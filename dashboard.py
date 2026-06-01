@@ -3,14 +3,26 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import calendar
+import requests
+import io
 from datetime import date
 from pathlib import Path
 
-# Googleスプレッドシート（公開URL）またはローカルファイルを自動判定
 SHEET_ID = "1nYlBXMdibPZf08RmSCUCKmOHrClTl8VEHBEeNTNvgd4"
 GSHEET_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx"
 LOCAL_PATH = Path.home() / "Documents" / "クリニックDB" / "院情報一覧_カウント自動化.xlsx"
-EXCEL_PATH = GSHEET_URL  # Streamlit Cloud ではGoogleスプレッドシートから読み込む
+
+def get_excel_data():
+    """GoogleスプレッドシートまたはローカルファイルからExcelデータを取得する"""
+    if LOCAL_PATH.exists():
+        return LOCAL_PATH
+    try:
+        response = requests.get(GSHEET_URL, timeout=30)
+        response.raise_for_status()
+        return io.BytesIO(response.content)
+    except Exception as e:
+        st.error(f"データの読み込みに失敗しました: {e}")
+        st.stop()
 ORANGE_TWIST_COUNT = 24
 
 # ── 色定義（元Excelと同じ） ──────────────────────────
@@ -72,7 +84,7 @@ def to_ts(v):
 
 @st.cache_data(ttl=3600)
 def load_master():
-    df = pd.read_excel(EXCEL_PATH, sheet_name="クリニック一覧")
+    df = pd.read_excel(get_excel_data(), sheet_name="クリニック一覧")
     for c in ["開院日", "MA日", "移転拡張日", "業態転換日", "閉院日"]:
         if c in df.columns:
             df[c] = pd.to_datetime(df[c], errors="coerce")
@@ -194,7 +206,7 @@ def load_brand_settings():
     """Excelの「ブランド設定」シートからブランド順・設定を読み込む。"""
     try:
         # まず全データを読み込み、ヘッダー行を自動検出する
-        raw = pd.read_excel(EXCEL_PATH, sheet_name="ブランド設定", header=None)
+        raw = pd.read_excel(get_excel_data(), sheet_name="ブランド設定", header=None)
 
         # 「ブランド名」という文字が入っている行をヘッダーとして使う
         header_row = None
@@ -206,7 +218,7 @@ def load_brand_settings():
         if header_row is None:
             return [], [], [], "「ブランド設定」シートにヘッダー行（ブランド名）が見つかりません。"
 
-        df = pd.read_excel(EXCEL_PATH, sheet_name="ブランド設定", header=header_row)
+        df = pd.read_excel(get_excel_data(), sheet_name="ブランド設定", header=header_row)
         df = df.dropna(subset=["ブランド名"])
         df = df[df["ブランド名"].astype(str).str.strip() != ""]
 
