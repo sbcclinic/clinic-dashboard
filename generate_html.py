@@ -362,6 +362,32 @@ def load_brand_settings():
         return cols, flags, excl_pr
     except: return [], [], []
 
+def load_orangetwist_settings():
+    """ブランド設定シートからOrangeTwistの院数・開始年月を読み込む"""
+    default = {"count": 24, "start": "2025/12"}
+    try:
+        path = get_path()
+        raw = pd.read_excel(path, sheet_name="ブランド設定", header=None)
+        for i, row in raw.iterrows():
+            for j, val in enumerate(row):
+                if str(val).strip() == "OrangeTwist":
+                    cnt_val   = raw.iloc[i, j+1] if j+1 < raw.shape[1] else 24
+                    start_val = raw.iloc[i, j+2] if j+2 < raw.shape[1] else "2025/12"
+                    cnt = int(cnt_val) if pd.notna(cnt_val) else 24
+                    if isinstance(start_val, pd.Timestamp):
+                        start = start_val.strftime("%Y/%m")
+                    else:
+                        start = str(start_val).strip() if pd.notna(start_val) else "2025/12"
+                    return {"count": cnt, "start": start}
+        return default
+    except Exception:
+        return default
+
+def get_orangetwist_count(month_key, ot_settings):
+    """指定年月のOrangeTwist院数を返す（開始年月より前は0）"""
+    return ot_settings["count"] if month_key >= ot_settings["start"] else 0
+
+
 def get_base_date(row):
     ma = to_ts(row.get("MA日")); op = to_ts(row.get("開院日"))
     return ma if ma is not None else op
@@ -613,7 +639,7 @@ def aggregate_with_houjin(df, target_brands, exclude_pr, me, ms):
     return r1, r2, r3, houjin_brand
 
 
-def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, existing_flags=None):
+def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, existing_flags=None, ot_settings=None):
     """
     2021/01 から今月まで各月の集計データを返す
     brand_cols: ブランド設定シートから読んだ[(brand, gyoutai)] のリスト
@@ -660,8 +686,9 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
             if i < len(existing_flags) and existing_flags[i]
         )
 
-        # IR広報用
-        ir_sum = sum_pr + ORANGE_TWIST_COUNT
+        # IR広報用（OrangeTwistは開始年月以降のみ加算）
+        ot_count = get_orangetwist_count(ym_key, ot_settings) if ot_settings else ORANGE_TWIST_COUNT
+        ir_sum = sum_pr + ot_count
 
         # jikei_row: brand counts + summary columns
         jikei_row = {}
@@ -670,7 +697,7 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
         jikei_row["既存G合計"] = existing_sum
         jikei_row[LABEL_ALL] = sum_all
         jikei_row["IR・広報用（除：Holdingsへの収益貢献なし）"] = sum_pr   # 広報IR用の除外前ベース
-        jikei_row["OrangeTwist"] = ORANGE_TWIST_COUNT
+        jikei_row["OrangeTwist"] = ot_count
         jikei_row[LABEL_IR] = ir_sum
         # per houjin group totals
         for gname, members in HOUJIN_GROUPS:
@@ -857,6 +884,7 @@ def generate():
     df = load_data()
     # 法人設定シートから並び順を読み込む
     REGION_HOUJIN_ORDER = load_houjin_settings()
+    ot_settings = load_orangetwist_settings()
     brand_cols, existing_flags, exclude_pr = load_brand_settings()
     if not brand_cols:
         brand_cols = [(b,None) for b in TARGET_BRANDS]
@@ -1075,7 +1103,8 @@ def generate():
     # ブランド設定シートの並び順・既存G合計フラグを時系列にも反映
     all_monthly_data = build_all_monthly_data(
         df, [b for b,_ in brand_cols], exclude_pr,
-        brand_cols=brand_cols, existing_flags=existing_flags
+        brand_cols=brand_cols, existing_flags=existing_flags,
+        ot_settings=ot_settings
     )
     timeseries_html = build_timeseries_html(all_monthly_data, brand_cols=brand_cols)
 
@@ -1207,7 +1236,7 @@ def generate():
 <div class="kpi">
   <div class="kpi-card orange">
     <div class="kpi-label">IR・広報用（除：Holdingsへの収益貢献なし、含：OrangeTwist）</div>
-    <div class="kpi-value">{sum_pr+ORANGE_TWIST_COUNT:,} 院</div>
+    <div class="kpi-value">{sum_pr + get_orangetwist_count(f"{y}/{m:02d}", ot_settings):,} 院</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">全拠点</div>
@@ -1218,7 +1247,7 @@ def generate():
 <div class="tabs">
   <div class="tab tab-brand active" onclick="showTab('brand',this)">📋 ブランド別 集計（月末時点）</div>
   <div class="tab tab-region" onclick="showTab('region',this)">🌏 地域・法人別 集計（月末時点）</div>
-  <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別 院数（月初時点）</div>
+  <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別集計（フィー計算）</div>
   <div class="tab tab-trend" onclick="showTab('trend',this)">📅 年月別 院数サマリー</div>
   <div class="tab tab-history" onclick="showTab('history',this)">🏥 開院・閉院履歴</div>
   <div class="tab tab-convert" onclick="showTab('convert',this)">🔵 業態転換履歴</div>
