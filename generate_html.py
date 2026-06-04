@@ -443,6 +443,7 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
             jikei_row[r["label"]] = r["all"]
         jikei_row["既存G合計"] = existing_sum
         jikei_row[LABEL_ALL] = sum_all
+        jikei_row["除外院除く合計"] = sum_pr   # 広報IR用の除外前ベース
         jikei_row["OrangeTwist"] = ORANGE_TWIST_COUNT
         jikei_row[LABEL_IR] = ir_sum
         # per houjin group totals
@@ -553,6 +554,7 @@ def build_timeseries_html(all_data, brand_cols=None):
     # 集計列（末尾）
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">全拠点</th>'
+    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px">除外院除く合計</th>'
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
     header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:100px">{LABEL_IR}</th>'
     header1 += '</tr>'
@@ -601,10 +603,12 @@ def build_timeseries_html(all_data, brand_cols=None):
         # 集計列（末尾）
         existing  = jikei.get("既存G合計", 0)
         all_total = jikei.get("全拠点", 0)
+        excl_base = jikei.get("除外院除く合計", 0)
         ot = jikei.get("OrangeTwist", ORANGE_TWIST_COUNT)
         ir = jikei.get(LABEL_IR, 0)
         row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#EBF5FB;color:#1a5276;font-weight:bold">{existing}</td>'
         row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#EBF5FB;color:#1a5276;font-weight:bold">{all_total}</td>'
+        row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#E8DAEF;color:#6c3483;font-weight:bold">{excl_base}</td>'
         row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#FEF0E3;color:#d35400">{ot}</td>'
         row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#FEF0E3;color:#d35400;font-weight:bold">{ir}</td>'
 
@@ -837,6 +841,7 @@ def generate():
         base = ma if ma is not None else op
 
         clinic_records.append({
+            "id": str(row.get("院ID","") or ""),
             "name": str(row.get("正式名称","") or ""),
             "brand": brand,
             "gyoutai": str(row.get("業態","") or ""),
@@ -849,8 +854,19 @@ def generate():
     clinic_json = json.dumps(clinic_records, ensure_ascii=False)
     clinic_json_escaped = clinic_json.replace("'", "\\'")
 
-    unique_brands = sorted(set(r["brand"] for r in clinic_records))
-    unique_houjin = sorted(set(r["houjin"] for r in clinic_records if r["houjin"]))
+    # ブランド設定の順序でブランド一覧を作成（指示⑥）
+    brand_cols_order = [b for b, _ in brand_cols]
+    seen_brands = set()
+    unique_brands = []
+    for b in brand_cols_order:
+        if b not in seen_brands and any(r["brand"] == b for r in clinic_records):
+            unique_brands.append(b)
+            seen_brands.add(b)
+    # 設定にないブランドは末尾へ
+    for r in clinic_records:
+        if r["brand"] not in seen_brands:
+            unique_brands.append(r["brand"])
+            seen_brands.add(r["brand"])
     brands_json = json.dumps(unique_brands, ensure_ascii=False)
     houjin_json = json.dumps(unique_houjin, ensure_ascii=False)
 
