@@ -982,10 +982,6 @@ def generate():
     <div class="kpi-label">全拠点</div>
     <div class="kpi-value">{sum_all:,} 院</div>
   </div>
-  <div class="kpi-card">
-    <div class="kpi-label">OrangeTwist（別管理）</div>
-    <div class="kpi-value">{ORANGE_TWIST_COUNT} 院</div>
-  </div>
 </div>
 
 <div class="tabs">
