@@ -856,8 +856,17 @@ def generate():
                     cnt += 1
         excl_counts[houjin_name] = cnt
 
+    # 法人別表に表示する法人（この6法人のみ）
+    HOUJIN_DISPLAY = [
+        "医療法人 湘美会",
+        "医療法人社団 孝和会",
+        "医療法人社団 菜寿会",
+        "医療法人社団 愛恵会",
+        "医療法人社団 樹慶会",
+        "医療法人社団 リッツ美容外科",
+    ]
     houjin_rows=[]; total_h=0
-    for h in HOUJIN_ORDER:
+    for h in HOUJIN_DISPLAY:
         cnt = r3.get(h,{}).get("all",0)
         excl = excl_counts.get(h, 0)
         adj_cnt = cnt - excl
