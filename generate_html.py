@@ -185,7 +185,7 @@ def aggregate(df, me, ms, target_brands, exclude_pr):
                 if houjin not in EXCLUDE_HOUJIN: r3[houjin]["all"]+=1
     return r1, r2, r3
 
-def df_to_html_table(df, highlight_last=True, orange_last=False):
+def df_to_html_table(df, highlight_last=True, orange_last=False, right_align_nums=False):
     rows_html = ""
     for i, (_, row) in enumerate(df.iterrows()):
         is_last = i == len(df) - 1
@@ -201,7 +201,13 @@ def df_to_html_table(df, highlight_last=True, orange_last=False):
             style = f'background:{C_TOTAL};font-weight:bold'
         else:
             style = 'background:white'
-        cells = "".join(f'<td style="padding:6px 10px;border:1px solid #ddd">{v}</td>' for v in row)
+        if right_align_nums:
+            cells = "".join(
+                f'<td style="padding:6px 10px;border:1px solid #ddd;text-align:{"right" if ci > 0 else "left"}">{v}</td>'
+                for ci, v in enumerate(row)
+            )
+        else:
+            cells = "".join(f'<td style="padding:6px 10px;border:1px solid #ddd">{v}</td>' for v in row)
         rows_html += f'<tr style="{style}">{cells}</tr>'
     headers = "".join(f'<th style="padding:8px 10px;background:{C_HEADER};color:white;border:1px solid #555">{c}</th>' for c in df.columns)
     return f'<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>{headers}</tr></thead><tbody>{rows_html}</tbody></table>'
@@ -935,7 +941,7 @@ def generate():
 <div id="houjin" class="content">
   <div class="box">
     <div class="section-title">{y}年{m}月初 法人別内訳（月初時点／経理用）</div>
-    {df_to_html_table(houjin_df)}
+    {df_to_html_table(houjin_df, right_align_nums=True)}
   </div>
 </div>
 
@@ -1062,63 +1068,65 @@ function buildCompareTable(startKey, endKey) {{
   const startRows = startData.brand_rows;
   const endRows = endData.brand_rows;
 
+  // 列順：左=IR・広報用、右=全拠点
   let html = '<table class="compare-table" style="border-collapse:collapse;width:100%">';
   html += '<thead><tr>';
-  html += '<th>ブランド</th>';
-  html += '<th>' + startKey + '（全拠点）</th>';
-  html += '<th>' + endKey + '（全拠点）</th>';
-  html += '<th>増減（全拠点）</th>';
-  html += '<th>' + startKey + '（IR用）</th>';
-  html += '<th>' + endKey + '（IR用）</th>';
-  html += '<th>増減（IR用）</th>';
+  html += '<th rowspan="2" style="vertical-align:middle">ブランド</th>';
+  html += '<th colspan="3" style="text-align:center;background:#d35400">IR・広報用</th>';
+  html += '<th colspan="3" style="text-align:center;background:#1a5276">全拠点</th>';
+  html += '</tr><tr>';
+  html += '<th style="background:#d35400">' + startKey + '</th>';
+  html += '<th style="background:#d35400">' + endKey + '</th>';
+  html += '<th style="background:#d35400">増減</th>';
+  html += '<th style="background:#1a5276">' + startKey + '</th>';
+  html += '<th style="background:#1a5276">' + endKey + '</th>';
+  html += '<th style="background:#1a5276">増減</th>';
   html += '</tr></thead><tbody>';
 
+  function diffStr(d) {{ return d > 0 ? '+' + d : String(d); }}
+  function diffStyle(d) {{ return d > 0 ? 'color:#27ae60' : d < 0 ? 'color:#c0392b' : ''; }}
+
+  // ブランド行
   for (let i = 0; i < endRows.length; i++) {{
     const er = endRows[i];
     const sr = startRows[i] || {{label: er.label, all: 0, pr: 0}};
-    const diffAll = er.all - sr.all;
-    const diffPr  = er.pr  - sr.pr;
-    const diffAllCls = diffAll > 0 ? 'pos' : diffAll < 0 ? 'neg' : '';
-    const diffPrCls  = diffPr  > 0 ? 'pos' : diffPr  < 0 ? 'neg' : '';
-    const diffAllStr = diffAll > 0 ? '+' + diffAll : String(diffAll);
-    const diffPrStr  = diffPr  > 0 ? '+' + diffPr  : String(diffPr);
+    const dPr  = er.pr  - sr.pr;
+    const dAll = er.all - sr.all;
     html += '<tr>';
     html += '<td style="text-align:left">' + er.label + '</td>';
+    html += '<td style="text-align:right">' + sr.pr  + '</td>';
+    html += '<td style="text-align:right">' + er.pr  + '</td>';
+    html += '<td style="text-align:right;' + diffStyle(dPr)  + '">' + diffStr(dPr)  + '</td>';
     html += '<td style="text-align:right">' + sr.all + '</td>';
     html += '<td style="text-align:right">' + er.all + '</td>';
-    html += '<td style="text-align:right" class="' + diffAllCls + '">' + diffAllStr + '</td>';
-    html += '<td style="text-align:right">' + sr.pr + '</td>';
-    html += '<td style="text-align:right">' + er.pr + '</td>';
-    html += '<td style="text-align:right" class="' + diffPrCls + '">' + diffPrStr + '</td>';
+    html += '<td style="text-align:right;' + diffStyle(dAll) + '">' + diffStr(dAll) + '</td>';
     html += '</tr>';
   }}
 
-  // 合計行
-  const sAll = startData.sum_all, eAll = endData.sum_all;
-  const sPr  = startData.sum_pr,  ePr  = endData.sum_pr;
-  const dAll = eAll - sAll, dPr = ePr - sPr;
-  const dAllStr = dAll >= 0 ? '+' + dAll : String(dAll);
-  const dPrStr  = dPr  >= 0 ? '+' + dPr  : String(dPr);
-  html += '<tr style="background:#FFF2CC;font-weight:bold">';
-  html += '<td>合計</td>';
-  html += '<td style="text-align:right">' + sAll + '</td>';
-  html += '<td style="text-align:right">' + eAll + '</td>';
-  html += '<td style="text-align:right;' + (dAll>=0?'color:#27ae60':'color:#c0392b') + '">' + dAllStr + '</td>';
-  html += '<td style="text-align:right">' + sPr + '</td>';
-  html += '<td style="text-align:right">' + ePr + '</td>';
-  html += '<td style="text-align:right;' + (dPr>=0?'color:#27ae60':'color:#c0392b') + '">' + dPrStr + '</td>';
+  // OrangeTwist行（固定値24）
+  html += '<tr style="background:#FFF9C4">';
+  html += '<td style="text-align:left">OrangeTwist</td>';
+  html += '<td style="text-align:right">' + ORANGE_TWIST_COUNT + '</td>';
+  html += '<td style="text-align:right">' + ORANGE_TWIST_COUNT + '</td>';
+  html += '<td style="text-align:right">+0</td>';
+  html += '<td style="text-align:right;color:#888">別管理</td>';
+  html += '<td style="text-align:right;color:#888">別管理</td>';
+  html += '<td style="text-align:right;color:#888">－</td>';
   html += '</tr>';
 
-  // IR広報用（OrangeTwist込み）
-  const sIR = sPr + ORANGE_TWIST_COUNT, eIR = ePr + ORANGE_TWIST_COUNT;
-  const dIR = eIR - sIR;
-  const dIRStr = dIR >= 0 ? '+' + dIR : String(dIR);
-  html += '<tr style="background:#FAD7A0;font-weight:bold">';
-  html += '<td>IR・広報用（除：Holdingsへの収益貢献なし、含：OrangeTwist）</td>';
-  html += '<td style="text-align:right">' + sIR + '</td>';
-  html += '<td style="text-align:right">' + eIR + '</td>';
-  html += '<td style="text-align:right;' + (dIR>=0?'color:#27ae60':'color:#c0392b') + '">' + dIRStr + '</td>';
-  html += '<td colspan="3" style="text-align:center;color:#888">（参考）</td>';
+  // 合計行（IR・広報用＝ブランド合計＋OrangeTwist）
+  const sPr  = startData.sum_pr,  ePr  = endData.sum_pr;
+  const sAll = startData.sum_all, eAll = endData.sum_all;
+  const sIR  = sPr  + ORANGE_TWIST_COUNT, eIR = ePr  + ORANGE_TWIST_COUNT;
+  const dIR  = eIR  - sIR,  dAll = eAll - sAll;
+  html += '<tr style="background:#E67E22;color:white;font-weight:bold">';
+  html += '<td style="text-align:left">合計</td>';
+  html += '<td style="text-align:right">' + sIR  + '</td>';
+  html += '<td style="text-align:right">' + eIR  + '</td>';
+  html += '<td style="text-align:right;' + diffStyle(dIR)  + '">' + diffStr(dIR)  + '</td>';
+  html += '<td style="text-align:right">' + sAll + '</td>';
+  html += '<td style="text-align:right">' + eAll + '</td>';
+  html += '<td style="text-align:right;' + diffStyle(dAll) + '">' + diffStr(dAll) + '</td>';
   html += '</tr>';
 
   html += '</tbody></table>';
