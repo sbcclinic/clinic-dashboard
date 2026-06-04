@@ -238,20 +238,40 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
         if m > 12: m = 1; y += 1
 
     # Build clinic ID to name mapping
+    # 業態転換がある院は「転換前の院名」を優先（歴史データのマッピングに使う）
     id_to_name = {}
+    id_to_old_name = {}  # 転換前院名（業態転換日あり）
+    id_to_new_name = {}  # 転換後院名
     for _, row in clinic_df.iterrows():
         cid = row.get("院ID")
         name = str(row.get("正式名称", "") or "").strip()
+        d_conv = to_ts(row.get("業態転換日"))
+        tenkan_mae = str(row.get("転換前業態", "") or "").strip()
         if pd.notna(cid) and name:
             try:
-                id_to_name[int(float(str(cid)))] = name
+                cid_int = int(float(str(cid)))
+                if d_conv is not None:
+                    # 業態転換日あり → 転換元の院
+                    id_to_old_name[cid_int] = name
+                elif tenkan_mae and tenkan_mae not in ("", "nan"):
+                    # 転換前業態あり → 転換後の院
+                    id_to_new_name[cid_int] = name
+                # id_to_name: 転換元があればそれを優先
+                if cid_int not in id_to_name or d_conv is not None:
+                    id_to_name[cid_int] = name
             except: pass
 
     # Build past director lookup: {clinic_name: [(date, director), ...]}
+    # 転換元院名にマッピングし、転換後も同じデータを引き継ぐ
     past_by_name = {}
     for cid, events in past_data.items():
         if cid in id_to_name:
-            past_by_name[id_to_name[cid]] = events
+            old_name = id_to_old_name.get(cid) or id_to_name[cid]
+            past_by_name[old_name] = events
+            # 転換後の院にも同じ履歴を引き継ぐ（転換日以降の分を継続表示）
+            new_name = id_to_new_name.get(cid)
+            if new_name and new_name not in past_by_name:
+                past_by_name[new_name] = events
 
     # Build monthly events index from doctor_df (2025/09+)
     events_by_month = {}
