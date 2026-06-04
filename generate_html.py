@@ -443,7 +443,7 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
             jikei_row[r["label"]] = r["all"]
         jikei_row["既存G合計"] = existing_sum
         jikei_row[LABEL_ALL] = sum_all
-        jikei_row["除外院除く合計"] = sum_pr   # 広報IR用の除外前ベース
+        jikei_row["IR・広報用（除：Holdingsへの収益貢献なし）"] = sum_pr   # 広報IR用の除外前ベース
         jikei_row["OrangeTwist"] = ORANGE_TWIST_COUNT
         jikei_row[LABEL_IR] = ir_sum
         # per houjin group totals
@@ -554,9 +554,9 @@ def build_timeseries_html(all_data, brand_cols=None):
     # 集計列（末尾）
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">全拠点</th>'
-    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px">除外院除く合計</th>'
+    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px;white-space:normal;text-align:center">IR・広報用（除：Holdingsへの収益貢献なし）</th>'
     header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
-    header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:100px">{LABEL_IR}</th>'
+    header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:70px;white-space:normal;text-align:center">{LABEL_IR}</th>'
     header1 += '</tr>'
 
     # ── ヘッダー行2：ブランド名 ──
@@ -603,7 +603,7 @@ def build_timeseries_html(all_data, brand_cols=None):
         # 集計列（末尾）
         existing  = jikei.get("既存G合計", 0)
         all_total = jikei.get("全拠点", 0)
-        excl_base = jikei.get("除外院除く合計", 0)
+        excl_base = jikei.get("IR・広報用（除：Holdingsへの収益貢献なし）", 0)
         ot = jikei.get("OrangeTwist", ORANGE_TWIST_COUNT)
         ir = jikei.get(LABEL_IR, 0)
         row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#EBF5FB;color:#1a5276;font-weight:bold">{existing}</td>'
@@ -1300,6 +1300,7 @@ function runSnapshot() {{
     html += `<div id="${{uid}}a" style="display:none;overflow-x:auto">`;
     html += `<table style="border-collapse:collapse;width:100%;font-size:13px">`;
     html += `<thead><tr style="background:#2C3E50;color:white">`;
+    html += `<th style="padding:6px 10px;border:1px solid #555">院ID</th>`;
     html += `<th style="padding:6px 10px;border:1px solid #555">院名</th>`;
     html += `<th style="padding:6px 10px;border:1px solid #555">業態</th>`;
     html += `<th style="padding:6px 10px;border:1px solid #555">法人名</th>`;
@@ -1309,6 +1310,7 @@ function runSnapshot() {{
     clinics.forEach((c, ci) => {{
       const bg = ci % 2 === 0 ? 'white' : '#f8f9fa';
       html += `<tr style="background:${{bg}}">`;
+      html += `<td style="padding:5px 10px;border:1px solid #ddd;text-align:right;color:#666">${{c.id || ''}}</td>`;
       html += `<td style="padding:5px 10px;border:1px solid #ddd">${{c.name}}</td>`;
       html += `<td style="padding:5px 10px;border:1px solid #ddd">${{c.gyoutai}}</td>`;
       html += `<td style="padding:5px 10px;border:1px solid #ddd">${{c.houjin}}</td>`;
@@ -1329,9 +1331,9 @@ function downloadCSV() {{
   }}
   const year = document.getElementById('snapYear').value;
   const month = document.getElementById('snapMonth').value;
-  const headers = ['院名','ブランド','業態','法人名','国内／海外','開院日'];
+  const headers = ['院ID','院名','ブランド','業態','法人名','国内／海外','開院日'];
   const rows = lastSnapshotData.map(c => [
-    c.name, c.brand, c.gyoutai, c.houjin, c.region, c.open_date || ''
+    c.id || '', c.name, c.brand, c.gyoutai, c.houjin, c.region, c.open_date || ''
   ]);
   const csvContent = [headers, ...rows].map(r => r.map(v => `"${{String(v).replace(/"/g,'""')}}"`).join(',')).join('\\n');
   const blob = new Blob(['\\uFEFF' + csvContent], {{type:'text/csv;charset=utf-8;'}});
