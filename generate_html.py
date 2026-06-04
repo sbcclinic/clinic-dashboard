@@ -43,6 +43,12 @@ HOUJIN_ORDER = [
 ]
 EXCLUDE_HOUJIN = ["学校法人 SBC東京医療大学","㈻SBC東京医療大学附属","医療法人 きびたき会","医療法人社団 百花会","SBC東京接骨院","株式会社 MG"]
 
+# 法人別集計から特定ブランドを除外する設定
+HOUJIN_BRAND_EXCLUSIONS = {
+    "医療法人社団 樹慶会":       {"brands": ["神奈川レディース"], "note": "※神奈川レディース・神奈川ウィメンズを除く"},
+    "医療法人社団 リッツ美容外科": {"brands": ["リッツ美容外科"],  "note": "※リッツ美容外科を除く"},
+}
+
 HOUJIN_GROUPS = [
     ("①6医療法人合計", ["医療法人 湘美会","医療法人社団 孝和会","医療法人社団 菜寿会","医療法人社団 愛恵会","医療法人社団 樹慶会","医療法人社団 リッツ美容外科","一般社団法人MASA","健美会","法人無し（個人開設）","個人/その他"]),
     ("②3医療法人合計", ["医療法人社団 風林会","医療法人 きびたき会","医療法人社団 百花会"]),
@@ -837,10 +843,28 @@ def generate():
         p=k.split("|",1); ovs_tmp.append({"法人名":p[1],"広報・IR用":r2[k]["pr"],"全拠点":r2[k]["all"]})
     dom_df=pd.DataFrame(dom_tmp); ovs_df=pd.DataFrame(ovs_tmp)
 
-    # ── 法人別表 ──
+    # ── 法人別表（特定法人から特定ブランドを除外） ──
+    # 除外対象の院数を先に計算
+    excl_counts = {}
+    for houjin_name, excl_info in HOUJIN_BRAND_EXCLUSIONS.items():
+        cnt = 0
+        for _, row in df.iterrows():
+            brand = get_brand(row)
+            houjin = str(row.get("法人名","") or "").strip()
+            if houjin == houjin_name and brand in excl_info["brands"]:
+                if check_active(row, ms):
+                    cnt += 1
+        excl_counts[houjin_name] = cnt
+
     houjin_rows=[]; total_h=0
     for h in HOUJIN_ORDER:
-        cnt=r3.get(h,{}).get("all",0); houjin_rows.append({"法人名":h,"全拠点":cnt}); total_h+=cnt
+        cnt = r3.get(h,{}).get("all",0)
+        excl = excl_counts.get(h, 0)
+        adj_cnt = cnt - excl
+        note = HOUJIN_BRAND_EXCLUSIONS[h]["note"] if h in HOUJIN_BRAND_EXCLUSIONS else ""
+        row_label = f"{h}　{note}" if note else h
+        houjin_rows.append({"法人名": row_label, "全拠点": adj_cnt})
+        total_h += adj_cnt
     houjin_rows.append({"法人名":"合計","全拠点":total_h})
     houjin_df=pd.DataFrame(houjin_rows)
 
