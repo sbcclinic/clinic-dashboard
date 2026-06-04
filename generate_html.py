@@ -8,6 +8,7 @@ import plotly.express as px
 import calendar
 from datetime import date
 from pathlib import Path
+from itertools import groupby
 
 # ── ファイルパス ──────────────────────────────────────
 BOX_PATH  = Path(r"C:\Users\宮城杏奈\Box\総合企画部_特殊案件\その他\院情報一覧カウント\院情報一覧_カウント自動化.xlsx")
@@ -49,7 +50,7 @@ HOUJIN_GROUPS = [
     ("④2医療法人合計", ["医療法人社団美咲会","一般社団法人美央斗会"]),
     ("⑤㈻SBC東京医療大学附属", ["㈻SBC東京医療大学附属","学校法人 SBC東京医療大学"]),
     ("⑥株式会社SBC湘南接骨院", ["株式会社SBC湘南接骨院"]),
-    ("⑦SBCメディカルグループ株式会社", ["SBCメディカルグループ株式会社","株式会社 MG"]),
+    ("⑦株式会社ボディアーキ・ジャパン", ["SBCメディカルグループ株式会社","株式会社 MG","株式会社ボディアーキ・ジャパン"]),
     ("⑧Shoubikai Medical Vietnam Co., Ltd.", ["Shoubikai Medical Vietnam Co., Ltd."]),
     ("⑨WWMG", ["WWMG"]),("⑩DS", ["DS"]),("⑪DSS", ["DSS"]),("⑫DSS(FC)", ["DSS(FC)"]),("⑬WWFC", ["WWFC"]),("⑭RCC", ["RCC"]),
 ]
@@ -438,10 +439,16 @@ def build_all_monthly_data(df, target_brands, exclude_pr):
                 if check_active(row, me):
                     cnt += 1
             jikei_row[gname] = cnt
-        # houjin_brand per group
-        for gname in houjin_brand:
-            for blabel, cnt in houjin_brand[gname].items():
-                jikei_row[f"{gname}|{blabel}"] = cnt
+        # houjin group × brand × gyoutai counts
+        for gname, members in HOUJIN_GROUPS:
+            for _, row in df.iterrows():
+                if check_active(row, me):
+                    houjin = str(row.get("法人名", "") or "").strip()
+                    if houjin in members:
+                        brand = get_brand(row)
+                        gyoutai = str(row.get("業態", "") or "").strip()
+                        key = f"{gname}|{brand}|{gyoutai}"
+                        jikei_row[key] = jikei_row.get(key, 0) + 1
 
         # region_dom / region_ovs
         region_dom = []
@@ -480,106 +487,135 @@ def build_all_monthly_data(df, target_brands, exclude_pr):
 
 
 def build_timeseries_html(all_data):
-    """時系列推移テーブルHTMLを生成（法人グループ×ブランドの階層ヘッダー付き）"""
+    """時系列推移テーブルHTMLを生成（法人グループ×ブランド×業態の3段階層ヘッダー付き）"""
     if not all_data:
         return "<p>データなし</p>"
 
-    brand_labels = [f"{b}({g})" if g else b for b, g in JIKEI_BRAND_COLS]
+    months = sorted(all_data.keys())
 
-    # 第1パス: 各法人グループで出現するブランドを収集
-    # jikei_row には "{gname}|{blabel}" 形式のキーが入っている
-    group_brands = {}  # gname -> ordered list of blabels that appear
-    for gname, _ in HOUJIN_GROUPS:
-        seen = set()
-        ordered = []
-        for ym, rec in all_data.items():
-            jr = rec.get("jikei_row", {})
-            for k, v in jr.items():
-                if k.startswith(f"{gname}|") and v and v > 0:
-                    blabel = k[len(gname)+1:]
-                    if blabel not in seen:
-                        seen.add(blabel)
-                        ordered.append(blabel)
-        # JIKEIの順序で並べ直す
-        jikei_order = [f"{b}({g})" if g else b for b, g in JIKEI_BRAND_COLS]
-        sorted_blabels = [bl for bl in jikei_order if bl in seen]
+    # Step 1: overall brand columns (JIKEI_BRAND_COLS order)
+    overall_cols = []  # list of (brand, gyoutai, col_key)
+    for brand, gyoutai in JIKEI_BRAND_COLS:
+        col_key = f"{brand}({gyoutai})" if gyoutai else brand
+        overall_cols.append((brand, gyoutai or "", col_key))
+
+    # Step 2: For each HOUJIN_GROUP, determine which (brand, gyoutai) combos appear
+    group_cols = {}  # group_name -> list of (brand, gyoutai) tuples
+    for gname, members in HOUJIN_GROUPS:
+        combos_seen = set()
+        for month_data in all_data.values():
+            jikei = month_data.get("jikei_row", {})
+            for key, val in jikei.items():
+                if key.startswith(f"{gname}|") and val and val > 0:
+                    parts = key.split("|", 2)
+                    if len(parts) == 3:
+                        combos_seen.add((parts[1], parts[2]))
+        # JIKEI_BRAND_COLS の順序で並べ直す
+        jikei_order = []
+        for brand, gyoutai in JIKEI_BRAND_COLS:
+            g = gyoutai or ""
+            if (brand, g) in combos_seen:
+                jikei_order.append((brand, g))
         # 未定義のものは末尾
-        for bl in ordered:
-            if bl not in sorted_blabels:
-                sorted_blabels.append(bl)
-        group_brands[gname] = sorted_blabels
+        for combo in sorted(combos_seen):
+            if combo not in jikei_order:
+                jikei_order.append(combo)
+        group_cols[gname] = jikei_order
 
-    # スタイル定義
-    def th_attr(colspan=1, rowspan=1, bg=C_HEADER):
-        s = f'padding:6px 8px;background:{bg};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;z-index:2'
-        attrs = f'style="{s}"'
-        if colspan > 1: attrs += f' colspan="{colspan}"'
-        if rowspan > 1: attrs += f' rowspan="{rowspan}"'
-        return attrs
+    # Step 3: Build header rows (3 rows)
+    # Row 1
+    header1 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:0;z-index:3">'
+    header1 += '<th rowspan="3" style="position:sticky;left:0;z-index:4;background:#2C3E50;min-width:70px;padding:4px 6px">年月</th>'
+    header1 += f'<th colspan="{len(overall_cols)}" style="padding:4px 6px;border:1px solid #555;text-align:center">ブランド別（全体）</th>'
+    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
+    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">全拠点</th>'
+    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
+    header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:80px">{LABEL_IR}</th>'
+    for gname, members in HOUJIN_GROUPS:
+        combos = group_cols.get(gname, [])
+        if not combos:
+            continue
+        member_label = " / ".join(members)
+        header1 += f'<th colspan="{len(combos)}" style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:10px">{member_label}</th>'
+    header1 += '</tr>'
 
-    def th_sticky_attr(rowspan=2):
-        s = f'padding:6px 8px;background:{C_HEADER};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;left:0;z-index:3'
-        return f'style="{s}" rowspan="{rowspan}"'
+    # Row 2
+    header2 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:24px;z-index:3">'
+    # overall brands grouped by brand name
+    grouped_overall = []
+    for brand, grp in groupby(overall_cols, key=lambda x: x[0]):
+        items = list(grp)
+        grouped_overall.append((brand, len(items)))
+    for brand, cnt in grouped_overall:
+        header2 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{brand}</th>'
+    # per-group brand names
+    for gname, members in HOUJIN_GROUPS:
+        combos = group_cols.get(gname, [])
+        if not combos:
+            continue
+        grouped = []
+        for brand, grp in groupby(combos, key=lambda x: x[0]):
+            items = list(grp)
+            grouped.append((brand, len(items)))
+        for brand, cnt in grouped:
+            header2 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{brand}</th>'
+    header2 += '</tr>'
 
-    # 第1行ヘッダー: 年月 | ブランド別(colspan=n_brand) | 既存G合計 | OrangeTwist | LABEL_IR | LABEL_ALL | 各法人グループ(colspan=サブブランド数+1)
-    n_brand = len(brand_labels)
-    row1 = f'<th {th_sticky_attr()}>年月</th>'
-    row1 += f'<th {th_attr(colspan=n_brand)}>ブランド別</th>'
-    row1 += f'<th {th_attr(rowspan=2, bg="#1E8449")}>既存G合計</th>'
-    row1 += f'<th {th_attr(rowspan=2, bg=C_ORANGE)}>OrangeTwist</th>'
-    row1 += f'<th {th_attr(rowspan=2, bg=C_ORANGE)}>{LABEL_IR}</th>'
-    row1 += f'<th {th_attr(rowspan=2)}>{LABEL_ALL}</th>'
-    for gname, _ in HOUJIN_GROUPS:
-        sub_count = len(group_brands[gname])
-        colspan = sub_count + 1  # サブブランド列 + 合計列
-        row1 += f'<th {th_attr(colspan=colspan, bg=C_BLUE)}>{gname}</th>'
+    # Row 3
+    header3 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:48px;z-index:3">'
+    for brand, gyoutai, col_key in overall_cols:
+        header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px">{gyoutai if gyoutai else "―"}</th>'
+    for gname, members in HOUJIN_GROUPS:
+        combos = group_cols.get(gname, [])
+        for brand, gyoutai in combos:
+            header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px">{gyoutai if gyoutai else "―"}</th>'
+    header3 += '</tr>'
 
-    # 第2行ヘッダー: ブランド名 | 各法人グループのサブブランド + 合計
-    row2 = ""
-    for label in brand_labels:
-        row2 += f'<th {th_attr()}>{label}</th>'
-    for gname, _ in HOUJIN_GROUPS:
-        for blabel in group_brands[gname]:
-            row2 += f'<th {th_attr(bg=C_BLUE)}>{blabel}</th>'
-        row2 += f'<th {th_attr(bg=C_BLUE)}>合計</th>'
+    # Step 4: Build data rows
+    rows_html = ""
+    for month in months:
+        month_data = all_data[month]
+        jikei = month_data.get("jikei_row", {})
+        is_dec = month.endswith("/12")
+        bg = "#EBF5FB" if is_dec else "white"
 
-    thead = f"<thead><tr>{row1}</tr><tr>{row2}</tr></thead>"
+        row = f'<tr style="background:{bg};font-size:12px">'
+        row += f'<td style="position:sticky;left:0;background:{bg};padding:4px 6px;border:1px solid #ddd;font-weight:{"bold" if is_dec else "normal"}">{month}</td>'
 
-    # tbody
-    months_sorted = sorted(all_data.keys())
-    tbody_rows = ""
-    for ym in months_sorted:
-        rec = all_data[ym]
-        is_dec = ym.endswith("/12")
-        row_bg = "#EBF5FB" if is_dec else "white"
+        # Overall brand counts
+        for brand, gyoutai, col_key in overall_cols:
+            val = jikei.get(col_key, 0)
+            row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right">{val if val else ""}</td>'
 
-        td_base = f'padding:5px 8px;border:1px solid #ddd;text-align:right;font-size:12px;background:{row_bg}'
-        td_green = f'padding:5px 8px;border:1px solid #ddd;text-align:right;font-size:12px;background:#D5F5E3;font-weight:bold'
-        td_orange = f'padding:5px 8px;border:1px solid #ddd;text-align:right;font-size:12px;background:#FAD7A0;font-weight:bold'
-        td_sticky = f'padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;background:{row_bg};position:sticky;left:0;z-index:1;font-weight:bold;white-space:nowrap'
+        # Aggregate columns
+        existing = jikei.get("既存G合計", 0)
+        all_total = jikei.get("全拠点", 0)
+        ot = jikei.get("OrangeTwist", ORANGE_TWIST_COUNT)
+        ir = jikei.get(LABEL_IR, 0)
+        row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#EBF5FB;color:#1a5276;font-weight:bold">{existing}</td>'
+        row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#EBF5FB;color:#1a5276;font-weight:bold">{all_total}</td>'
+        row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#FEF0E3;color:#d35400">{ot}</td>'
+        row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right;background:#FEF0E3;color:#d35400;font-weight:bold">{ir}</td>'
 
-        cells = f'<td style="{td_sticky}">{ym}</td>'
+        # Per-group brand×gyoutai counts
+        for gname, members in HOUJIN_GROUPS:
+            combos = group_cols.get(gname, [])
+            for brand, gyoutai in combos:
+                key = f"{gname}|{brand}|{gyoutai}"
+                val = jikei.get(key, 0)
+                row += f'<td style="padding:4px 6px;border:1px solid #ddd;text-align:right">{val if val else ""}</td>'
 
-        jr = rec.get("jikei_row", {})
-        for label in brand_labels:
-            cells += f'<td style="{td_base}">{jr.get(label, 0)}</td>'
+        row += '</tr>'
+        rows_html += row
 
-        cells += f'<td style="{td_green}">{jr.get("既存G合計", 0)}</td>'
-        cells += f'<td style="{td_orange}">{jr.get("OrangeTwist", ORANGE_TWIST_COUNT)}</td>'
-        cells += f'<td style="{td_orange}">{jr.get(LABEL_IR, 0)}</td>'
-        cells += f'<td style="{td_base}">{jr.get(LABEL_ALL, 0)}</td>'
-
-        for gname, _ in HOUJIN_GROUPS:
-            for blabel in group_brands[gname]:
-                key = f"{gname}|{blabel}"
-                cells += f'<td style="{td_base}">{jr.get(key, 0)}</td>'
-            cells += f'<td style="{td_base}">{jr.get(gname, 0)}</td>'
-
-        tbody_rows += f'<tr>{cells}</tr>'
-
-    tbody = f"<tbody>{tbody_rows}</tbody>"
-    table = f'<table style="border-collapse:collapse;font-size:12px;min-width:100%">{thead}{tbody}</table>'
-    return f'<div style="overflow-x:auto;max-height:70vh;overflow-y:auto;border:1px solid #ddd;border-radius:4px">{table}</div>'
+    table = f'''
+    <div style="overflow-x:auto;overflow-y:auto;max-height:70vh">
+    <table style="border-collapse:collapse;font-size:12px;white-space:nowrap">
+    <thead>{header1}{header2}{header3}</thead>
+    <tbody>{rows_html}</tbody>
+    </table>
+    </div>'''
+    return table
 
 
 def generate():
