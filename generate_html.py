@@ -3,7 +3,6 @@
 実行すると index.html を生成します
 """
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
 import calendar
 from datetime import date
@@ -54,6 +53,64 @@ JIKEI_COLS = [
     ("湘南美容クリニック（ﾍﾞﾄﾅﾑ）",None),("The Chelsea Clinic",None),("Chelsea Aesthetics",None),
     ("Gangnam Laser Clinic",None),("SkinGo!",None),("Wen & Weng Family Clinic",None),("Rochor Centre Clinic",None),
 ]
+
+# 法人グループ定義
+HOUJIN_GROUPS = [
+    ("①6医療法人合計", ["医療法人 湘美会","医療法人社団 孝和会","医療法人社団 菜寿会",
+                       "医療法人社団 愛恵会","医療法人社団 樹慶会","医療法人社団 リッツ美容外科",
+                       "一般社団法人MASA","健美会","法人無し（個人開設）","個人/その他"]),
+    ("②3医療法人合計", ["医療法人社団 風林会","医療法人 きびたき会","医療法人社団 百花会"]),
+    ("③医療法人社団十二会", ["医療法人社団十二会"]),
+    ("④2医療法人合計", ["医療法人社団美咲会","一般社団法人美央斗会"]),
+    ("⑤㈻SBC東京医療大学附属", ["㈻SBC東京医療大学附属","学校法人 SBC東京医療大学"]),
+    ("⑥株式会社SBC湘南接骨院", ["株式会社SBC湘南接骨院"]),
+    ("⑦SBCメディカルグループ株式会社", ["SBCメディカルグループ株式会社","株式会社 MG"]),
+    ("⑧Shoubikai Medical Vietnam Co., Ltd.", ["Shoubikai Medical Vietnam Co., Ltd."]),
+    ("⑨WWMG", ["WWMG"]),
+    ("⑩DS", ["DS"]),
+    ("⑪DSS", ["DSS"]),
+    ("⑫DSS(FC)", ["DSS(FC)"]),
+    ("⑬WWFC", ["WWFC"]),
+    ("⑭RCC", ["RCC"]),
+]
+
+# ブランド列定義（時系列表用・指定順）
+JIKEI_BRAND_COLS = [
+    ("湘南美容クリニック","美容外科・皮膚科"),
+    ("湘南美容クリニック","オンライン"),
+    ("湘南美容クリニック","スキンLab"),
+    ("湘南歯科クリニック",None),
+    ("湘南AGAクリニック",None),
+    ("湘南美容皮フ科",None),
+    ("湘南皮膚科クリニック",None),
+    ("SBC NEO Skin Clinic",None),
+    ("肌の青空クリニック",None),
+    ("湘南内科皮フ科クリニック",None),
+    ("湘南美容皮フ科内科クリニック",None),
+    ("イテウォン",None),
+    ("湘南メディカル記念病院",None),
+    ("新宿近視クリニック",None),
+    ("西新宿整形外科",None),
+    ("SBC横浜駅前整形外科",None),
+    ("六本木レディース",None),
+    ("神奈川レディース",None),
+    ("リッツ美容外科",None),
+    ("リゼクリニック",None),
+    ("ゴリラクリニック",None),
+    ("JUNCLINIC",None),
+    ("SBC東京医療大学付属クリニック",None),
+    ("SBC東京接骨院",None),
+    ("SBC BODY ARCHI",None),
+    ("湘南美容クリニック（ﾍﾞﾄﾅﾑ）",None),
+    ("The Chelsea Clinic",None),
+    ("Chelsea Aesthetics",None),
+    ("Gangnam Laser Clinic",None),
+    ("SkinGo!",None),
+    ("Wen & Weng Family Clinic",None),
+    ("Rochor Centre Clinic",None),
+]
+EXISTING_GROUP_END = 19  # リッツ美容外科まで（既存グループ合計）
+
 
 def get_path():
     if BOX_PATH.exists(): return BOX_PATH
@@ -222,7 +279,7 @@ def build_history(df, target_brands, exclude_pr):
         result[year] = monthly
     return result, hist_years
 
-def build_history_html(history, hist_years, mode="openclose"):
+def build_history_html(history, hist_years, mode="openclose", prefix=""):
     """開院・閉院または業態転換のアコーディオンHTMLを生成"""
     html = ""
     uid = 0
@@ -269,10 +326,10 @@ def build_history_html(history, hist_years, mode="openclose"):
 
             html += f"""
 <div style="margin-top:8px;border:1px solid #ddd;border-radius:6px;overflow:hidden">
-  <div onclick="toggleAcc('acc{uid}')" style="padding:10px 16px;cursor:pointer;background:#f8f9fa;display:flex;align-items:center;gap:8px">
-    <span id="arr{uid}" style="font-size:12px">▶</span> {label}
+  <div onclick="toggleAcc('{prefix}acc{uid}','{prefix}arr{uid}')" style="padding:10px 16px;cursor:pointer;background:#f8f9fa;display:flex;align-items:center;gap:8px">
+    <span id="{prefix}arr{uid}" style="font-size:12px">▶</span> {label}
   </div>
-  <div id="acc{uid}" style="display:none;padding:16px">
+  <div id="{prefix}acc{uid}" style="display:none;padding:16px">
     {inner}
   </div>
 </div>"""
@@ -298,6 +355,169 @@ def df_to_html_table(df, highlight_last=True, orange_last=False):
         rows_html += f'<tr style="{style}">{cells}</tr>'
     headers = "".join(f'<th style="padding:8px 10px;background:{C_HEADER};color:white;border:1px solid #555">{c}</th>' for c in df.columns)
     return f'<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>{headers}</tr></thead><tbody>{rows_html}</tbody></table>'
+
+
+def build_jikei_table_with_houjin(df, target_brands, exclude_pr):
+    """2021/01から今月まで、月別×ブランド・法人グループの集計レコードリストを返す"""
+    today = date.today()
+    sy, sm = 2021, 1
+    records = []
+
+    while (sy, sm) <= (today.year, today.month):
+        tme = month_end_ts(sy, sm)
+        rec = {"年月": f"{sy}/{sm:02d}"}
+
+        # ブランド×業態ごとのカウント
+        brand_counts = {}
+        for _, row in df.iterrows():
+            brand = get_brand(row)
+            gyoutai = str(row.get("業態", "") or "").strip()
+            houjin = str(row.get("法人名", "") or "個人/その他").strip()
+            if not brand or brand not in target_brands:
+                continue
+            if check_active(row, tme):
+                key = (brand, gyoutai)
+                brand_counts[key] = brand_counts.get(key, 0) + 1
+
+        # JIKEI_BRAND_COLS の各列カウント
+        col_counts = []
+        for (brand, gyoutai) in JIKEI_BRAND_COLS:
+            if gyoutai is not None:
+                cnt = brand_counts.get((brand, gyoutai), 0)
+            else:
+                # 業態指定なし → そのブランド全業態合計
+                cnt = sum(v for (b, g), v in brand_counts.items() if b == brand)
+            col_counts.append(cnt)
+            label = f"{brand}({gyoutai})" if gyoutai else brand
+            rec[label] = cnt
+
+        # 既存グループ合計（最初の EXISTING_GROUP_END ブランド）
+        existing_sum = sum(col_counts[:EXISTING_GROUP_END])
+        rec["既存グループ合計"] = existing_sum
+
+        # 全拠点合計
+        total_all = sum(col_counts)
+        rec["全拠点合計"] = total_all
+
+        # OrangeTwist
+        rec["OrangeTwist"] = ORANGE_TWIST_COUNT
+
+        # IR・広報用（exclude_pr 以外のブランド合計 + OrangeTwist）
+        pr_sum = 0
+        for _, row in df.iterrows():
+            brand = get_brand(row)
+            if not brand or brand not in target_brands:
+                continue
+            if brand in exclude_pr:
+                continue
+            if check_active(row, tme):
+                pr_sum += 1
+        rec["IR・広報用"] = pr_sum + ORANGE_TWIST_COUNT
+
+        # 法人グループ別カウント
+        houjin_group_counts = {}
+        for group_name, members in HOUJIN_GROUPS:
+            cnt = 0
+            for _, row in df.iterrows():
+                brand = get_brand(row)
+                houjin = str(row.get("法人名", "") or "個人/その他").strip()
+                if not brand or brand not in target_brands:
+                    continue
+                if houjin not in members:
+                    continue
+                if check_active(row, tme):
+                    cnt += 1
+            houjin_group_counts[group_name] = cnt
+            rec[group_name] = cnt
+
+        records.append(rec)
+
+        sm += 1
+        if sm > 12:
+            sm = 1
+            sy += 1
+
+    return records
+
+
+def jikei_to_html_table(records):
+    """時系列法人・ブランド別集計テーブルのHTMLを生成"""
+    if not records:
+        return "<p>データなし</p>"
+
+    # ヘッダー列構成
+    brand_labels = []
+    for (brand, gyoutai) in JIKEI_BRAND_COLS:
+        label = f"{brand}({gyoutai})" if gyoutai else brand
+        brand_labels.append(label)
+
+    houjin_labels = [g for g, _ in HOUJIN_GROUPS]
+
+    # 2行ヘッダー構成
+    # 第1行: グループ見出し (colspan)
+    # 第2行: 個別列名
+
+    # ブランド列数
+    n_brand = len(brand_labels)
+
+    # 色設定
+    th_base = f'style="padding:6px 8px;background:{C_HEADER};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;z-index:2"'
+    th_orange = f'style="padding:6px 8px;background:{C_ORANGE};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;z-index:2"'
+    th_blue = f'style="padding:6px 8px;background:{C_BLUE};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;z-index:2"'
+    th_green = f'style="padding:6px 8px;background:#1E8449;color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;z-index:2"'
+    th_sticky = f'style="padding:6px 8px;background:{C_HEADER};color:white;border:1px solid #444;white-space:nowrap;font-size:11px;position:sticky;top:0;left:0;z-index:3"'
+
+    # 第1行ヘッダー
+    row1 = f'<th rowspan="2" {th_sticky}>年月</th>'
+    row1 += f'<th colspan="{n_brand}" {th_base}>ブランド</th>'
+    row1 += f'<th rowspan="2" {th_green}>既存グループ合計</th>'
+    row1 += f'<th rowspan="2" {th_base}>全拠点合計</th>'
+    row1 += f'<th rowspan="2" {th_orange}>OrangeTwist</th>'
+    row1 += f'<th rowspan="2" {th_orange}>IR・広報用</th>'
+    row1 += f'<th colspan="{len(houjin_labels)}" {th_blue}>法人別</th>'
+
+    # 第2行ヘッダー
+    row2 = ""
+    for label in brand_labels:
+        row2 += f'<th {th_base}>{label}</th>'
+    for label in houjin_labels:
+        row2 += f'<th {th_blue}>{label}</th>'
+
+    thead = f"<thead><tr>{row1}</tr><tr>{row2}</tr></thead>"
+
+    # tbody
+    tbody_rows = ""
+    for rec in records:
+        ym = rec["年月"]
+        # 12月は薄青背景
+        is_dec = ym.endswith("/12")
+        row_bg = "#EBF5FB" if is_dec else "white"
+
+        td_base = f'style="padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;background:{row_bg}"'
+        td_green = f'style="padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;background:#D5F5E3;font-weight:bold"'
+        td_orange = f'style="padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;background:#FAD7A0;font-weight:bold"'
+        td_sticky = f'style="padding:5px 8px;border:1px solid #ddd;text-align:center;font-size:12px;background:{row_bg};position:sticky;left:0;z-index:1;font-weight:bold;white-space:nowrap"'
+
+        cells = f'<td {td_sticky}>{ym}</td>'
+
+        for label in brand_labels:
+            cells += f'<td {td_base}>{rec.get(label, 0)}</td>'
+
+        cells += f'<td {td_green}>{rec.get("既存グループ合計", 0)}</td>'
+        cells += f'<td {td_base}>{rec.get("全拠点合計", 0)}</td>'
+        cells += f'<td {td_orange}>{rec.get("OrangeTwist", ORANGE_TWIST_COUNT)}</td>'
+        cells += f'<td {td_orange}>{rec.get("IR・広報用", 0)}</td>'
+
+        for label in houjin_labels:
+            cells += f'<td {td_base}>{rec.get(label, 0)}</td>'
+
+        tbody_rows += f'<tr>{cells}</tr>'
+
+    tbody = f"<tbody>{tbody_rows}</tbody>"
+
+    table = f'<table style="border-collapse:collapse;font-size:12px;min-width:100%">{thead}{tbody}</table>'
+    return f'<div style="overflow-x:auto;max-height:70vh;overflow-y:auto;border:1px solid #ddd;border-radius:4px">{table}</div>'
+
 
 def generate():
     print("データを読み込み中...")
@@ -347,36 +567,22 @@ def generate():
     houjin_rows.append({"法人名":"合計","全拠点(ALL)":total_h})
     houjin_df=pd.DataFrame(houjin_rows)
 
-    # ── 時系列グラフ ──
-    print("時系列データを集計中...")
-    sy, sm = 2021, 1
-    ts_records = []
-    while (sy,sm) <= (today.year,today.month):
-        tme=month_end_ts(sy,sm); tms=month_start_ts(sy,sm)
-        tr1,_,_=aggregate(df,tme,tms,[b for b,_ in brand_cols],exclude_pr)
-        tall=sum(v["all"] for v in tr1.values()); tpr=sum(v["pr"] for v in tr1.values())
-        ts_records.append({"年月":f"{sy}/{sm:02d}","全拠点合計":tall,"IR・広報用":tpr+ORANGE_TWIST_COUNT})
-        sm+=1
-        if sm>12: sm=1; sy+=1
-    ts_df=pd.DataFrame(ts_records)
-
-    fig=go.Figure()
-    fig.add_trace(go.Scatter(x=ts_df["年月"],y=ts_df["IR・広報用"],mode="lines+markers",name="IR・広報用",line=dict(color=C_ORANGE,width=3)))
-    fig.add_trace(go.Scatter(x=ts_df["年月"],y=ts_df["全拠点合計"],mode="lines+markers",name="全拠点合計",line=dict(color=C_BLUE,width=2)))
-    fig.update_layout(height=400,xaxis=dict(tickangle=45),legend=dict(orientation="h"),margin=dict(t=30))
-    chart_html = fig.to_html(full_html=False, include_plotlyjs="cdn")
+    # ── 時系列推移（法人・ブランド別）テーブル ──
+    print("時系列推移（法人・ブランド別）を集計中...")
+    jikei_records = build_jikei_table_with_houjin(df, [b for b,_ in brand_cols], exclude_pr)
+    jikei_table_html = jikei_to_html_table(jikei_records)
 
     # ── ブランド別棒グラフ ──
     plot_df = brand_df[brand_df["ブランド"].isin([f"{b}({g})" if g else b for b,g in brand_cols])].copy()
     fig2=px.bar(plot_df,x="全拠点(ALL)",y="ブランド",orientation="h",height=550,color_discrete_sequence=[C_BLUE])
     fig2.update_layout(yaxis=dict(autorange="reversed"),margin=dict(t=30))
-    chart2_html = fig2.to_html(full_html=False, include_plotlyjs=False)
+    chart2_html = fig2.to_html(full_html=False, include_plotlyjs="cdn")
 
     # ── 開院・閉院・業態転換履歴 ──
     print("開院・閉院・業態転換履歴を集計中...")
     history, hist_years = build_history(df, [b for b,_ in brand_cols], exclude_pr)
-    openclose_html = build_history_html(history, hist_years, mode="openclose")
-    convert_html   = build_history_html(history, hist_years, mode="convert")
+    openclose_html = build_history_html(history, hist_years, mode="openclose", prefix="oc")
+    convert_html   = build_history_html(history, hist_years, mode="convert",   prefix="cv")
 
     # ── HTML生成 ──
     report_date = f"{y}年{m}月末"
@@ -467,10 +673,9 @@ def generate():
 </div>
 
 <div id="trend" class="content">
-  <div class="box">{chart_html}</div>
-  <div class="box" style="margin-top:20px">
-    <div class="section-title">月次データ一覧</div>
-    {df_to_html_table(ts_df.set_index("年月").reset_index())}
+  <div class="box">
+    <div class="section-title">時系列推移（法人・ブランド別）2021/01〜{y}/{m:02d}</div>
+    {jikei_table_html}
   </div>
 </div>
 
@@ -493,9 +698,9 @@ function showTab(id){{
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
 }}
-function toggleAcc(id){{
-  var el=document.getElementById(id);
-  var arr=document.getElementById('arr'+id.replace('acc',''));
+function toggleAcc(accId, arrId){{
+  var el=document.getElementById(accId);
+  var arr=document.getElementById(arrId);
   if(el.style.display==='none'){{el.style.display='block';arr.textContent='▼';}}
   else{{el.style.display='none';arr.textContent='▶';}}
 }}
