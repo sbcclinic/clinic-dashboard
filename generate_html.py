@@ -898,16 +898,6 @@ def generate():
   </div>
 </div>
 
-<div class="period-bar">
-  <span>表示期間：</span>
-  <select id="startYear">{year_options}</select>年
-  <select id="startMonth">{month_options}</select>月 〜
-  <select id="endYear">{year_options}</select>年
-  <select id="endMonth">{month_options}</select>月
-  <button onclick="filterPeriod()">適用</button>
-  <span id="periodStatus" style="font-size:12px;color:#666"></span>
-</div>
-
 <div class="tabs">
   <div class="tab active" onclick="showTab('brand',this)">📋 ブランド×業態</div>
   <div class="tab" onclick="showTab('region',this)">🌏 国内／海外×法人</div>
@@ -926,6 +916,15 @@ def generate():
   </div>
   <div class="box" style="margin-top:20px">
     <div class="section-title">期間比較（開始月 vs 終了月）</div>
+    <div class="period-bar" style="background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-weight:bold;font-size:13px">表示期間：</span>
+      <select id="startYear">{year_options}</select>年
+      <select id="startMonth">{month_options}</select>月 〜
+      <select id="endYear">{year_options}</select>年
+      <select id="endMonth">{month_options}</select>月
+      <button onclick="filterPeriod()" style="padding:5px 14px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">適用</button>
+      <span id="periodStatus" style="font-size:12px;color:#666"></span>
+    </div>
     <div id="compareTableContainer"><p style="color:#999;font-size:13px">期間を選択して「適用」を押すと比較表が表示されます。</p></div>
   </div>
   <div class="box" style="margin-top:20px">{chart2_html}</div>
