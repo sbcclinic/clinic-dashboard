@@ -8,7 +8,7 @@ from pathlib import Path
 
 def get_excel_data():
     """Box DriveまたはローカルファイルからExcelデータを取得する"""
-    box_path  = Path(r"C:\Users\宮城杏奈\Box\総合企画部_特殊案件\その他\院情報一覧カウント\院情報一覧_カウント自動化.xlsx")
+    box_path   = Path(r"C:\Users\宮城杏奈\Box\総合企画部_特殊案件\その他\院情報一覧カウント\院情報一覧_カウント自動化.xlsx")
     local_path = Path.home() / "Documents" / "クリニックDB" / "院情報一覧_カウント自動化.xlsx"
     if box_path.exists():
         return box_path
