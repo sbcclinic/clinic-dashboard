@@ -899,6 +899,10 @@ def generate():
             seen_brands.add(r["brand"])
     brands_json = json.dumps(unique_brands, ensure_ascii=False)
 
+    # 法人設定の順序をJavaScript用にJSON化（国内→海外の順）
+    houjin_order_list = REGION_HOUJIN_ORDER.get("国内", []) + REGION_HOUJIN_ORDER.get("海外", [])
+    houjin_order_json = json.dumps(houjin_order_list, ensure_ascii=False)
+
     # ── ブランド別棒グラフ ──
     plot_df = brand_df[brand_df["ブランド"].isin([f"{b}({g})" if g else b for b,g in brand_cols])].copy()
     fig2=px.bar(plot_df,x="全拠点",y="ブランド",orientation="h",height=550,color_discrete_sequence=[C_BLUE])
@@ -1104,6 +1108,7 @@ const ALL_DATA = JSON.parse('{json_str}');
 const BRAND_LABELS = {brand_labels_json};
 const CLINIC_DATA = JSON.parse('{clinic_json_escaped}');
 const UNIQUE_BRANDS = {brands_json};
+const HOUJIN_ORDER = {houjin_order_json};
 const LABEL_IR = {json.dumps(LABEL_IR, ensure_ascii=False)};
 const LABEL_ALL = {json.dumps(LABEL_ALL, ensure_ascii=False)};
 const ORANGE_TWIST_COUNT = {ORANGE_TWIST_COUNT};
@@ -1372,7 +1377,13 @@ function renderSnapshot(filtered) {{
       if (ib === -1) return -1;
       return ia - ib;
     }}
-    return a[0].localeCompare(b[0], 'ja');
+    // 法人設定シートの順序で並べる
+    const ia = HOUJIN_ORDER.indexOf(a[0]);
+    const ib = HOUJIN_ORDER.indexOf(b[0]);
+    if (ia === -1 && ib === -1) return a[0].localeCompare(b[0], 'ja');
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
   }});
 
   let html = `<p style="font-size:13px;color:#666;margin-bottom:8px"><b>${{year}}年${{parseInt(month)}}月末時点：${{filtered.length}}院</b></p>`;
