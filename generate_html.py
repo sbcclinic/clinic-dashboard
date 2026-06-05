@@ -1184,6 +1184,42 @@ def build_timeseries_html(all_data, brand_cols=None):
     return table
 
 
+def build_doctor_movement_data(monthly_states, months):
+    """先生ごとの異動データを構築"""
+    # {doctor: {month: clinic}}
+    doctor_monthly = {}
+    for mk in months:
+        state = monthly_states.get(mk, {})
+        for clinic, doctor in state.items():
+            if doctor and doctor not in ("-", ""):
+                doctor_monthly.setdefault(doctor, {})[mk] = clinic
+
+    # 連続する同一院をスティントにまとめる
+    doctor_stints = {}
+    all_clinics = set()
+    for doctor, mc in doctor_monthly.items():
+        sorted_months = sorted(mc.keys())
+        stints = []
+        if sorted_months:
+            cur_clinic = mc[sorted_months[0]]
+            cur_start  = sorted_months[0]
+            cur_end    = sorted_months[0]
+            for mk in sorted_months[1:]:
+                if mc[mk] == cur_clinic:
+                    cur_end = mk
+                else:
+                    stints.append({"clinic": cur_clinic, "start": cur_start, "end": cur_end})
+                    all_clinics.add(cur_clinic)
+                    cur_clinic = mc[mk]
+                    cur_start  = mk
+                    cur_end    = mk
+            stints.append({"clinic": cur_clinic, "start": cur_start, "end": cur_end})
+            all_clinics.add(cur_clinic)
+        doctor_stints[doctor] = stints
+
+    return doctor_stints, sorted(all_clinics), months
+
+
 def generate():
     global REGION_HOUJIN_ORDER
     print("データを読み込み中...")
@@ -1474,6 +1510,15 @@ def generate():
     doctor_df = load_doctor_data()
     director_html = build_director_html(doctor_df, df, brand_cols)
 
+    # ── 先生の異動データ ──
+    past_data_mv, _ = load_past_director_data()
+    monthly_states_mv, months_mv = build_director_pivot(doctor_df, df, past_data_mv)
+    doctor_stints, all_clinics_list, _ = build_doctor_movement_data(monthly_states_mv, months_mv)
+    doctor_stints_json = json.dumps(doctor_stints, ensure_ascii=False).replace("'", "\\'")
+    all_doctors_json   = json.dumps(sorted(doctor_stints.keys()), ensure_ascii=False)
+    all_clinics_json   = json.dumps(all_clinics_list, ensure_ascii=False)
+    months_mv_json     = json.dumps(months_mv, ensure_ascii=False)
+
     # ── 開院・閉院・業態転換履歴 ──
     print("開院・閉院・業態転換履歴を集計中...")
     history, hist_years = build_history(df, [b for b,_ in brand_cols], exclude_pr)
@@ -1521,6 +1566,7 @@ def generate():
   .tab-convert{{background:#16A085}}
   .tab-snapshot{{background:#2C3E50}}
   .tab-director{{background:#1A5276}}
+  .tab-movement{{background:#B7950B}}
   .content{{display:none;padding:24px 30px}}
   .content.active{{display:block}}
   .section-title{{background:{C_GREEN};padding:8px 14px;font-weight:bold;border-radius:4px;margin-bottom:12px}}
@@ -1559,6 +1605,7 @@ def generate():
   <div class="tab tab-convert" onclick="showTab('convert',this)">🔵 業態転換履歴</div>
   <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
   <div class="tab tab-director" onclick="showTab('director',this)">👨‍⚕️ 院長履歴</div>
+  <div class="tab tab-movement" onclick="showTab('movement',this)">🔀 先生の異動履歴</div>
 </div>
 
 <div id="brand" class="content active">
@@ -1672,10 +1719,63 @@ def generate():
   </div>
 </div>
 
+<div id="movement" class="content">
+  <div class="box">
+    <div class="section-title">先生の異動履歴</div>
+
+    <!-- ビュー切り替え -->
+    <div style="margin-bottom:12px;display:flex;gap:8px">
+      <button id="mvBtnA" onclick="mvSwitch('A')"
+        style="padding:5px 14px;border-radius:16px;border:none;cursor:pointer;font-size:13px;background:#B7950B;color:white;font-weight:bold">
+        A：先生タイムライン
+      </button>
+      <button id="mvBtnC" onclick="mvSwitch('C')"
+        style="padding:5px 14px;border-radius:16px;border:none;cursor:pointer;font-size:13px;background:#ddd;color:#333">
+        C：月次配属マップ
+      </button>
+    </div>
+
+    <!-- Case A: 先生タイムライン -->
+    <div id="mvViewA">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-size:13px">先生を選択：</span>
+        <input id="mvDoctorInput" type="text" placeholder="名前を入力して検索..."
+          style="padding:5px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;min-width:200px"
+          oninput="mvFilterDoctors()">
+        <select id="mvDoctorSelect" size="1"
+          style="padding:5px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;min-width:200px"
+          onchange="mvDrawGantt()">
+          <option value="">（先生を選んでください）</option>
+        </select>
+        <button onclick="mvDrawGantt()"
+          style="padding:5px 14px;background:#2980B9;color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">表示</button>
+      </div>
+      <div id="mvGanttArea" style="overflow-x:auto"></div>
+    </div>
+
+    <!-- Case C: 月次配属マップ -->
+    <div id="mvViewC" style="display:none">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-size:13px">月を選択：</span>
+        <select id="mvMonthSelect"
+          style="padding:5px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px"
+          onchange="mvDrawMonthMap()">
+        </select>
+        <span style="font-size:12px;color:#888">🟡 前月から異動あり</span>
+      </div>
+      <div id="mvMonthMapArea" style="overflow-x:auto;max-height:70vh;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
 <div class="updated">最終更新: {today.strftime('%Y/%m/%d')}</div>
 
 <script>
 const ALL_DATA = JSON.parse('{json_str}');
+const DOCTOR_STINTS = JSON.parse('{doctor_stints_json}');
+const ALL_DOCTORS   = {all_doctors_json};
+const ALL_CLINICS   = {all_clinics_json};
+const MONTHS_LIST   = {months_mv_json};
 const BRAND_LABELS = {brand_labels_json};
 const CLINIC_DATA = JSON.parse('{clinic_json_escaped}');
 const UNIQUE_BRANDS = {brands_json};
@@ -1692,6 +1792,163 @@ function showTab(id, el) {{
   document.getElementById(id).classList.add('active');
   if(el) el.classList.add('active');
 }}
+
+// ── 先生の異動履歴 ──────────────────────────────
+// クリニック別カラー（最大30色）
+const CLINIC_COLORS = [
+  '#2980B9','#27AE60','#E67E22','#8E44AD','#E74C3C',
+  '#16A085','#D35400','#2C3E50','#F39C12','#1ABC9C',
+  '#7D3C98','#1F618D','#148F77','#B7950B','#922B21',
+  '#117A65','#784212','#1A5276','#196F3D','#6C3483'
+];
+const clinicColorMap = {{}};
+function getClinicColor(clinic) {{
+  if (!clinicColorMap[clinic]) {{
+    const idx = Object.keys(clinicColorMap).length % CLINIC_COLORS.length;
+    clinicColorMap[clinic] = CLINIC_COLORS[idx];
+  }}
+  return clinicColorMap[clinic];
+}}
+
+function mvSwitch(mode) {{
+  document.getElementById('mvViewA').style.display = mode==='A' ? '' : 'none';
+  document.getElementById('mvViewC').style.display = mode==='C' ? '' : 'none';
+  document.getElementById('mvBtnA').style.background = mode==='A' ? '#B7950B' : '#ddd';
+  document.getElementById('mvBtnA').style.color      = mode==='A' ? 'white' : '#333';
+  document.getElementById('mvBtnC').style.background = mode==='C' ? '#B7950B' : '#ddd';
+  document.getElementById('mvBtnC').style.color      = mode==='C' ? 'white' : '#333';
+  if (mode==='C') mvDrawMonthMap();
+}}
+
+// Case A: 先生タイムライン
+(function initMvDoctors() {{
+  const sel = document.getElementById('mvDoctorSelect');
+  ALL_DOCTORS.forEach(d => {{
+    const opt = document.createElement('option');
+    opt.value = d; opt.textContent = d;
+    sel.appendChild(opt);
+  }});
+  const mvSel = document.getElementById('mvMonthSelect');
+  MONTHS_LIST.slice().reverse().forEach(mk => {{
+    const opt = document.createElement('option');
+    opt.value = mk; opt.textContent = mk;
+    mvSel.appendChild(opt);
+  }});
+}})();
+
+function mvFilterDoctors() {{
+  const q = document.getElementById('mvDoctorInput').value.toLowerCase();
+  const sel = document.getElementById('mvDoctorSelect');
+  sel.innerHTML = '<option value="">（先生を選んでください）</option>';
+  ALL_DOCTORS.filter(d => d.toLowerCase().includes(q)).forEach(d => {{
+    const opt = document.createElement('option');
+    opt.value = d; opt.textContent = d;
+    sel.appendChild(opt);
+  }});
+}}
+
+function mvDrawGantt() {{
+  const doctor = document.getElementById('mvDoctorSelect').value;
+  const area = document.getElementById('mvGanttArea');
+  if (!doctor || !DOCTOR_STINTS[doctor]) {{
+    area.innerHTML = '<p style="color:#999;font-size:13px">先生を選択してください</p>';
+    return;
+  }}
+  const stints = DOCTOR_STINTS[doctor];
+  const allMonths = MONTHS_LIST;
+  const minM = allMonths[0], maxM = allMonths[allMonths.length-1];
+  const totalCols = allMonths.length;
+
+  let html = `<h4 style="margin:0 0 8px">${{doctor}} の院長歴</h4>`;
+  html += '<div style="position:relative;overflow-x:auto">';
+  // ヘッダー（年だけ表示）
+  html += '<div style="display:flex;border-bottom:2px solid #ddd;margin-bottom:4px;min-width:' + (totalCols*40) + 'px">';
+  let prevYear = '';
+  allMonths.forEach(mk => {{
+    const yr = mk.split('/')[0];
+    const mo = mk.split('/')[1];
+    const isJan = mo === '01';
+    const bg = isJan ? '#2C3E50' : '#ECF0F1';
+    const color = isJan ? 'white' : '#666';
+    html += `<div style="width:40px;min-width:40px;font-size:9px;text-align:center;background:${{bg}};color:${{color}};padding:2px 0;border-right:1px solid #ddd">` + (isJan ? yr : mo) + '</div>';
+  }});
+  html += '</div>';
+
+  // スティント行
+  stints.forEach(stint => {{
+    const startIdx = allMonths.indexOf(stint.start);
+    const endIdx   = allMonths.indexOf(stint.end);
+    if (startIdx < 0) return;
+    const spanCols = Math.max(1, endIdx - startIdx + 1);
+    const leftPx   = startIdx * 40;
+    const widthPx  = spanCols * 40;
+    const color     = getClinicColor(stint.clinic);
+    html += `<div style="position:relative;height:30px;min-width:${{totalCols*40}}px;margin-bottom:4px">`;
+    html += `<div style="position:absolute;left:${{leftPx}}px;width:${{widthPx}}px;height:28px;background:${{color}};border-radius:4px;display:flex;align-items:center;padding:0 6px;color:white;font-size:12px;font-weight:bold;white-space:nowrap;overflow:hidden;cursor:default" title="${{stint.clinic}} (${{stint.start}}〜${{stint.end}})">
+      ${{stint.clinic}} (${{stint.start}}〜${{stint.end}})
+    </div></div>`;
+  }});
+
+  html += '</div>';
+
+  // 凡例
+  const uniqueClinics = [...new Set(stints.map(s => s.clinic))];
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:12px">';
+  uniqueClinics.forEach(c => {{
+    html += `<span style="background:${{getClinicColor(c)}};color:white;padding:2px 8px;border-radius:3px">${{c}}</span>`;
+  }});
+  html += '</div>';
+
+  area.innerHTML = html;
+}}
+
+// Case C: 月次配属マップ
+function mvDrawMonthMap() {{
+  const selMonth = document.getElementById('mvMonthSelect').value;
+  const area = document.getElementById('mvMonthMapArea');
+  if (!selMonth) return;
+
+  const monthIdx = MONTHS_LIST.indexOf(selMonth);
+  const prevMonth = monthIdx > 0 ? MONTHS_LIST[monthIdx - 1] : null;
+
+  // その月の配属
+  const curMap  = {{}};
+  const prevMap = {{}};
+  Object.entries(DOCTOR_STINTS).forEach(([doctor, stints]) => {{
+    stints.forEach(s => {{
+      if (s.start <= selMonth && s.end >= selMonth) curMap[doctor]  = s.clinic;
+      if (prevMonth && s.start <= prevMonth && s.end >= prevMonth)  prevMap[doctor] = s.clinic;
+    }});
+  }});
+
+  // テーブル生成
+  const rows = Object.entries(curMap).sort((a,b) => a[1].localeCompare(b[1],'ja'));
+  let html = `<p style="font-size:13px;color:#666;margin-bottom:8px"><b>${{selMonth}} 時点の配属一覧（${{rows.length}}名）</b></p>`;
+  html += '<table style="border-collapse:collapse;font-size:13px;width:100%">';
+  html += `<thead><tr style="background:#2C3E50;color:white">
+    <th style="padding:6px 12px;border:1px solid #555;min-width:120px">先生名</th>
+    <th style="padding:6px 12px;border:1px solid #555;min-width:180px">今月の院</th>
+    <th style="padding:6px 12px;border:1px solid #555;min-width:180px">前月の院</th>
+    <th style="padding:6px 12px;border:1px solid #555">変化</th>
+  </tr></thead><tbody>`;
+
+  rows.forEach(([doctor, clinic]) => {{
+    const prev = prevMap[doctor] || '―';
+    const moved = prev !== '―' && prev !== clinic;
+    const bg = moved ? '#FFF9C4' : 'white';
+    const change = moved ? `${{prev}} → ${{clinic}}` : '変化なし';
+    const changeColor = moved ? '#E67E22' : '#999';
+    html += `<tr style="background:${{bg}}">
+      <td style="padding:5px 12px;border:1px solid #ddd;font-weight:bold">${{doctor}}</td>
+      <td style="padding:5px 12px;border:1px solid #ddd">${{clinic}}</td>
+      <td style="padding:5px 12px;border:1px solid #ddd;color:#666">${{prev}}</td>
+      <td style="padding:5px 12px;border:1px solid #ddd;color:${{changeColor}};font-weight:${{moved?'bold':'normal'}}">${{change}}</td>
+    </tr>`;
+  }});
+  html += '</tbody></table>';
+  area.innerHTML = html;
+}}
+// ─────────────────────────────────────────────────
 
 function toggleAcc(accId, arrId) {{
   var el=document.getElementById(accId);
