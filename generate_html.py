@@ -424,14 +424,12 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
     W_DIR  = 104  # 現院長列幅
     W_DATE = 74   # 就任時期列幅
     sticky = 'position:sticky;top:0;z-index:5;background:{C_HEADER}'
-    W_ABBR = 80   # 略式院名列幅
     W_FLAG = 50   # 状態列幅
     headers  = f'<th style="{th_style};position:sticky;top:0;left:0px;z-index:5;min-width:{W_ID}px">院ID</th>'
-    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID}px;z-index:5;min-width:{W_ABBR}px">略式院名</th>'
-    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_ABBR}px;z-index:5;min-width:{W_FLAG}px">状態</th>'
-    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_ABBR+W_FLAG}px;z-index:5;min-width:{W_NAME}px">院名</th>'
-    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_ABBR+W_FLAG+W_NAME}px;z-index:5;min-width:{W_DIR}px">現院長</th>'
-    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_ABBR+W_FLAG+W_NAME+W_DIR}px;z-index:5;min-width:{W_DATE}px">就任時期</th>'
+    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID}px;z-index:5;min-width:{W_FLAG}px">状態</th>'
+    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_FLAG}px;z-index:5;min-width:{W_NAME}px">院名</th>'
+    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_FLAG+W_NAME}px;z-index:5;min-width:{W_DIR}px">現院長</th>'
+    headers += f'<th style="{th_style};position:sticky;top:0;left:{W_ID+W_FLAG+W_NAME+W_DIR}px;z-index:5;min-width:{W_DATE}px">就任時期</th>'
     for mk in months:
         headers += f'<th style="{th_style};position:sticky;top:0;z-index:4;min-width:80px">{mk}</th>'
 
@@ -458,19 +456,17 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
         cid_val = clinic_id_map.get(clinic, "")
         # ① 現院長・就任時期
         cur_dir, cur_start = get_current_director_info(clinic, limit_before, limit_from)
-        # 略式院名・状態フラグ
-        abbr = clinic_abbr_map.get(clinic, "")
+        # 状態フラグ（開院中/閉院・転換）
         is_active = clinic_active_map.get(clinic, True)
         status_txt = "開院中" if is_active else "閉院/転換"
         status_bg  = "#D5F5E3" if is_active else "#FADBD8"
         status_col = "#1E8449" if is_active else "#922B21"
         # 左列をsticky固定（left位置を積算）
         cells  = f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:0px;background:{row_bg};font-size:12px;text-align:right;color:#666;z-index:1">{cid_val}</td>'
-        cells += f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:{W_ID}px;background:{row_bg};font-size:12px;white-space:nowrap;color:#333;z-index:1">{abbr}</td>'
-        cells += f'<td style="padding:3px 6px;border:1px solid #ddd;position:sticky;left:{W_ID+W_ABBR}px;background:{status_bg};font-size:10px;text-align:center;color:{status_col};font-weight:bold;z-index:1">{status_txt}</td>'
-        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_ABBR+W_FLAG}px;background:{row_bg};font-size:12px;white-space:nowrap;color:#333;z-index:1">{clinic}</td>'
-        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_ABBR+W_FLAG+W_NAME}px;background:{row_bg};font-size:12px;font-weight:bold;color:#2C3E50;z-index:1">{cur_dir}</td>'
-        cells += f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:{W_ID+W_ABBR+W_FLAG+W_NAME+W_DIR}px;background:{row_bg};font-size:11px;color:#555;text-align:center;z-index:1">{cur_start}</td>'
+        cells += f'<td style="padding:3px 6px;border:1px solid #ddd;position:sticky;left:{W_ID}px;background:{status_bg};font-size:10px;text-align:center;color:{status_col};font-weight:bold;z-index:1">{status_txt}</td>'
+        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG}px;background:{row_bg};font-size:12px;white-space:nowrap;color:#333;z-index:1">{clinic}</td>'
+        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME}px;background:{row_bg};font-size:12px;font-weight:bold;color:#2C3E50;z-index:1">{cur_dir}</td>'
+        cells += f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME+W_DIR}px;background:{row_bg};font-size:11px;color:#555;text-align:center;z-index:1">{cur_start}</td>'
         for mk in months:
             # 業態転換による表示範囲制限
             if limit_before and mk >= limit_before:
