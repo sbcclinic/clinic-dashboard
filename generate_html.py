@@ -420,7 +420,7 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
 
     # ── 院長履歴スナップショット比較による退職・昇格の自動補完 ──
     # 人事通達データのない月（2025/08以前）や未記入の退職を補う
-    RECENT_WINDOW = 3  # 直近N ヶ月以内に院長実績があれば「院長間異動」と判定
+    RECENT_WINDOW = 6  # 直近N ヶ月以内に院長実績があれば「院長間異動」と判定
 
     for i, month_key in enumerate(months):
         if i == 0: continue
@@ -447,19 +447,21 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
         for doctor in set(cur_dr) - set(prev_dr):
             new_clinic = cur_dr[doctor]
             # 直近 RECENT_WINDOW ヶ月以内に院長実績があるか確認
-            # → あれば「院長間異動」（例：東先生の四日市→静岡）
-            # → なければ「昇格」（例：佐藤先生の秋田→4ヶ月空白→川口）
+            # → あれば「院長間異動」（新院工事などで一時的に一般ドクター→半年以内に再就任）
+            # → なければ「昇格」（長期間のブランクを経て初めて院長に就任）
             was_recent_director = any(
                 doctor in {d for d in monthly_states.get(months[j], {}).values()
                            if d and d not in ('-', '', 'nan')}
                 for j in range(max(0, i - RECENT_WINDOW), i)
             )
-            if was_recent_director:
-                continue  # 直近に院長実績あり → 院長間異動なので除外
             if not any(e["doctor"] == doctor
                        for e in promotion_events.get(month_key, [])):
+                # 直近6ヶ月以内に院長実績あり → 異動として登録（チェーンには表示するが昇格扱いしない）
+                # 直近6ヶ月を超える空白 → 昇格として登録
+                kubun_snap = "異動" if was_recent_director else "昇格"
+                from_snap  = "（異動）" if was_recent_director else "（昇格）"
                 promotion_events.setdefault(month_key, []).append(
-                    {"doctor": doctor, "from": "（昇格）", "to": new_clinic, "kubun": "昇格"})
+                    {"doctor": doctor, "from": from_snap, "to": new_clinic, "kubun": kubun_snap})
 
     return monthly_states, months, promotion_events, resignation_events
 
