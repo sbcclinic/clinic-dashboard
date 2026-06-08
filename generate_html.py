@@ -2224,15 +2224,30 @@ function mvDetectChains() {{
   }});
 
   // 【2】院長間異動起点チェーン（退職なしで起きる玉突き）
-  // from院に未使用inEdgeがない異動 = その異動が連鎖の起点
-  moves.filter(m => !used.has(m.doctor)).forEach(rootMove => {{
-    if (used.has(rootMove.doctor)) return;
-    const hasUnusedIncoming = (inEdge[rootMove.from] || []).some(e => !used.has(e.doctor));
-    if (hasUnusedIncoming) return; // 誰かがfrom院に来ている = 起点ではない
-    used.add(rootMove.doctor);
-    const chain = buildChainFrom(rootMove.from);
-    if (chain.length >= 1) chains.push({{ resign: null, rootMove, chain }});
-  }});
+  // 「誰かが来た（inEdge）が、誰も出ていかない（outEdgeなし）院」= チェーンの終点
+  // 終点から inEdge を逆引きすることで連鎖全体を検出する
+  {{
+    const unusedMoves    = moves.filter(m => !used.has(m.doctor));
+    const unusedFromSet  = new Set(unusedMoves.map(m => m.from));
+    // to院が fromSet に含まれない = その院からは誰も出ていかない = 終点
+    const terminalTos    = unusedMoves.filter(m => !unusedFromSet.has(m.to)).map(m => m.to);
+    const seenTerminals  = new Set();
+
+    terminalTos.forEach(terminal => {{
+      if (seenTerminals.has(terminal)) return;
+      seenTerminals.add(terminal);
+      const unusedIn = (inEdge[terminal] || []).filter(e => !used.has(e.doctor));
+      if (!unusedIn.length) return;
+
+      // 終点への異動 = 起点（rootMove）
+      const rootMove = unusedIn[0];
+      used.add(rootMove.doctor);
+
+      // rootMove.from（起点が抜けた院）から逆引きで連鎖を構築
+      const chain = buildChainFrom(rootMove.from);
+      if (chain.length >= 1) chains.push({{ resign: null, rootMove, chain }});
+    }});
+  }}
 
   // ── 結果表示 ──
   let html = '';
