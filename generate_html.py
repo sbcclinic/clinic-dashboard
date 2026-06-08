@@ -1287,13 +1287,54 @@ def build_timeseries_html(all_data, brand_cols=None):
 
 def build_doctor_movement_data(monthly_states, months):
     """先生ごとの異動データを構築"""
-    # {doctor: {month: clinic}}
-    doctor_monthly = {}
+    # 全月・全院で先生→院の全対応を収集（同一先生が複数院に登録される場合を考慮）
+    doctor_monthly_all = {}  # {doctor: {month: set(clinics)}}
     for mk in months:
         state = monthly_states.get(mk, {})
         for clinic, doctor in state.items():
             if doctor and doctor not in ("-", ""):
-                doctor_monthly.setdefault(doctor, {})[mk] = clinic
+                doctor_monthly_all.setdefault(doctor, {}).setdefault(mk, set()).add(clinic)
+
+    # 各先生・各院について「最初に現れた月」を計算（最新着任院を優先するため）
+    clinic_first_month = {}  # {(doctor, clinic): first_month}
+    for doctor, mc in doctor_monthly_all.items():
+        for mk in sorted(mc.keys()):
+            for clinic in mc[mk]:
+                key = (doctor, clinic)
+                if key not in clinic_first_month:
+                    clinic_first_month[key] = mk
+
+    # 競合解消：1先生が同月に複数院に登録されている場合、最も最近着任した院を優先
+    # 同着の場合は look-ahead（将来別の先生が着任する院＝退任元）で判定
+    doctor_monthly = {}
+    for doctor, mc in doctor_monthly_all.items():
+        resolved = {}
+        for mk in sorted(mc.keys()):
+            clinics = list(mc[mk])
+            if len(clinics) == 1:
+                resolved[mk] = clinics[0]
+            else:
+                # 最も最近着任した院を選ぶ
+                first_months = {c: clinic_first_month.get((doctor, c), '0000/00') for c in clinics}
+                latest = max(first_months.values())
+                newest = [c for c, fm in first_months.items() if fm == latest]
+                if len(newest) == 1:
+                    resolved[mk] = newest[0]
+                else:
+                    # 同着: look-ahead で最初に後継者が来る院を選ぶ（＝そこが退任元）
+                    mk_idx = months.index(mk) if mk in months else -1
+                    chosen = None
+                    for future_mk in months[mk_idx + 1: mk_idx + 13]:
+                        future_state = monthly_states.get(future_mk, {})
+                        for c in newest:
+                            future_doc = future_state.get(c, '')
+                            if future_doc and future_doc != doctor:
+                                chosen = c
+                                break
+                        if chosen:
+                            break
+                    resolved[mk] = chosen if chosen else newest[0]
+        doctor_monthly[doctor] = resolved
 
     # 連続する同一院をスティントにまとめる
     doctor_stints = {}
