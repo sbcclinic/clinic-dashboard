@@ -247,13 +247,20 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
         m += 1
         if m > 12: m = 1; y += 1
 
-    # TWE表記 → 正式名称のマッピング（人事通達の略称を正式名称に統一するため）
-    twe_to_fullname = {}
+    # TWE表記 → 正式名称のマッピング（ブランド別候補対応）
+    twe_to_fullname = {}   # {twe: 正式名称} 院ID昇順で先着優先（SBC湘南美容が最初に来るため正しいブランドを選択）
+    twe_to_clinics  = {}   # {twe: [(正式名称, ブランド)]} ブランド優先検索用
+    clinic_to_brand = {}   # {正式名称: ブランド} 逆引き用
     for _, row in clinic_df.iterrows():
-        name = str(row.get("正式名称", "") or "").strip()
-        twe  = str(row.get("TWE表記", "") or "").strip()
+        name  = str(row.get("正式名称", "") or "").strip()
+        twe   = str(row.get("TWE表記",  "") or "").strip()
+        brand = str(row.get("ブランド",  "") or "").strip()
         if name and twe and twe not in ("nan", ""):
-            twe_to_fullname[twe] = name
+            if twe not in twe_to_fullname:   # 最初のものを優先（院ID昇順→SBC湘南美容が先）
+                twe_to_fullname[twe] = name
+            twe_to_clinics.setdefault(twe, []).append((name, brand))
+        if name and brand and brand not in ("nan", ""):
+            clinic_to_brand[name] = brand
 
     # Build clinic ID to name mapping
     # 業態転換がある院は「転換前の院名」を優先（歴史データのマッピングに使う）
@@ -331,11 +338,11 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
                     doctor = extract_doctor_name(row.get("氏名（よみ）", ""))
 
                     clinic, is_dir = parse_director_from_detail(detail)
-                    # 略称（TWE表記）を正式名称に変換（「○○院」→「○○」でも再試行）
-                    if clinic and clinic in twe_to_fullname:
-                        clinic = twe_to_fullname[clinic]
-                    elif clinic and clinic.endswith('院') and clinic[:-1] in twe_to_fullname:
-                        clinic = twe_to_fullname[clinic[:-1]]
+                    # 略称（TWE表記）を正式名称に変換（ブランド別候補対応・「○○院」→「○○」でも試行）
+                    if clinic:
+                        _ck = clinic if clinic in twe_to_clinics else (clinic[:-1] if clinic.endswith('院') else clinic)
+                        if _ck in twe_to_clinics:
+                            clinic = twe_to_clinics[_ck][0][0]  # 院ID最小（SBC湘南美容）を使用
 
                     if kubun == "退職":
                         if doctor in doctor_clinic:
@@ -345,13 +352,25 @@ def build_director_pivot(doctor_df, clinic_df, past_data):
                     elif is_dir and clinic:
                         # 昇格・新任（前月に院長職なし）の場合は昇格イベントとして記録
                         if doctor not in doctor_clinic:
-                            from_place = str(row.get("異動前/現所属", "") or "").strip()
-                            if from_place and from_place not in ("nan", ""):
-                                # 前の所属も TWE変換を試みる
-                                if from_place in twe_to_fullname:
-                                    from_place = twe_to_fullname[from_place]
-                                elif from_place.endswith('院') and from_place[:-1] in twe_to_fullname:
-                                    from_place = twe_to_fullname[from_place[:-1]]
+                            from_place_raw = str(row.get("異動前/現所属", "") or "").strip()
+                            if from_place_raw and from_place_raw not in ("nan", ""):
+                                # 着任先のブランドを参照して異動元クリニックを正確に特定
+                                to_brand = clinic_to_brand.get(clinic, "")
+                                fp_key = from_place_raw
+                                if fp_key not in twe_to_clinics and fp_key.endswith('院'):
+                                    fp_key = fp_key[:-1]
+                                if fp_key in twe_to_clinics:
+                                    cands = twe_to_clinics[fp_key]
+                                    if len(cands) == 1:
+                                        from_place = cands[0][0]
+                                    elif to_brand:
+                                        # 着任先と同じブランドを優先
+                                        same = [n for n, b in cands if b == to_brand]
+                                        from_place = same[0] if same else cands[0][0]
+                                    else:
+                                        from_place = cands[0][0]
+                                else:
+                                    from_place = from_place_raw
                             else:
                                 from_place = "（新任）"
                             promotion_events.setdefault(month_key, []).append({
