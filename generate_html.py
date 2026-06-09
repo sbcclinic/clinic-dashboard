@@ -2537,6 +2537,10 @@ function mvDrawMonthMap() {{
   const monthIdx = MONTHS_LIST.indexOf(selMonth);
   const prevMonth = monthIdx > 0 ? MONTHS_LIST[monthIdx - 1] : null;
 
+  // 院名→院IDのマップ
+  const clinicIdMap = {{}};
+  CLINIC_DATA.forEach(c => {{ if (c.name && c.id) clinicIdMap[c.name] = c.id; }});
+
   const curMap  = {{}};
   const prevMap = {{}};
   Object.entries(DOCTOR_STINTS).forEach(([doctor, stints]) => {{
@@ -2546,10 +2550,17 @@ function mvDrawMonthMap() {{
     }});
   }});
 
-  const rows = Object.entries(curMap).sort((a,b) => a[1].localeCompare(b[1],'ja'));
+  // 院ID順にソート（IDなし院は末尾）
+  const rows = Object.entries(curMap).sort((a, b) => {{
+    const idA = parseInt(clinicIdMap[a[1]] || '999999');
+    const idB = parseInt(clinicIdMap[b[1]] || '999999');
+    return idA !== idB ? idA - idB : a[1].localeCompare(b[1], 'ja');
+  }});
+
   let html = `<p style="font-size:13px;color:#666;margin-bottom:8px"><b>${{selMonth}} 時点の配属一覧（${{rows.length}}名）</b></p>`;
   html += '<table style="border-collapse:collapse;font-size:13px;width:100%">';
   html += `<thead><tr style="background:#2C3E50;color:white">
+    <th style="padding:6px 12px;border:1px solid #555;min-width:60px;text-align:right">院ID</th>
     <th style="padding:6px 12px;border:1px solid #555;min-width:120px">先生名</th>
     <th style="padding:6px 12px;border:1px solid #555;min-width:180px">今月の院</th>
     <th style="padding:6px 12px;border:1px solid #555;min-width:180px">前月の院</th>
@@ -2557,12 +2568,14 @@ function mvDrawMonthMap() {{
   </tr></thead><tbody>`;
 
   rows.forEach(([doctor, clinic]) => {{
+    const clinicId = clinicIdMap[clinic] || '―';
     const prev = prevMap[doctor] || '―';
     const moved = prev !== '―' && prev !== clinic;
     const bg = moved ? '#FFF9C4' : 'white';
     const change = moved ? `${{prev}} → ${{clinic}}` : '変化なし';
     const changeColor = moved ? '#E67E22' : '#999';
     html += `<tr style="background:${{bg}}">
+      <td style="padding:5px 12px;border:1px solid #ddd;text-align:right;color:#666">${{clinicId}}</td>
       <td style="padding:5px 12px;border:1px solid #ddd;font-weight:bold">${{doctor}}</td>
       <td style="padding:5px 12px;border:1px solid #ddd">${{clinic}}</td>
       <td style="padding:5px 12px;border:1px solid #ddd;color:#666">${{prev}}</td>
