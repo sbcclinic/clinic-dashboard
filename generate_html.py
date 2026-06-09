@@ -1929,10 +1929,10 @@ def generate():
   <div class="box">
     <div class="section-title" id="brandTableTitle">{report_date} ブランド×業態</div>
     <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
-      <div id="brandTableContainer" style="flex:0 0 auto;max-width:560px">
+      <div id="brandTableContainer" style="flex:1 1 0;min-width:0;overflow-x:auto">
         {brand_table}
       </div>
-      <div style="flex:1;min-width:220px">
+      <div style="flex:1 1 0;min-width:0">
         <div style="font-weight:bold;font-size:15px;margin-bottom:10px;color:#2C3E50;border-left:4px solid {C_BLUE};padding-left:8px">業態別 院数</div>
         {gyoutai_table_html_str}
       </div>
