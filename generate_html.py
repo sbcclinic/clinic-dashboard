@@ -674,15 +674,21 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
         cur_dir, cur_start = get_current_director_info(clinic, limit_before, limit_from)
         # 状態フラグ（開院中/閉院・転換）
         is_active = clinic_active_map.get(clinic, True)
+        # 閉院・転換済みの場合は行全体をグレーにし院長名を非表示
+        if not is_active:
+            row_bg   = "#e8e8e8"
+            cur_dir  = ""
+            cur_start = ""
         status_txt = "開院中" if is_active else "閉院/転換"
-        status_bg  = "#D5F5E3" if is_active else "#FADBD8"
-        status_col = "#1E8449" if is_active else "#922B21"
+        status_bg  = "#D5F5E3" if is_active else "#c8c8c8"
+        status_col = "#1E8449" if is_active else "#777"
+        txt_col    = "#333" if is_active else "#888"
         # 左列をsticky固定（left位置を積算）
-        cells  = f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:0px;background:{row_bg};font-size:12px;text-align:right;color:#666;z-index:1">{cid_val}</td>'
+        cells  = f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:0px;background:{row_bg};font-size:12px;text-align:right;color:#888;z-index:1">{cid_val}</td>'
         cells += f'<td style="padding:3px 6px;border:1px solid #ddd;position:sticky;left:{W_ID}px;background:{status_bg};font-size:10px;text-align:center;color:{status_col};font-weight:bold;z-index:1">{status_txt}</td>'
-        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG}px;background:{row_bg};font-size:12px;white-space:nowrap;color:#333;z-index:1">{clinic}</td>'
-        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME}px;background:{row_bg};font-size:12px;font-weight:bold;color:#2C3E50;z-index:1">{cur_dir}</td>'
-        cells += f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME+W_DIR}px;background:{row_bg};font-size:11px;color:#555;text-align:center;z-index:1">{cur_start}</td>'
+        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG}px;background:{row_bg};font-size:12px;white-space:nowrap;color:{txt_col};z-index:1">{clinic}</td>'
+        cells += f'<td style="padding:5px 10px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME}px;background:{row_bg};font-size:12px;font-weight:bold;color:{txt_col};z-index:1">{cur_dir}</td>'
+        cells += f'<td style="padding:5px 8px;border:1px solid #ddd;position:sticky;left:{W_ID+W_FLAG+W_NAME+W_DIR}px;background:{row_bg};font-size:11px;color:#888;text-align:center;z-index:1">{cur_start}</td>'
         for mk in months:
             # 業態転換による表示範囲制限
             if limit_before and mk >= limit_before:
@@ -693,11 +699,13 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
                 continue
             # 閉院後のグレーアウト（閉院月の翌月以降）
             if close_month and mk > close_month:
-                cells += f'<td style="padding:5px 8px;border:1px solid #ddd;background:#d0d0d0;font-size:12px;text-align:center;color:#aaa" title="閉院済">🔴</td>'
+                cells += f'<td style="padding:5px 8px;border:1px solid #ddd;background:#e8e8e8;font-size:12px;text-align:center;color:#bbb" title="閉院済"></td>'
                 continue
             doctor = monthly_states.get(mk, {}).get(clinic, "")
             changed = doctor and doctor != prev_doctor and prev_doctor != ""
-            if not doctor:
+            if not is_active:
+                bg = "#e8e8e8"; color = "#aaa"; txt = doctor if doctor else ""
+            elif not doctor:
                 bg = "#f8f9fa"; color = "#ccc"; txt = "―"
             elif changed:
                 bg = "#FFF9C4"; color = "#333"; txt = doctor
@@ -758,7 +766,7 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
       <span style="background:#D7BDE2;padding:2px 8px;border:1px solid #ddd;color:#6c3483">業態転換前</span>
       <span style="background:#F3E5F5;padding:2px 8px;border:1px solid #ddd;color:#6c3483">業態転換後</span>
       <span style="background:#f0f0f0;padding:2px 8px;border:1px solid #ddd;color:#999">対象外期間</span>
-      <span style="background:#d0d0d0;padding:2px 8px;border:1px solid #ddd;color:#aaa">🔴 閉院済</span>
+      <span style="background:#e8e8e8;padding:2px 8px;border:1px solid #ddd;color:#888">閉院済（行全体グレー）</span>
       <span style="color:#ccc;padding:2px 8px;border:1px solid #ddd">―　記録なし</span>
       &nbsp;│&nbsp;
       <span>🔵 同ID引き継ぎ</span>
