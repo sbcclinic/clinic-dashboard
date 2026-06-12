@@ -278,12 +278,18 @@ def build_director_pivot(doctor_df, clinic_df, past_data, past_name_data=None):
         m += 1
         if m > 12: m = 1; y += 1
 
+    # 開院中の院名セット（同名の閉院院に閉院日を誤適用しないため）
+    _open_names = {str(r.get("正式名称","") or "").strip()
+                   for _, r in clinic_df.iterrows()
+                   if str(r.get("開院フラグ","") or "").strip() == "開院"}
+
     # 閉院日マップ: {院名: "YYYY/MM"} — この月の翌月以降スナップショットから除外
+    # ※ 同名で開院中の院が存在する場合は閉院日を適用しない
     clinic_close_mk = {}
     for _, row in clinic_df.iterrows():
         name = str(row.get("正式名称", "") or "").strip()
         d_close = to_ts(row.get("閉院日"))
-        if name and d_close is not None:
+        if name and d_close is not None and name not in _open_names:
             clinic_close_mk[name] = f"{d_close.year}/{d_close.month:02d}"
 
     # TWE表記 → 正式名称のマッピング（ブランド別候補対応）
@@ -585,11 +591,16 @@ def build_director_html(doctor_df, clinic_df, brand_cols):
             clinic_active_map[name] = (flag == "開院")
 
     # 閉院月マップ: {正式名称: "YYYY/MM"} — 閉院月の翌月以降をグレーアウト
+    # 開院中の院名セット（同名閉院院への閉院日誤適用を防止）
+    _open_names_html = {str(r.get("正式名称","") or "").strip()
+                        for _, r in clinic_df.iterrows()
+                        if str(r.get("開院フラグ","") or "").strip() == "開院"}
+
     clinic_close_month = {}
     for _, row in clinic_df.iterrows():
         name = str(row.get("正式名称", "") or "").strip()
         d_close = to_ts(row.get("閉院日"))
-        if name and d_close is not None:
+        if name and d_close is not None and name not in _open_names_html:
             clinic_close_month[name] = f"{d_close.year}/{d_close.month:02d}"
 
     # 業態転換ペアを特定: {旧院名: (新院名, 業態転換年月)}
