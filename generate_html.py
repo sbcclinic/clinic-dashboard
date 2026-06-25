@@ -2161,6 +2161,7 @@ def generate():
   <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
   <div class="tab tab-director" onclick="showTab('director',this)">👨‍⚕️ 院長履歴</div>
   <div class="tab tab-movement" onclick="showTab('movement',this)">🔀 先生の異動履歴</div>
+  <div class="tab tab-sns" onclick="showTab('sns',this)">★NEW 📱 SNS流入ファネル</div>
 </div>
 
 <div id="brand" class="content active">
@@ -2378,6 +2379,36 @@ def generate():
   </div>
 </div>
 
+<div id="sns" class="content">
+  <div class="box">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <span style="background:#FF6B35;color:white;font-size:11px;font-weight:bold;padding:2px 7px;border-radius:3px">★NEW</span>
+      <span style="font-size:18px;font-weight:bold;color:#2C3E50">SNS流入ファネル（予約導線の可視化）</span>
+      <span style="font-size:12px;color:#E74C3C;font-weight:bold;background:#FFF0F0;border:1px solid #FFCDD2;padding:2px 8px;border-radius:10px">デモ表示</span>
+    </div>
+
+    <!-- 媒体選択ボタン -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="sns-media-btn active" onclick="switchSnsMedia('all',this)" style="padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:bold;background:#2980B9;color:white">全媒体合計</button>
+      <button class="sns-media-btn" onclick="switchSnsMedia('instagram',this)" style="padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:bold;background:#ddd;color:#333">📸 Instagram</button>
+      <button class="sns-media-btn" onclick="switchSnsMedia('tiktok',this)" style="padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:bold;background:#ddd;color:#333">🎵 TikTok</button>
+      <button class="sns-media-btn" onclick="switchSnsMedia('x',this)" style="padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:bold;background:#ddd;color:#333">✕ X（旧Twitter）</button>
+      <button class="sns-media-btn" onclick="switchSnsMedia('line',this)" style="padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:bold;background:#ddd;color:#333">💬 LINE</button>
+    </div>
+
+    <!-- ファネルカード -->
+    <div id="snsFunnelArea"></div>
+
+    <!-- AIファネル分析 -->
+    <div id="snsAiArea" style="margin-top:16px;background:#EBF5FB;border:1px solid #AED6F1;border-radius:8px;padding:14px 18px">
+      <div style="font-size:13px;font-weight:bold;color:#2980B9;margin-bottom:6px">
+        🤖 AIファネル分析 <span style="font-size:11px;font-weight:bold;color:white;background:#E74C3C;padding:1px 6px;border-radius:3px;margin-left:4px">AI予測</span>
+      </div>
+      <div id="snsAiText" style="font-size:13px;color:#333;line-height:1.8"></div>
+    </div>
+  </div>
+</div>
+
 <div class="updated">最終更新: {today.strftime('%Y/%m/%d')}</div>
 
 <script>
@@ -2548,6 +2579,87 @@ function showTab(id, el) {{
   document.getElementById(id).classList.add('active');
   if(el) el.classList.add('active');
 }}
+
+// ── SNS流入ファネル（デモ） ──────────────────────────────
+const SNS_DEMO_DATA = {{
+  all: {{
+    label: '全媒体合計',
+    imp: 42800, click: 8540, visit: 3210, rsv: 284,
+    ai: '最大離脱ポイントは「サイト訪問→予約」ステップ（離脱率91.2%）。LP・予約フォームのUXに課題がある可能性。<br>改善提案：①ストーリーズの予約リンク露出強化　②リンクツリー経由のパスを短縮'
+  }},
+  instagram: {{
+    label: 'Instagram',
+    imp: 28500, click: 5700, visit: 2100, rsv: 198,
+    ai: 'Instagramはクリック率・予約転換率ともに平均水準。リール動画経由の流入が多く、フォロワー層との親和性が高い。<br>改善提案：①ストーリーズハイライトに予約導線を追加　②リール末尾に「プロフのリンクから予約」テキストを挿入'
+  }},
+  tiktok: {{
+    label: 'TikTok',
+    imp: 9200, click: 1840, visit: 680, rsv: 52,
+    ai: 'TikTokはインプレッションに対してクリック率が低め（20.0%）。動画から直接予約へのパスが長いことが課題。<br>改善提案：①TikTokショップ連携またはリンク強化　②「予約はプロフから」のCTAを動画内に明示'
+  }},
+  x: {{
+    label: 'X（旧Twitter）',
+    imp: 3800, click: 760, visit: 310, rsv: 28,
+    ai: 'Xはサイト訪問→予約の転換率が他媒体より高め（9.0%）。検索経由・情報収集目的のユーザーが多い。<br>改善提案：①施術実績ポストの定期投稿　②キャンペーン告知との連動で予約数を底上げ'
+  }},
+  line: {{
+    label: 'LINE',
+    imp: 1300, click: 240, visit: 120, rsv: 6,
+    ai: 'LINEはサイト訪問→予約の離脱率が高い（95.0%）。LINEからの流入ユーザーは予約意欲が低い可能性。<br>改善提案：①LINE公式アカウントのリッチメニューに予約ボタンを設置　②クーポン配信で来院動機を強化'
+  }}
+}};
+
+function _pct(a, b) {{ return b ? (a/b*100).toFixed(1) : '0.0'; }}
+
+function renderSnsFunnel(key) {{
+  const d = SNS_DEMO_DATA[key];
+  const total_pct = (d.rsv / d.imp * 100).toFixed(2);
+  const c2p = _pct(d.click, d.imp);
+  const c3p = _pct(d.visit, d.click);
+  const c4p = _pct(d.rsv, d.visit);
+  const C_BLUE = '#2980B9', C_RED = '#E74C3C', C_GREEN = '#27AE60';
+  const card = (label, val, sub, rate, rateColor, isFinal) => {{
+    const bg = isFinal ? '#FFF0F0' : '#EBF5FB';
+    const border = isFinal ? '1.5px solid #FFCDD2' : '1.5px solid #AED6F1';
+    const numColor = isFinal ? C_RED : C_BLUE;
+    return `<div style="flex:1;min-width:140px;background:${{bg}};border:${{border}};border-radius:10px;padding:14px 16px;text-align:center">
+      <div style="font-size:12px;color:#888;margin-bottom:6px">${{label}}</div>
+      <div style="font-size:28px;font-weight:bold;color:${{numColor}}">${{val.toLocaleString()}}</div>
+      <div style="font-size:12px;color:#888;margin-top:4px">${{sub}}</div>
+      ${{rate ? `<div style="font-size:13px;font-weight:bold;color:${{rateColor}};margin-top:4px">転換率 ${{rate}}%</div>` : ''}}
+    </div>`;
+  }};
+  const arrow = `<div style="font-size:22px;color:#90A4AE;display:flex;align-items:center;padding-top:10px">▶</div>`;
+  document.getElementById('snsFunnelArea').innerHTML = `
+    <div style="display:flex;gap:10px;align-items:stretch;flex-wrap:wrap">
+      ${{card('投稿閲覧', d.imp, 'インプレッション', '', '', false)}}
+      ${{arrow}}
+      ${{card('プロフクリック', d.click, '', c2p, C_GREEN, false)}}
+      ${{arrow}}
+      ${{card('サイト訪問', d.visit, '', c3p, C_GREEN, false)}}
+      ${{arrow}}
+      ${{card('予約完了', d.rsv, '', c4p, C_RED, true)}}
+      <div style="display:flex;align-items:center;padding:0 8px;text-align:center">
+        <div>
+          <div style="font-size:12px;color:#888;margin-bottom:4px">総転換率</div>
+          <div style="font-size:26px;font-weight:bold;color:${{C_BLUE}}">${{total_pct}}%</div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('snsAiText').innerHTML = d.ai;
+}}
+
+function switchSnsMedia(key, el) {{
+  document.querySelectorAll('.sns-media-btn').forEach(b => {{
+    b.style.background = '#ddd'; b.style.color = '#333';
+  }});
+  el.style.background = '#2980B9'; el.style.color = 'white';
+  renderSnsFunnel(key);
+}}
+
+document.addEventListener('DOMContentLoaded', function() {{
+  renderSnsFunnel('all');
+}});
 
 // ── 先生の異動履歴 ──────────────────────────────
 // クリニック別カラー（最大20色）
