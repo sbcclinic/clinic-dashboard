@@ -1499,6 +1499,15 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
                 _addon_cnt += 1
         jikei_row[_TARGET_GROUP] = jikei_row.get(_TARGET_GROUP, 0) + _addon_cnt
 
+        # gyoutai_counts
+        gyoutai_counts = {}
+        for k, v in r1.items():
+            if "|" in k:
+                gt = k.split("|", 1)[1]
+                if not gt:
+                    gt = "（未設定）"
+                gyoutai_counts[gt] = gyoutai_counts.get(gt, 0) + v["all"]
+
         # region_dom / region_ovs
         region_dom = []
         region_ovs = []
@@ -1525,6 +1534,7 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
             "region_dom": region_dom,
             "region_ovs": region_ovs,
             "houjin_rows": houjin_rows,
+            "gyoutai_counts": gyoutai_counts,
         }
 
         sm += 1
@@ -2038,6 +2048,8 @@ def generate():
     # 法人設定の順序をJavaScript用にJSON化（国内→海外の順）
     houjin_order_list = REGION_HOUJIN_ORDER.get("国内", []) + REGION_HOUJIN_ORDER.get("海外", [])
     houjin_order_json = json.dumps(houjin_order_list, ensure_ascii=False)
+    dom_order_json = json.dumps(REGION_HOUJIN_ORDER.get("国内", []), ensure_ascii=False)
+    ovs_order_json = json.dumps(REGION_HOUJIN_ORDER.get("海外", []), ensure_ascii=False)
 
     # ── ブランド別棒グラフ ──
     plot_df = brand_df[brand_df["ブランド"].isin([f"{b}({g})" if g else b for b,g in brand_cols])].copy()
@@ -2153,14 +2165,22 @@ def generate():
 
 <div id="brand" class="content active">
   <div class="box">
-    <div class="section-title" id="brandTableTitle">{report_date} ブランド×業態</div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="section-title" id="brandTableTitle" style="margin-bottom:0">{report_date} ブランド×業態</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:6px 12px">
+        <span style="font-size:13px;font-weight:bold;color:#2C3E50">月末時点：</span>
+        <select id="brandSelYear" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>年
+        <select id="brandSelMonth" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>月
+        <button onclick="applyBrandMonth()" style="padding:4px 12px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">表示</button>
+      </div>
+    </div>
     <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
       <div id="brandTableContainer" style="flex:1 1 0;min-width:0;overflow-x:auto">
         {brand_table}
       </div>
       <div style="flex:1 1 0;min-width:0">
         <div style="font-weight:bold;font-size:15px;margin-bottom:10px;color:#2C3E50;border-left:4px solid {C_BLUE};padding-left:8px">業態別 院数</div>
-        {gyoutai_table_html_str}
+        <div id="gyoutaiTableContainer">{gyoutai_table_html_str}</div>
       </div>
     </div>
   </div>
@@ -2182,8 +2202,16 @@ def generate():
 
 <div id="region" class="content">
   <div class="box">
-    <div class="section-title" id="regionTableTitle">{report_date} 国内／海外×法人</div>
-    {region_table_html_str}
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <div class="section-title" id="regionTableTitle" style="margin-bottom:0">{report_date} 国内／海外×法人</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:6px 12px">
+        <span style="font-size:13px;font-weight:bold;color:#2C3E50">月末時点：</span>
+        <select id="regionSelYear" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>年
+        <select id="regionSelMonth" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>月
+        <button onclick="applyRegionMonth()" style="padding:4px 12px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">表示</button>
+      </div>
+    </div>
+    <div id="regionTableContainer">{region_table_html_str}</div>
   </div>
 </div>
 
@@ -2364,11 +2392,155 @@ const BRAND_LABELS = {brand_labels_json};
 const CLINIC_DATA = JSON.parse('{clinic_json_escaped}');
 const UNIQUE_BRANDS = {brands_json};
 const HOUJIN_ORDER = {houjin_order_json};
+const DOM_ORDER = {dom_order_json};
+const OVS_ORDER = {ovs_order_json};
 const LABEL_IR = {json.dumps(LABEL_IR, ensure_ascii=False)};
 const LABEL_ALL = {json.dumps(LABEL_ALL, ensure_ascii=False)};
 const ORANGE_TWIST_COUNT = {ot_settings["count"]};
 const OT_START = "{ot_settings["start"]}";
 function getOT(monthKey) {{ return monthKey >= OT_START ? ORANGE_TWIST_COUNT : 0; }}
+
+// ── 月選択プルダウン共通処理 ──────────────────────────────
+function _initMonthPicker(yearId, monthId, defaultYm) {{
+  const [dy, dm] = defaultYm.split('/');
+  const sel = document.getElementById(yearId);
+  const allYears = [...new Set(Object.keys(allMonthlyData).map(k => k.split('/')[0]))].sort();
+  allYears.forEach(y => {{
+    const op = document.createElement('option');
+    op.value = y; op.textContent = y + '年';
+    if (y === dy) op.selected = true;
+    sel.appendChild(op);
+  }});
+  const msel = document.getElementById(monthId);
+  for (let i = 1; i <= 12; i++) {{
+    const op = document.createElement('option');
+    op.value = String(i).padStart(2, '0');
+    op.textContent = i + '月';
+    if (op.value === dm) op.selected = true;
+    msel.appendChild(op);
+  }}
+}}
+
+function _getPickerYm(yearId, monthId) {{
+  const y = document.getElementById(yearId).value;
+  const m = document.getElementById(monthId).value;
+  return y + '/' + m;
+}}
+
+// ── ブランド別集計テーブル描画 ──────────────────────────────
+function renderBrandTable(ym) {{
+  const d = allMonthlyData[ym];
+  if (!d) {{ alert('データがありません: ' + ym); return; }}
+  const C_H = '#2C3E50', C_OR = '#E67E22', C_YL = '#FFF9C4';
+  const td = (val, align, bg, color, fw) =>
+    `<td style="padding:6px 10px;border:1px solid #ddd;text-align:${{align}};background:${{bg}};color:${{color}};font-weight:${{fw}}">${{val}}</td>`;
+  let tbody = '';
+  (d.brand_rows || []).forEach(row => {{
+    const hi = row.pr !== row.all;
+    const bg = hi ? '#FFFDE7' : 'white';
+    tbody += `<tr>${{td(row.label,'left',bg,'#333','normal')}}${{td(row.pr,'right',bg,'#333','normal')}}${{td(row.all,'right',bg,'#333','normal')}}</tr>`;
+  }});
+  const ot = getOT(ym);
+  tbody += `<tr>${{td('集計内訳合計','left',C_OR,'white','bold')}}${{td(d.sum_pr,'right',C_OR,'white','bold')}}${{td(d.sum_all,'right',C_OR,'white','bold')}}</tr>`;
+  tbody += `<tr>${{td('海外(OrangeTwist)加算','left',C_YL,'#333','normal')}}${{td(ot,'right',C_YL,'#333','normal')}}${{td('－','right',C_YL,'#333','normal')}}</tr>`;
+  tbody += `<tr>${{td('最終報告数値','left',C_OR,'white','bold')}}${{td(d.sum_pr+ot,'right',C_OR,'white','bold')}}${{td(d.sum_all,'right',C_OR,'white','bold')}}</tr>`;
+  const th = c => `<th style="padding:8px 10px;background:${{C_H}};color:white;border:1px solid #555;text-align:left">${{c}}</th>`;
+  document.getElementById('brandTableContainer').innerHTML =
+    `<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>${{th('ブランド')}}${{th('広報・IR用')}}${{th('全拠点')}}</tr></thead><tbody>${{tbody}}</tbody></table>`;
+
+  // 業態別テーブル
+  const gc = d.gyoutai_counts || {{}};
+  const sorted = Object.entries(gc).sort((a,b) => b[1]-a[1]);
+  const total = sorted.reduce((s,[,v]) => s+v, 0);
+  let gtRows = sorted.map(([g,cnt]) =>
+    `<tr><td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">${{g}}</td><td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px;font-weight:bold">${{cnt}}</td></tr>`
+  ).join('');
+  gtRows += `<tr style="background:${{C_OR}};color:white;font-weight:bold"><td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">合計</td><td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px">${{total}}</td></tr>`;
+  document.getElementById('gyoutaiTableContainer').innerHTML =
+    `<table style="border-collapse:collapse;width:100%"><thead><tr><th style="padding:10px 14px;background:${{C_H}};color:white;border:1px solid #555;text-align:left;font-size:14px">業態</th><th style="padding:10px 14px;background:${{C_H}};color:white;border:1px solid #555;text-align:right;font-size:14px">院数</th></tr></thead><tbody>${{gtRows}}</tbody></table>`;
+
+  const [yr, mo] = ym.split('/');
+  document.getElementById('brandTableTitle').textContent = yr + '年' + parseInt(mo) + '月末 ブランド×業態';
+}}
+
+function applyBrandMonth() {{
+  renderBrandTable(_getPickerYm('brandSelYear','brandSelMonth'));
+}}
+
+// ── 地域・法人別集計テーブル描画 ──────────────────────────────
+function renderRegionTable(ym) {{
+  const d = allMonthlyData[ym];
+  if (!d) {{ alert('データがありません: ' + ym); return; }}
+  const C_H = '#2C3E50', C_OR = '#E67E22', C_YL = '#FFF9C4', C_LY = '#FFFDE7';
+  const TDS = 'padding:6px 10px;border:1px solid #ddd';
+  const makeRow = (cells, bg, color, fw) => {{
+    const tds = cells.map((v,i) =>
+      `<td style="${{TDS}};text-align:${{i===0?'left':'right'}};background:${{bg}};color:${{color}};font-weight:${{fw}}">${{v}}</td>`
+    ).join('');
+    return `<tr>${{tds}}</tr>`;
+  }};
+
+  const domMap = {{}}, ovsMap = {{}};
+  (d.region_dom||[]).forEach(r => domMap[r['法人名']] = r);
+  (d.region_ovs||[]).forEach(r => ovsMap[r['法人名']] = r);
+
+  // 国内法人を順序通りに並べる
+  const domSeen = new Set();
+  const domOrder = [...DOM_ORDER];
+  Object.keys(domMap).forEach(h => {{ if (!domOrder.includes(h)) domOrder.push(h); }});
+
+  let rows = '';
+  let domPr = 0, domAll = 0;
+  domOrder.forEach(h => {{
+    if (!domMap[h]) return;
+    const v = domMap[h];
+    domPr += v.pr; domAll += v.all;
+    const hi = v.pr !== v.all;
+    rows += makeRow([h, v.pr, v.all], hi ? C_LY : 'white', 'inherit', 'normal');
+  }});
+  rows += makeRow(['国内 小計', domPr, domAll], C_OR, 'white', 'bold');
+
+  const ovsOrder = [...OVS_ORDER];
+  Object.keys(ovsMap).forEach(h => {{ if (!ovsOrder.includes(h)) ovsOrder.push(h); }});
+  let ovsPr = 0, ovsAll = 0;
+  ovsOrder.forEach(h => {{
+    if (!ovsMap[h]) return;
+    const v = ovsMap[h];
+    ovsPr += v.pr; ovsAll += v.all;
+    const hi = v.pr !== v.all;
+    rows += makeRow([h, v.pr, v.all], hi ? C_LY : 'white', 'inherit', 'normal');
+  }});
+  rows += makeRow(['海外 小計', ovsPr, ovsAll], C_OR, 'white', 'bold');
+
+  const totPr = domPr + ovsPr, totAll = domAll + ovsAll;
+  rows += makeRow(['合計（OrangeTwist除く）', totPr, totAll], C_OR, 'white', 'bold');
+  const ot = getOT(ym);
+  rows += makeRow(['OrangeTwist加算', ot, '－'], C_YL, '#333', 'normal');
+  rows += makeRow(['最終報告数値', totPr + ot, totAll], C_OR, 'white', 'bold');
+
+  const THS = `padding:8px 10px;background:${{C_H}};color:white;border:1px solid #555`;
+  document.getElementById('regionTableContainer').innerHTML =
+    `<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>
+      <th style="${{THS}};text-align:left">法人名</th>
+      <th style="${{THS}};text-align:left">広報・IR用</th>
+      <th style="${{THS}};text-align:left">全拠点</th>
+    </tr></thead><tbody>${{rows}}</tbody></table>`;
+
+  const [yr, mo] = ym.split('/');
+  document.getElementById('regionTableTitle').textContent = yr + '年' + parseInt(mo) + '月末 国内／海外×法人';
+}}
+
+function applyRegionMonth() {{
+  renderRegionTable(_getPickerYm('regionSelYear','regionSelMonth'));
+}}
+
+// ── ページ読み込み時に月選択を初期化 ──────────────────────────────
+(function() {{
+  const allKeys = Object.keys(allMonthlyData).sort();
+  const latestYm = allKeys[allKeys.length - 1];
+  _initMonthPicker('brandSelYear', 'brandSelMonth', latestYm);
+  _initMonthPicker('regionSelYear', 'regionSelMonth', latestYm);
+}})();
 
 function showTab(id, el) {{
   document.querySelectorAll('.content').forEach(e=>e.classList.remove('active'));
