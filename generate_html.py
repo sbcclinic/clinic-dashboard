@@ -69,7 +69,8 @@ HOUJIN_GROUP_EXCLUDE_BRANDS = {
 }
 
 HOUJIN_GROUPS = [
-    ("①6医療法人合計", ["医療法人 湘美会","医療法人社団 孝和会","医療法人社団 菜寿会","医療法人社団 愛恵会","医療法人社団 樹慶会","医療法人社団 リッツ美容外科","一般社団法人MASA","健美会","法人無し（個人開設）","個人/その他"]),
+    ("①6医療法人合計", ["医療法人 湘美会","医療法人社団 孝和会","医療法人社団 菜寿会","医療法人社団 愛恵会","医療法人社団 樹慶会","医療法人社団 リッツ美容外科"]),
+    ("一般社団法人MASA等", ["一般社団法人MASA","健美会","法人無し（個人開設）","個人/その他"]),
     ("②3医療法人合計", ["医療法人社団 風林会","医療法人 きびたき会","医療法人社団 百花会"]),
     ("③医療法人社団十二会", ["医療法人社団十二会"]),
     ("④2医療法人合計", ["医療法人社団美咲会","一般社団法人美央斗会"]),
@@ -2404,7 +2405,7 @@ function getOT(monthKey) {{ return monthKey >= OT_START ? ORANGE_TWIST_COUNT : 0
 function _initMonthPicker(yearId, monthId, defaultYm) {{
   const [dy, dm] = defaultYm.split('/');
   const sel = document.getElementById(yearId);
-  const allYears = [...new Set(Object.keys(allMonthlyData).map(k => k.split('/')[0]))].sort();
+  const allYears = [...new Set(Object.keys(ALL_DATA).map(k => k.split('/')[0]))].sort();
   allYears.forEach(y => {{
     const op = document.createElement('option');
     op.value = y; op.textContent = y + '年';
@@ -2429,7 +2430,7 @@ function _getPickerYm(yearId, monthId) {{
 
 // ── ブランド別集計テーブル描画 ──────────────────────────────
 function renderBrandTable(ym) {{
-  const d = allMonthlyData[ym];
+  const d = ALL_DATA[ym];
   if (!d) {{ alert('データがありません: ' + ym); return; }}
   const C_H = '#2C3E50', C_OR = '#E67E22', C_YL = '#FFF9C4';
   const td = (val, align, bg, color, fw) =>
@@ -2469,7 +2470,7 @@ function applyBrandMonth() {{
 
 // ── 地域・法人別集計テーブル描画 ──────────────────────────────
 function renderRegionTable(ym) {{
-  const d = allMonthlyData[ym];
+  const d = ALL_DATA[ym];
   if (!d) {{ alert('データがありません: ' + ym); return; }}
   const C_H = '#2C3E50', C_OR = '#E67E22', C_YL = '#FFF9C4', C_LY = '#FFFDE7';
   const TDS = 'padding:6px 10px;border:1px solid #ddd';
@@ -2536,7 +2537,7 @@ function applyRegionMonth() {{
 
 // ── ページ読み込み時に月選択を初期化 ──────────────────────────────
 (function() {{
-  const allKeys = Object.keys(allMonthlyData).sort();
+  const allKeys = Object.keys(ALL_DATA).sort();
   const latestYm = allKeys[allKeys.length - 1];
   _initMonthPicker('brandSelYear', 'brandSelMonth', latestYm);
   _initMonthPicker('regionSelYear', 'regionSelMonth', latestYm);
