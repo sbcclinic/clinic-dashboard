@@ -29,7 +29,8 @@ TARGET_BRANDS = [
     "西新宿整形外科","SBC横浜駅前整形外科","六本木レディース","神奈川レディース","リッツ美容外科",
     "リゼクリニック","ゴリラクリニック","JUNCLINIC","SBC東京医療大学付属クリニック",
     "SBC東京接骨院","SBC BODY ARCHI","SkinGo!","Wen & Weng Family Clinic",
-    "The Chelsea Clinic","Chelsea Aesthetics","Chelsea Asthetics","Gangnam Laser Clinic","Rochor Centre Clinic"
+    "The Chelsea Clinic","Chelsea Aesthetics","Chelsea Asthetics","Gangnam Laser Clinic","Rochor Centre Clinic",
+    "SBCスキンクリニック","SBC THE LIFT CLINIC","SBC MEN'S FLASH CLINIC","湘南美容クリニック THE LASER","BLEZ",
 ]
 EXCLUDE_PR = ["SBC東京医療大学付属クリニック","SBC東京接骨院","SBC BODY ARCHI"]
 # 院長履歴テーブルから除外するブランド（院長管理対象外）
@@ -93,6 +94,8 @@ JIKEI_BRAND_COLS = [
     ("SBC東京医療大学付属クリニック",None),("SBC東京接骨院",None),("SBC BODY ARCHI",None),
     ("The Chelsea Clinic",None),("Chelsea Aesthetics",None),
     ("Gangnam Laser Clinic",None),("SkinGo!",None),("Wen & Weng Family Clinic",None),("Rochor Centre Clinic",None),
+    ("SBCスキンクリニック",None),("SBC THE LIFT CLINIC",None),("SBC MEN'S FLASH CLINIC",None),
+    ("湘南美容クリニック THE LASER",None),("BLEZ",None),
 ]
 EXISTING_GROUP_END = 19
 LABEL_IR = "IR・広報用（除：Holdingsへの収益貢献なし、含：OrangeTwist）"
@@ -1077,7 +1080,23 @@ def load_data():
     excl = "猶予期限（業態転換後の院が開院するまでの期間）"
     if excl in df.columns:
         df[excl] = df[excl].apply(parse_limit)
+    # Excelに新ブランドが追加されていたら自動でリストに追加
+    _auto_add_new_brands(df)
     return df
+
+def _auto_add_new_brands(df):
+    """Excelのブランド列を読んでTARGET_BRANDSとJIKEI_BRAND_COLSに未登録ブランドを自動追加する"""
+    if "ブランド" not in df.columns:
+        return
+    excel_brands = [str(b).strip() for b in df["ブランド"].dropna().unique() if str(b).strip()]
+    added = []
+    for brand in excel_brands:
+        if brand not in TARGET_BRANDS:
+            TARGET_BRANDS.append(brand)
+            JIKEI_BRAND_COLS.append((brand, None))
+            added.append(brand)
+    if added:
+        print(f"  ※ 新ブランドを自動追加しました: {added}")
 
 def load_brand_settings():
     try:
