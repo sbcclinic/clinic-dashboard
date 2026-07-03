@@ -2439,13 +2439,23 @@ function _initMonthPicker(yearId, monthId, defaultYm) {{
     sel.appendChild(op);
   }});
   const msel = document.getElementById(monthId);
-  for (let i = 1; i <= 12; i++) {{
-    const op = document.createElement('option');
-    op.value = String(i).padStart(2, '0');
-    op.textContent = i + '月';
-    if (op.value === dm) op.selected = true;
-    msel.appendChild(op);
+  // 選択中の年に存在する月のみ表示
+  function updateMonths() {{
+    const y = sel.value;
+    msel.innerHTML = '';
+    const validMonths = [...new Set(Object.keys(ALL_DATA).filter(k => k.startsWith(y + '/')).map(k => k.split('/')[1]))].sort();
+    validMonths.forEach(mv => {{
+      const op = document.createElement('option');
+      op.value = mv;
+      op.textContent = parseInt(mv) + '月';
+      if (mv === dm && y === dy) op.selected = true;
+      msel.appendChild(op);
+    }});
+    // デフォルト年以外は最新月を選択
+    if (y !== dy && msel.options.length > 0) msel.selectedIndex = msel.options.length - 1;
   }}
+  sel.addEventListener('change', updateMonths);
+  updateMonths();
 }}
 
 function _getPickerYm(yearId, monthId) {{
