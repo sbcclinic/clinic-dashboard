@@ -1773,6 +1773,13 @@ def generate():
         brand_cols = [(b,None) for b in TARGET_BRANDS]
         existing_flags = [True]*19 + [False]*(len(brand_cols)-19)
         exclude_pr = EXCLUDE_PR
+    else:
+        # ブランド設定シートにないブランドをTARGET_BRANDSから自動補完
+        existing_brand_names = {b for b,_ in brand_cols}
+        for brand in TARGET_BRANDS:
+            if brand not in existing_brand_names:
+                brand_cols.append((brand, None))
+                existing_flags.append(False)
 
     today = date.today()
     y, m = today.year, today.month
