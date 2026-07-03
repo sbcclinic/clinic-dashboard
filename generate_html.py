@@ -79,7 +79,8 @@ HOUJIN_GROUPS = [
     ("⑥株式会社SBC湘南接骨院", ["株式会社SBC湘南接骨院"]),
     ("⑦株式会社ボディアーキ・ジャパン", ["株式会社ボディアーキ・ジャパン","SBCメディカルグループ株式会社","株式会社 MG"]),
     ("⑧Shoubikai Medical Vietnam Co., Ltd.", ["Shoubikai Medical Vietnam Co., Ltd."]),
-    ("⑨WWMG", ["WWMG"]),("⑩DS", ["DS"]),("⑪DSS", ["DSS"]),("⑫DSS(FC)", ["DSS(FC)"]),("⑬WWFC", ["WWFC"]),("⑭RCC", ["RCC"]),
+    ("⑨BLEZ ASIA Co., Ltd.", ["BLEZ ASIA Co., Ltd."]),
+    ("⑩WWMG", ["WWMG"]),("⑪DS", ["DS"]),("⑫DSS", ["DSS"]),("⑬DSS(FC)", ["DSS(FC)"]),("⑭WWFC", ["WWFC"]),("⑮RCC", ["RCC"]),
 ]
 
 JIKEI_BRAND_COLS = [
