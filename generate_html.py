@@ -1311,10 +1311,11 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
     for year in hist_years:
         monthly = history[year]
         if mode == "openclose":
-            ytotal_o = sum(len(v["opened"]) for v in monthly.values())
-            ytotal_c = sum(len(v["closed"]) for v in monthly.values())
-            if ytotal_o == 0 and ytotal_c == 0: continue
-            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院"
+            ytotal_o = sum(len([x for x in v["opened"] if "業態転換" not in x.get("種別","")]) for v in monthly.values())
+            ytotal_c = sum(len([x for x in v["closed"]  if "業態転換" not in x.get("種別","")]) for v in monthly.values())
+            ytotal_k = sum(len(v["convert"]) for v in monthly.values())
+            if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0: continue
+            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🔵 業態転換 {ytotal_k} 院"
             color = C_HEADER
         else:
             ytotal_k = sum(len(v["convert"]) for v in monthly.values())
@@ -1331,17 +1332,23 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             uid += 1
 
             if mode == "openclose":
-                n_o = len(opened); n_c = len(closed)
-                if n_o == 0 and n_c == 0: continue
-                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院"
+                opened_new  = [x for x in opened if "業態転換" not in x.get("種別","")]
+                closed_real = [x for x in closed  if "業態転換" not in x.get("種別","")]
+                n_o = len(opened_new); n_c = len(closed_real); n_k = len(convert)
+                if n_o == 0 and n_c == 0 and n_k == 0: continue
+                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院　　🔵 業態転換 {n_k}院"
                 inner = ""
                 if n_o > 0:
                     inner += f'<div style="border-left:4px solid #27AE60;background:#D5F5E3;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟢 開院　{n_o}院</div>'
-                    inner += df_to_html_table(pd.DataFrame(opened), highlight_last=False)
+                    inner += df_to_html_table(pd.DataFrame(opened_new), highlight_last=False)
                     inner += "<br>"
                 if n_c > 0:
                     inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{n_c}院</div>'
-                    inner += df_to_html_table(pd.DataFrame(closed), highlight_last=False)
+                    inner += df_to_html_table(pd.DataFrame(closed_real), highlight_last=False)
+                    if n_k > 0: inner += "<br>"
+                if n_k > 0:
+                    inner += f'<div style="border-left:4px solid {C_BLUE};background:#D6EAF8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔵 業態転換　{n_k}院</div>'
+                    inner += df_to_html_table(pd.DataFrame(convert), highlight_last=False)
             else:
                 n_k = len(convert)
                 if n_k == 0: continue
@@ -1527,7 +1534,10 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
                 gt = k.split("|", 1)[1]
                 if not gt:
                     gt = "（未設定）"
-                gyoutai_counts[gt] = gyoutai_counts.get(gt, 0) + v["all"]
+                entry = gyoutai_counts.get(gt, {"all": 0, "pr": 0})
+                entry["all"] += v["all"]
+                entry["pr"]  += v["pr"]
+                gyoutai_counts[gt] = entry
 
         # region_dom / region_ovs
         region_dom = []
@@ -1783,7 +1793,12 @@ def generate():
                 existing_flags.append(False)
 
     today = date.today()
-    y, m = today.year, today.month
+    # 月次更新は毎月25日〜30日に実施され、その月の月末時点データを反映する。
+    # 25日より前に実行した場合は前月分がまだ最新の確定データのため、前月末を表示する。
+    if today.day < 25:
+        y, m = (today.year, today.month - 1) if today.month > 1 else (today.year - 1, 12)
+    else:
+        y, m = today.year, today.month
     me = month_end_ts(y, m)
     ms = month_start_ts(y, m)
     r1, r2, r3 = aggregate(df, me, ms, [b for b,_ in brand_cols], exclude_pr)
@@ -1859,24 +1874,31 @@ def generate():
             gt = k.split("|", 1)[1]
             if not gt:
                 gt = "（未設定）"
-            gyoutai_counts[gt] = gyoutai_counts.get(gt, 0) + v["all"]
-    gyoutai_rows_sorted = sorted(gyoutai_counts.items(), key=lambda x: -x[1])
-    gyoutai_total_cnt = sum(v for _, v in gyoutai_rows_sorted)
+            entry = gyoutai_counts.get(gt, {"all": 0, "pr": 0})
+            entry["all"] += v["all"]
+            entry["pr"]  += v["pr"]
+            gyoutai_counts[gt] = entry
+    gyoutai_rows_sorted = sorted(gyoutai_counts.items(), key=lambda x: -x[1]["all"])
+    gyoutai_total_all = sum(v["all"] for _, v in gyoutai_rows_sorted)
+    gyoutai_total_pr  = sum(v["pr"]  for _, v in gyoutai_rows_sorted)
     _gt_rows_html = "".join(
         f'<tr><td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">{g}</td>'
-        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px;font-weight:bold">{cnt}</td></tr>'
-        for g, cnt in gyoutai_rows_sorted
+        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px;font-weight:bold">{v["pr"]}</td>'
+        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px;font-weight:bold">{v["all"]}</td></tr>'
+        for g, v in gyoutai_rows_sorted
     )
     _gt_rows_html += (
         f'<tr style="background:{C_ORANGE};color:white;font-weight:bold">'
         f'<td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">合計</td>'
-        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px">{gyoutai_total_cnt}</td></tr>'
+        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px">{gyoutai_total_pr}</td>'
+        f'<td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px">{gyoutai_total_all}</td></tr>'
     )
     gyoutai_table_html_str = (
         f'<table style="border-collapse:collapse;width:100%">'
         f'<thead><tr>'
         f'<th style="padding:10px 14px;background:{C_HEADER};color:white;border:1px solid #555;text-align:left;font-size:14px">業態</th>'
-        f'<th style="padding:10px 14px;background:{C_HEADER};color:white;border:1px solid #555;text-align:right;font-size:14px">院数</th>'
+        f'<th style="padding:10px 14px;background:{C_HEADER};color:white;border:1px solid #555;text-align:right;font-size:14px">広報・IR用</th>'
+        f'<th style="padding:10px 14px;background:{C_HEADER};color:white;border:1px solid #555;text-align:right;font-size:14px">全拠点</th>'
         f'</tr></thead><tbody>{_gt_rows_html}</tbody></table>'
     )
 
@@ -2488,14 +2510,19 @@ function renderBrandTable(ym) {{
 
   // 業態別テーブル
   const gc = d.gyoutai_counts || {{}};
-  const sorted = Object.entries(gc).sort((a,b) => b[1]-a[1]);
-  const total = sorted.reduce((s,[,v]) => s+v, 0);
-  let gtRows = sorted.map(([g,cnt]) =>
-    `<tr><td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">${{g}}</td><td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px;font-weight:bold">${{cnt}}</td></tr>`
-  ).join('');
-  gtRows += `<tr style="background:${{C_OR}};color:white;font-weight:bold"><td style="padding:8px 14px;border:1px solid #ddd;font-size:14px">合計</td><td style="padding:8px 14px;border:1px solid #ddd;text-align:right;font-size:14px">${{total}}</td></tr>`;
+  const sorted = Object.entries(gc).sort((a,b) => (b[1].all||b[1]||0)-(a[1].all||a[1]||0));
+  const totalAll = sorted.reduce((s,[,v]) => s+(v.all||v||0), 0);
+  const totalPr  = sorted.reduce((s,[,v]) => s+(v.pr||0), 0);
+  const TD = 'padding:8px 14px;border:1px solid #ddd;font-size:14px';
+  let gtRows = sorted.map(([g,v]) => {{
+    const all = v.all !== undefined ? v.all : v;
+    const pr  = v.pr  !== undefined ? v.pr  : v;
+    return `<tr><td style="${{TD}}">${{g}}</td><td style="${{TD}};text-align:right;font-weight:bold">${{pr}}</td><td style="${{TD}};text-align:right;font-weight:bold">${{all}}</td></tr>`;
+  }}).join('');
+  gtRows += `<tr style="background:${{C_OR}};color:white;font-weight:bold"><td style="${{TD}}">合計</td><td style="${{TD}};text-align:right">${{totalPr}}</td><td style="${{TD}};text-align:right">${{totalAll}}</td></tr>`;
+  const TH = 'padding:10px 14px;background:'+C_H+';color:white;border:1px solid #555;font-size:14px';
   document.getElementById('gyoutaiTableContainer').innerHTML =
-    `<table style="border-collapse:collapse;width:100%"><thead><tr><th style="padding:10px 14px;background:${{C_H}};color:white;border:1px solid #555;text-align:left;font-size:14px">業態</th><th style="padding:10px 14px;background:${{C_H}};color:white;border:1px solid #555;text-align:right;font-size:14px">院数</th></tr></thead><tbody>${{gtRows}}</tbody></table>`;
+    `<table style="border-collapse:collapse;width:100%"><thead><tr><th style="${{TH}};text-align:left">業態</th><th style="${{TH}};text-align:right">広報・IR用</th><th style="${{TH}};text-align:right">全拠点</th></tr></thead><tbody>${{gtRows}}</tbody></table>`;
 
   const [yr, mo] = ym.split('/');
   document.getElementById('brandTableTitle').textContent = yr + '年' + parseInt(mo) + '月末 ブランド×業態';
@@ -2574,10 +2601,11 @@ function applyRegionMonth() {{
 
 // ── ページ読み込み時に月選択を初期化 ──────────────────────────────
 (function() {{
-  const allKeys = Object.keys(ALL_DATA).sort();
-  const latestYm = allKeys[allKeys.length - 1];
-  _initMonthPicker('brandSelYear', 'brandSelMonth', latestYm);
-  _initMonthPicker('regionSelYear', 'regionSelMonth', latestYm);
+  // 報告月（25日より前は前月末、25日以降は当月末）をPythonから埋め込み
+  const reportYm = '{y}/{m:02d}';
+  const defaultYm = ALL_DATA[reportYm] ? reportYm : Object.keys(ALL_DATA).sort().slice(-1)[0];
+  _initMonthPicker('brandSelYear', 'brandSelMonth', defaultYm);
+  _initMonthPicker('regionSelYear', 'regionSelMonth', defaultYm);
 }})();
 
 function showTab(id, el) {{
