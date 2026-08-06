@@ -17,6 +17,7 @@ def get_excel_data():
     st.error("Excelファイルが見つかりません。Box Driveまたはローカルを確認してください。")
     st.stop()
 ORANGE_TWIST_COUNT = 24
+CONVERSION_SHEET = "業態転換・名称変更履歴"
 
 # ── 色定義（元Excelと同じ） ──────────────────────────
 C_HEADER_TITLE = "#D9EAD3"   # 薄緑：セクション見出し
@@ -75,9 +76,49 @@ def to_ts(v):
     try: return pd.Timestamp(v)
     except: return None
 
+def load_conversion_overrides(path):
+    """「業態転換・名称変更履歴」シートを読み込み、以下3つの辞書を返す。
+    1) before_overrides: (転換前院ID, 転換前名称) → 業態転換日・転換後院名・転換後業態
+    2) after_by_idname: (転換後院ID, 転換後名称) → 転換前業態（転換後の院自身への印。
+       開院数の二重計上防止に使う）
+    3) after_by_name_noid: 転換後名称 → 転換前業態（転換後院IDが未定の行専用）"""
+    try:
+        xls = pd.ExcelFile(path)
+        if CONVERSION_SHEET not in xls.sheet_names:
+            return {}, {}, {}
+        cdf = pd.read_excel(path, sheet_name=CONVERSION_SHEET)
+        cdf["業態転換日"] = pd.to_datetime(cdf.get("業態転換日"), errors="coerce")
+        before_overrides, after_by_idname, after_by_name_noid = {}, {}, {}
+        for _, row in cdf.iterrows():
+            before_name = str(row.get("転換前名称", "") or "").strip()
+            before_id_raw = row.get("転換前院ID", "")
+            before_gyoutai = str(row.get("転換前業態", "") or "").strip()
+            after_name = str(row.get("転換後名称", "") or "").strip()
+            after_id_raw = row.get("転換後院ID", "")
+            if before_name and not pd.isna(before_id_raw):
+                try:
+                    before_id = int(float(str(before_id_raw)))
+                    before_overrides[(before_id, before_name)] = {
+                        "業態転換日": row.get("業態転換日"),
+                        "転換後院名": after_name,
+                        "転換後業態": str(row.get("転換後業態", "") or "").strip(),
+                    }
+                except (ValueError, TypeError):
+                    pass
+            if after_name and before_gyoutai:
+                try:
+                    after_id = int(float(str(after_id_raw)))
+                    after_by_idname[(after_id, after_name)] = before_gyoutai
+                except (ValueError, TypeError):
+                    after_by_name_noid[after_name] = before_gyoutai
+        return before_overrides, after_by_idname, after_by_name_noid
+    except Exception:
+        return {}, {}, {}
+
 @st.cache_data(ttl=3600)
 def load_master():
-    df = pd.read_excel(get_excel_data(), sheet_name="クリニック一覧")
+    path = get_excel_data()
+    df = pd.read_excel(path, sheet_name="クリニック一覧")
     for c in ["開院日", "MA日", "移転拡張日", "業態転換日", "閉院日"]:
         if c in df.columns:
             df[c] = pd.to_datetime(df[c], errors="coerce")
@@ -88,6 +129,33 @@ def load_master():
         return str(v).strip()
     if excl in df.columns:
         df[excl] = df[excl].apply(parse_limit)
+    # 「業態転換・名称変更履歴」シートがあれば、その内容で転換関連の列を上書きする
+    before_overrides, after_by_idname, after_by_name_noid = load_conversion_overrides(path)
+    if (before_overrides or after_by_idname or after_by_name_noid) and "正式名称" in df.columns and "院ID" in df.columns:
+        for idx in df.index:
+            name = str(df.at[idx, "正式名称"] or "").strip()
+            cid_raw = df.at[idx, "院ID"]
+            cid = None
+            if not pd.isna(cid_raw):
+                try:
+                    cid = int(float(str(cid_raw)))
+                except (ValueError, TypeError):
+                    cid = None
+            if cid is not None and (cid, name) in after_by_idname:
+                df.at[idx, "転換前業態"] = after_by_idname[(cid, name)]
+            elif cid is None and name in after_by_name_noid:
+                df.at[idx, "転換前業態"] = after_by_name_noid[name]
+            if cid is None:
+                continue
+            ov = before_overrides.get((cid, name))
+            if not ov:
+                continue
+            if pd.notna(ov["業態転換日"]):
+                df.at[idx, "業態転換日"] = ov["業態転換日"]
+            if ov["転換後院名"]:
+                df.at[idx, "転換後院名"] = ov["転換後院名"]
+            if ov["転換後業態"]:
+                df.at[idx, "転換後業態"] = ov["転換後業態"]
     return df
 
 

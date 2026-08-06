@@ -1070,35 +1070,49 @@ def to_ts(v):
     except: return None
 
 def load_conversion_overrides(path):
-    """「業態転換・名称変更履歴」シートを読み込み、(転換前院ID, 転換前名称)をキーにした辞書を返す。
-    クリニック一覧の業態転換日・転換後院名・転換後業態を、このシートの内容で上書きするために使う。
+    """「業態転換・名称変更履歴」シートを読み込み、以下3つの辞書を返す。
+    1) before_overrides: (転換前院ID, 転換前名称) → 業態転換日・転換後院名・転換後業態
+       クリニック一覧の「転換前の院」の行に、これらの値を補う。
+    2) after_by_idname: (転換後院ID, 転換後名称) → 転換前業態
+       クリニック一覧の「転換後の院」自身の行に「転換前業態」の印を付け、
+       開院数の集計で二重計上（新規開院としても数えてしまう）されるのを防ぐ。
+       ※転換後院IDが数値で分かっている場合はこちらを使う。
+    3) after_by_name_noid: 転換後名称 → 転換前業態（転換後院IDがまだ未定の行専用の予備）
     院名だけをキーにすると、無関係な過去の同名院（例：閉院済みの旧院と現在の院が同じ名称）に
-    誤って上書きしてしまうため、必ず院IDと名称の組み合わせで一致させる。
-    シートが無い場合は空辞書を返し、従来通りクリニック一覧側の値のみを使う。"""
+    誤って上書きしてしまうため、院IDが分かる場合は必ず院IDとの組み合わせで一致させる。
+    シートが無い場合は全て空辞書を返し、従来通りクリニック一覧側の値のみを使う。"""
     try:
         xls = pd.ExcelFile(path)
         if CONVERSION_SHEET not in xls.sheet_names:
-            return {}
+            return {}, {}, {}
         cdf = pd.read_excel(path, sheet_name=CONVERSION_SHEET)
         cdf["業態転換日"] = pd.to_datetime(cdf.get("業態転換日"), errors="coerce")
-        overrides = {}
+        before_overrides, after_by_idname, after_by_name_noid = {}, {}, {}
         for _, row in cdf.iterrows():
             before_name = str(row.get("転換前名称", "") or "").strip()
             before_id_raw = row.get("転換前院ID", "")
-            if not before_name or pd.isna(before_id_raw):
-                continue
-            try:
-                before_id = int(float(str(before_id_raw)))
-            except (ValueError, TypeError):
-                continue
-            overrides[(before_id, before_name)] = {
-                "業態転換日": row.get("業態転換日"),
-                "転換後院名": str(row.get("転換後名称", "") or "").strip(),
-                "転換後業態": str(row.get("転換後業態", "") or "").strip(),
-            }
-        return overrides
+            before_gyoutai = str(row.get("転換前業態", "") or "").strip()
+            after_name = str(row.get("転換後名称", "") or "").strip()
+            after_id_raw = row.get("転換後院ID", "")
+            if before_name and not pd.isna(before_id_raw):
+                try:
+                    before_id = int(float(str(before_id_raw)))
+                    before_overrides[(before_id, before_name)] = {
+                        "業態転換日": row.get("業態転換日"),
+                        "転換後院名": after_name,
+                        "転換後業態": str(row.get("転換後業態", "") or "").strip(),
+                    }
+                except (ValueError, TypeError):
+                    pass
+            if after_name and before_gyoutai:
+                try:
+                    after_id = int(float(str(after_id_raw)))
+                    after_by_idname[(after_id, after_name)] = before_gyoutai
+                except (ValueError, TypeError):
+                    after_by_name_noid[after_name] = before_gyoutai
+        return before_overrides, after_by_idname, after_by_name_noid
     except Exception:
-        return {}
+        return {}, {}, {}
 
 def load_data():
     path = get_path()
@@ -1115,18 +1129,26 @@ def load_data():
         df[excl] = df[excl].apply(parse_limit)
     # 「業態転換・名称変更履歴」シートがあれば、その内容で転換関連の列を上書きする
     # （クリニック一覧側は今後このシートと重複入力しなくてよい）
-    overrides = load_conversion_overrides(path)
-    if overrides and "正式名称" in df.columns and "院ID" in df.columns:
+    before_overrides, after_by_idname, after_by_name_noid = load_conversion_overrides(path)
+    if (before_overrides or after_by_idname or after_by_name_noid) and "正式名称" in df.columns and "院ID" in df.columns:
         for idx in df.index:
             name = str(df.at[idx, "正式名称"] or "").strip()
             cid_raw = df.at[idx, "院ID"]
-            if pd.isna(cid_raw):
+            cid = None
+            if not pd.isna(cid_raw):
+                try:
+                    cid = int(float(str(cid_raw)))
+                except (ValueError, TypeError):
+                    cid = None
+            # 転換後の院自身への印付け（開院数の二重計上防止）
+            if cid is not None and (cid, name) in after_by_idname:
+                df.at[idx, "転換前業態"] = after_by_idname[(cid, name)]
+            elif cid is None and name in after_by_name_noid:
+                df.at[idx, "転換前業態"] = after_by_name_noid[name]
+            # 転換前の院への情報補完
+            if cid is None:
                 continue
-            try:
-                cid = int(float(str(cid_raw)))
-            except (ValueError, TypeError):
-                continue
-            ov = overrides.get((cid, name))
+            ov = before_overrides.get((cid, name))
             if not ov:
                 continue
             if pd.notna(ov["業態転換日"]):
