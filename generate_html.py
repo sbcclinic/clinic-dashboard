@@ -272,8 +272,10 @@ def parse_director_from_detail(detail):
                 return clinic, True
     return None, False
 
-def build_director_pivot(doctor_df, clinic_df, past_data, past_name_data=None):
+def build_director_pivot(doctor_df, clinic_df, past_data, past_name_data=None, after_by_idname=None, after_by_name_noid=None):
     """院長履歴のピボットデータを構築（過去データ+人事通達データを統合）"""
+    after_by_idname = after_by_idname or {}
+    after_by_name_noid = after_by_name_noid or {}
     today = date.today()
 
     # Determine start date: 2021/01
@@ -322,15 +324,15 @@ def build_director_pivot(doctor_df, clinic_df, past_data, past_name_data=None):
         cid = row.get("院ID")
         name = str(row.get("正式名称", "") or "").strip()
         d_conv = to_ts(row.get("業態転換日"))
-        tenkan_mae = str(row.get("転換前業態", "") or "").strip()
+        is_after = is_conversion_after_row(row, after_by_idname, after_by_name_noid)
         if pd.notna(cid) and name:
             try:
                 cid_int = int(float(str(cid)))
                 if d_conv is not None:
                     # 業態転換日あり → 転換元の院
                     id_to_old_name[cid_int] = name
-                elif tenkan_mae and tenkan_mae not in ("", "nan"):
-                    # 転換前業態あり → 転換後の院
+                elif is_after:
+                    # 「業態転換・名称変更履歴」に記録された転換後の院
                     id_to_new_name[cid_int] = name
                 # id_to_name: 転換元があればそれを優先
                 if cid_int not in id_to_name or d_conv is not None:
@@ -546,11 +548,11 @@ def build_director_pivot(doctor_df, clinic_df, past_data, past_name_data=None):
 
     return monthly_states, months, promotion_events, resignation_events
 
-def build_director_html(doctor_df, clinic_df, brand_cols):
+def build_director_html(doctor_df, clinic_df, brand_cols, after_by_idname=None, after_by_name_noid=None):
     """院長履歴ピボットテーブルHTMLを生成"""
     past_data, past_current_info, past_name_data = load_past_director_data()
 
-    monthly_states, months, _, __ = build_director_pivot(doctor_df, clinic_df, past_data, past_name_data)
+    monthly_states, months, _, __ = build_director_pivot(doctor_df, clinic_df, past_data, past_name_data, after_by_idname, after_by_name_noid)
     if not months:
         return '<p style="color:#999">データがありません</p>'
 
@@ -1074,13 +1076,14 @@ def load_conversion_overrides(path):
     1) before_overrides: (転換前院ID, 転換前名称) → 業態転換日・転換後院名・転換後業態
        クリニック一覧の「転換前の院」の行に、これらの値を補う。
     2) after_by_idname: (転換後院ID, 転換後名称) → 転換前業態
-       クリニック一覧の「転換後の院」自身の行に「転換前業態」の印を付け、
-       開院数の集計で二重計上（新規開院としても数えてしまう）されるのを防ぐ。
+       「転換後の院」が新規開院ではなく業態転換の結果であると判定するために
+       is_conversion_after_row() が参照する（開院数の二重計上防止・院長履歴の
+       転換ペア表示に使用）。クリニック一覧側には対応する列を持たせない。
        ※転換後院IDが数値で分かっている場合はこちらを使う。
     3) after_by_name_noid: 転換後名称 → 転換前業態（転換後院IDがまだ未定の行専用の予備）
     院名だけをキーにすると、無関係な過去の同名院（例：閉院済みの旧院と現在の院が同じ名称）に
-    誤って上書きしてしまうため、院IDが分かる場合は必ず院IDとの組み合わせで一致させる。
-    シートが無い場合は全て空辞書を返し、従来通りクリニック一覧側の値のみを使う。"""
+    誤って一致してしまうため、院IDが分かる場合は必ず院IDとの組み合わせで一致させる。
+    シートが無い場合は全て空辞書を返す。"""
     try:
         xls = pd.ExcelFile(path)
         if CONVERSION_SHEET not in xls.sheet_names:
@@ -1130,23 +1133,15 @@ def load_data():
     # 「業態転換・名称変更履歴」シートがあれば、その内容で転換関連の列を上書きする
     # （クリニック一覧側は今後このシートと重複入力しなくてよい）
     before_overrides, after_by_idname, after_by_name_noid = load_conversion_overrides(path)
-    if (before_overrides or after_by_idname or after_by_name_noid) and "正式名称" in df.columns and "院ID" in df.columns:
+    if before_overrides and "正式名称" in df.columns and "院ID" in df.columns:
         for idx in df.index:
             name = str(df.at[idx, "正式名称"] or "").strip()
             cid_raw = df.at[idx, "院ID"]
-            cid = None
-            if not pd.isna(cid_raw):
-                try:
-                    cid = int(float(str(cid_raw)))
-                except (ValueError, TypeError):
-                    cid = None
-            # 転換後の院自身への印付け（開院数の二重計上防止）
-            if cid is not None and (cid, name) in after_by_idname:
-                df.at[idx, "転換前業態"] = after_by_idname[(cid, name)]
-            elif cid is None and name in after_by_name_noid:
-                df.at[idx, "転換前業態"] = after_by_name_noid[name]
-            # 転換前の院への情報補完
-            if cid is None:
+            if pd.isna(cid_raw):
+                continue
+            try:
+                cid = int(float(str(cid_raw)))
+            except (ValueError, TypeError):
                 continue
             ov = before_overrides.get((cid, name))
             if not ov:
@@ -1159,7 +1154,26 @@ def load_data():
                 df.at[idx, "転換後業態"] = ov["転換後業態"]
     # Excelに新ブランドが追加されていたら自動でリストに追加
     _auto_add_new_brands(df)
-    return df
+    # 「転換後の院自身は新規開院ではなく業態転換扱いにする」判定に使う情報を、
+    # 「業態転換・名称変更履歴」シートから直接渡す（クリニック一覧に印の列は持たせない）
+    return df, after_by_idname, after_by_name_noid
+
+def is_conversion_after_row(row, after_by_idname, after_by_name_noid):
+    """この行が「業態転換・名称変更履歴」に記録された転換後の院かどうかを判定する。
+    転換後院IDが分かっていれば(院ID,正式名称)で、未定なら正式名称のみで判定する。"""
+    name = str(row.get("正式名称","") or "").strip()
+    cid_raw = row.get("院ID")
+    cid = None
+    if pd.notna(cid_raw):
+        try:
+            cid = int(float(str(cid_raw)))
+        except (ValueError, TypeError):
+            cid = None
+    if cid is not None and (cid, name) in after_by_idname:
+        return True
+    if cid is None and name in after_by_name_noid:
+        return True
+    return False
 
 def _auto_add_new_brands(df):
     """Excelのブランド列を読んでTARGET_BRANDSとJIKEI_BRAND_COLSに未登録ブランドを自動追加する"""
@@ -1302,8 +1316,10 @@ def df_to_html_table(df, highlight_last=True, orange_last=False, right_align_num
     headers = "".join(f'<th style="padding:8px 10px;background:{C_HEADER};color:white;border:1px solid #555">{c}</th>' for c in df.columns)
     return f'<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>{headers}</tr></thead><tbody>{rows_html}</tbody></table>'
 
-def build_history(df, target_brands, exclude_pr):
+def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_name_noid=None):
     """年別・月別の開院・閉院・業態転換データを構築"""
+    after_by_idname = after_by_idname or {}
+    after_by_name_noid = after_by_name_noid or {}
     today = date.today()
     all_dates = pd.concat([df["開院日"].dropna(), df["MA日"].dropna(),
                            df["閉院日"].dropna(), df["業態転換日"].dropna()])
@@ -1329,8 +1345,7 @@ def build_history(df, target_brands, exclude_pr):
                 if not brand or brand not in target_brands: continue
                 base = get_base_date(row)
                 d_conv = to_ts(row.get("業態転換日")); d_close = to_ts(row.get("閉院日"))
-                tenkan_mae = str(row.get("転換前業態","") or "").strip()
-                is_converted = tenkan_mae not in ("","nan")
+                is_converted = is_conversion_after_row(row, after_by_idname, after_by_name_noid)
                 if base is not None:
                     base_only = pd.Timestamp(base.year, base.month, base.day)
                     if ms <= base_only <= me:
@@ -1851,7 +1866,7 @@ def build_doctor_movement_data(monthly_states, months):
 def generate():
     global REGION_HOUJIN_ORDER
     print("データを読み込み中...")
-    df = load_data()
+    df, after_by_idname, after_by_name_noid = load_data()
     # 法人設定シートから並び順を読み込む
     REGION_HOUJIN_ORDER = load_houjin_settings()
     ot_settings = load_orangetwist_settings()
@@ -2186,11 +2201,11 @@ def generate():
 
     # ── 院長履歴 ──
     doctor_df = load_doctor_data()
-    director_html = build_director_html(doctor_df, df, brand_cols)
+    director_html = build_director_html(doctor_df, df, brand_cols, after_by_idname, after_by_name_noid)
 
     # ── 先生の異動データ ──
     past_data_mv, _, past_name_mv = load_past_director_data()
-    monthly_states_mv, months_mv, promotion_events, resignation_events = build_director_pivot(doctor_df, df, past_data_mv, past_name_mv)
+    monthly_states_mv, months_mv, promotion_events, resignation_events = build_director_pivot(doctor_df, df, past_data_mv, past_name_mv, after_by_idname, after_by_name_noid)
     doctor_stints, all_clinics_list, _ = build_doctor_movement_data(monthly_states_mv, months_mv)
     doctor_stints_json     = json.dumps(doctor_stints, ensure_ascii=False).replace("'", "\\'")
     all_doctors_json       = json.dumps(sorted(doctor_stints.keys()), ensure_ascii=False)
@@ -2201,7 +2216,7 @@ def generate():
 
     # ── 開院・閉院・業態転換履歴 ──
     print("開院・閉院・業態転換履歴を集計中...")
-    history, hist_years = build_history(df, [b for b,_ in brand_cols], exclude_pr)
+    history, hist_years = build_history(df, [b for b,_ in brand_cols], exclude_pr, after_by_idname, after_by_name_noid)
     openclose_html = build_history_html(history, hist_years, mode="openclose", prefix="oc")
     convert_html   = build_history_html(history, hist_years, mode="convert",   prefix="cv")
 

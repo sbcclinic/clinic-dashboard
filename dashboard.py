@@ -131,21 +131,15 @@ def load_master():
         df[excl] = df[excl].apply(parse_limit)
     # 「業態転換・名称変更履歴」シートがあれば、その内容で転換関連の列を上書きする
     before_overrides, after_by_idname, after_by_name_noid = load_conversion_overrides(path)
-    if (before_overrides or after_by_idname or after_by_name_noid) and "正式名称" in df.columns and "院ID" in df.columns:
+    if before_overrides and "正式名称" in df.columns and "院ID" in df.columns:
         for idx in df.index:
             name = str(df.at[idx, "正式名称"] or "").strip()
             cid_raw = df.at[idx, "院ID"]
-            cid = None
-            if not pd.isna(cid_raw):
-                try:
-                    cid = int(float(str(cid_raw)))
-                except (ValueError, TypeError):
-                    cid = None
-            if cid is not None and (cid, name) in after_by_idname:
-                df.at[idx, "転換前業態"] = after_by_idname[(cid, name)]
-            elif cid is None and name in after_by_name_noid:
-                df.at[idx, "転換前業態"] = after_by_name_noid[name]
-            if cid is None:
+            if pd.isna(cid_raw):
+                continue
+            try:
+                cid = int(float(str(cid_raw)))
+            except (ValueError, TypeError):
                 continue
             ov = before_overrides.get((cid, name))
             if not ov:
@@ -156,7 +150,23 @@ def load_master():
                 df.at[idx, "転換後院名"] = ov["転換後院名"]
             if ov["転換後業態"]:
                 df.at[idx, "転換後業態"] = ov["転換後業態"]
-    return df
+    return df, after_by_idname, after_by_name_noid
+
+def is_conversion_after_row(row, after_by_idname, after_by_name_noid):
+    """この行が「業態転換・名称変更履歴」に記録された転換後の院かどうかを判定する。"""
+    name = str(row.get("正式名称","") or "").strip()
+    cid_raw = row.get("院ID")
+    cid = None
+    if pd.notna(cid_raw):
+        try:
+            cid = int(float(str(cid_raw)))
+        except (ValueError, TypeError):
+            cid = None
+    if cid is not None and (cid, name) in after_by_idname:
+        return True
+    if cid is None and name in after_by_name_noid:
+        return True
+    return False
 
 
 def check_active(row, target):
@@ -363,7 +373,7 @@ JIKEI_COL_COLORS = {
 }
 
 # ── ページ設定 ──────────────────────────────────────
-df_master = load_master()
+df_master, after_by_idname, after_by_name_noid = load_master()
 today = date.today()
 
 # ブランド設定シートから広報IR除外リストとTARGET_BRANDSを動的に取得
@@ -580,8 +590,7 @@ with tab4:
                 d_close = to_ts(row.get("閉院日"))
 
                 # ── 開院（業態転換後の院には印をつける） ──
-                tenkan_mae = str(row.get("転換前業態","") or "").strip()
-                is_converted = tenkan_mae not in ("", "nan")
+                is_converted = is_conversion_after_row(row, after_by_idname, after_by_name_noid)
                 if base is not None:
                     base_only = pd.Timestamp(base.year, base.month, base.day)
                     if ms <= base_only <= me:
