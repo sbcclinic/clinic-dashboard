@@ -1339,24 +1339,30 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
         for month in range(1, 13):
             ms = pd.Timestamp(year, month, 1)
             me = pd.Timestamp(year, month, calendar.monthrange(year, month)[1])
-            opened, closed, convert = [], [], []
+            opened, closed, convert, ma = [], [], [], []
             for _, row in df.iterrows():
                 brand = get_brand(row)
                 if not brand or brand not in target_brands: continue
                 base = get_base_date(row)
                 d_conv = to_ts(row.get("業態転換日")); d_close = to_ts(row.get("閉院日"))
                 is_converted = is_conversion_after_row(row, after_by_idname, after_by_name_noid)
+                is_ma = to_ts(row.get("MA日")) is not None
                 if base is not None:
                     base_only = pd.Timestamp(base.year, base.month, base.day)
                     if ms <= base_only <= me:
-                        opened.append({
-                            "種別": "🔵 業態転換" if is_converted else "🟢 新規開院",
+                        entry = {
                             "開院日": base_only.strftime("%Y/%m/%d"),
                             "院名": row.get("正式名称",""), "ブランド": brand,
                             "業態": str(row.get("業態","") or ""),
                             "法人名": str(row.get("法人名","") or ""),
                             "国内／海外": get_region(row),
-                        })
+                        }
+                        if is_converted:
+                            opened.append({"種別": "🔵 業態転換", **entry})
+                        elif is_ma:
+                            ma.append({"種別": "🟣 M&A", **entry})
+                        else:
+                            opened.append({"種別": "🟢 新規開院", **entry})
                 if d_conv is not None:
                     conv_only = pd.Timestamp(d_conv.year, d_conv.month, d_conv.day)
                     if ms <= conv_only <= me:
@@ -1391,7 +1397,7 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
                             "法人名": str(row.get("法人名","") or ""),
                             "国内／海外": get_region(row),
                         })
-            monthly[month] = {"opened": opened, "closed": closed, "convert": convert}
+            monthly[month] = {"opened": opened, "closed": closed, "convert": convert, "ma": ma}
         result[year] = monthly
     return result, hist_years
 
@@ -1405,15 +1411,20 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             year_opened_new  = [x for m in monthly.values() for x in m["opened"] if "業態転換" not in x.get("種別","")]
             year_closed_real = [x for m in monthly.values() for x in m["closed"]  if "業態転換" not in x.get("種別","")]
             year_convert     = [x for m in monthly.values() for x in m["convert"]]
-            ytotal_o, ytotal_c, ytotal_k = len(year_opened_new), len(year_closed_real), len(year_convert)
-            if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0: continue
-            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🔵 業態転換 {ytotal_k} 院"
+            year_ma          = [x for m in monthly.values() for x in m["ma"]]
+            ytotal_o, ytotal_c, ytotal_k, ytotal_ma = len(year_opened_new), len(year_closed_real), len(year_convert), len(year_ma)
+            if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0 and ytotal_ma == 0: continue
+            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🟣 M&A {ytotal_ma} 院　　🔵 業態転換 {ytotal_k} 院"
             color = C_HEADER
 
             year_inner = ""
             if ytotal_o > 0:
                 year_inner += f'<div style="border-left:4px solid #27AE60;background:#D5F5E3;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟢 開院　{ytotal_o}院</div>'
                 year_inner += df_to_html_table(pd.DataFrame(year_opened_new), highlight_last=False)
+                year_inner += "<br>"
+            if ytotal_ma > 0:
+                year_inner += f'<div style="border-left:4px solid #8E44AD;background:#F1E6F7;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟣 M&A　{ytotal_ma}院</div>'
+                year_inner += df_to_html_table(pd.DataFrame(year_ma), highlight_last=False)
                 year_inner += "<br>"
             if ytotal_c > 0:
                 year_inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{ytotal_c}院</div>'
@@ -1443,18 +1454,23 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             opened  = monthly[month]["opened"]
             closed  = monthly[month]["closed"]
             convert = monthly[month]["convert"]
+            ma      = monthly[month]["ma"]
             uid += 1
 
             if mode == "openclose":
                 opened_new  = [x for x in opened if "業態転換" not in x.get("種別","")]
                 closed_real = [x for x in closed  if "業態転換" not in x.get("種別","")]
-                n_o = len(opened_new); n_c = len(closed_real); n_k = len(convert)
-                if n_o == 0 and n_c == 0 and n_k == 0: continue
-                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院　　🔵 業態転換 {n_k}院"
+                n_o = len(opened_new); n_c = len(closed_real); n_k = len(convert); n_ma = len(ma)
+                if n_o == 0 and n_c == 0 and n_k == 0 and n_ma == 0: continue
+                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院　　🟣 M&A {n_ma}院　　🔵 業態転換 {n_k}院"
                 inner = ""
                 if n_o > 0:
                     inner += f'<div style="border-left:4px solid #27AE60;background:#D5F5E3;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟢 開院　{n_o}院</div>'
                     inner += df_to_html_table(pd.DataFrame(opened_new), highlight_last=False)
+                    inner += "<br>"
+                if n_ma > 0:
+                    inner += f'<div style="border-left:4px solid #8E44AD;background:#F1E6F7;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟣 M&A　{n_ma}院</div>'
+                    inner += df_to_html_table(pd.DataFrame(ma), highlight_last=False)
                     inner += "<br>"
                 if n_c > 0:
                     inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{n_c}院</div>'
@@ -2270,8 +2286,12 @@ def generate():
   .period-bar select{{padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}}
   .period-bar button{{padding:6px 16px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px}}
   .period-bar button:hover{{background:#1a6fa8}}
-  .tabs-groups{{background:#f0f2f5;border-bottom:1px solid #ddd;padding:10px 20px 6px;display:flex;flex-wrap:wrap;gap:20px}}
-  .tabs-group-label{{font-size:11px;font-weight:bold;color:#888;letter-spacing:1px;margin-bottom:6px}}
+  .tabs-groups{{background:#e4e8ee;border-bottom:1px solid #ddd;padding:14px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:stretch}}
+  .tabs-group{{background:white;border:1px solid #d5dae3;border-radius:10px;padding:10px 16px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}}
+  .tabs-group-label{{font-size:13px;font-weight:bold;letter-spacing:1px;margin-bottom:8px;
+        display:block;padding-left:8px;border-left:4px solid;cursor:default}}
+  .tabs-group-clinic .tabs-group-label{{color:#2C3E50;border-left-color:#2C3E50}}
+  .tabs-group-doctor .tabs-group-label{{color:#7D6608;border-left-color:#7D6608}}
   .tabs{{display:flex;flex-wrap:wrap;gap:8px}}
   .tab{{padding:7px 16px;cursor:pointer;border-radius:20px;font-size:13px;font-weight:bold;
         color:white;opacity:0.6;transition:opacity 0.2s,box-shadow 0.2s;white-space:nowrap}}
@@ -2315,8 +2335,8 @@ def generate():
 </div>
 
 <div class="tabs-groups">
-  <div class="tabs-group">
-    <div class="tabs-group-label">院情報</div>
+  <div class="tabs-group tabs-group-clinic">
+    <div class="tabs-group-label">🏥 院情報</div>
     <div class="tabs">
       <div class="tab tab-brand active" onclick="showTab('brand',this)">📋 クリニック集計（月末時点）</div>
       <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別集計（フィー計算）</div>
@@ -2325,8 +2345,8 @@ def generate():
       <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
     </div>
   </div>
-  <div class="tabs-group">
-    <div class="tabs-group-label">院長の異動情報</div>
+  <div class="tabs-group tabs-group-doctor">
+    <div class="tabs-group-label">👨‍⚕️ 院長の異動情報</div>
     <div class="tabs">
       <div class="tab tab-director" onclick="showTab('director',this)">👨‍⚕️ 院長履歴</div>
       <div class="tab tab-movement" onclick="showTab('movement',this)">🔀 先生の異動履歴</div>
