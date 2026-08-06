@@ -16,6 +16,7 @@ LOCAL_PATH = Path.home() / "Documents" / "クリニックDB" / "院情報一覧_
 OUTPUT_HTML = Path(__file__).parent / "index.html"
 
 ORANGE_TWIST_COUNT = 24
+CONVERSION_SHEET = "業態転換・名称変更履歴"
 C_HEADER = "#2C3E50"
 C_TOTAL  = "#FFF2CC"
 C_ORANGE = "#E67E22"
@@ -1068,6 +1069,37 @@ def to_ts(v):
     try: return pd.Timestamp(v)
     except: return None
 
+def load_conversion_overrides(path):
+    """「業態転換・名称変更履歴」シートを読み込み、(転換前院ID, 転換前名称)をキーにした辞書を返す。
+    クリニック一覧の業態転換日・転換後院名・転換後業態を、このシートの内容で上書きするために使う。
+    院名だけをキーにすると、無関係な過去の同名院（例：閉院済みの旧院と現在の院が同じ名称）に
+    誤って上書きしてしまうため、必ず院IDと名称の組み合わせで一致させる。
+    シートが無い場合は空辞書を返し、従来通りクリニック一覧側の値のみを使う。"""
+    try:
+        xls = pd.ExcelFile(path)
+        if CONVERSION_SHEET not in xls.sheet_names:
+            return {}
+        cdf = pd.read_excel(path, sheet_name=CONVERSION_SHEET)
+        cdf["業態転換日"] = pd.to_datetime(cdf.get("業態転換日"), errors="coerce")
+        overrides = {}
+        for _, row in cdf.iterrows():
+            before_name = str(row.get("転換前名称", "") or "").strip()
+            before_id_raw = row.get("転換前院ID", "")
+            if not before_name or pd.isna(before_id_raw):
+                continue
+            try:
+                before_id = int(float(str(before_id_raw)))
+            except (ValueError, TypeError):
+                continue
+            overrides[(before_id, before_name)] = {
+                "業態転換日": row.get("業態転換日"),
+                "転換後院名": str(row.get("転換後名称", "") or "").strip(),
+                "転換後業態": str(row.get("転換後業態", "") or "").strip(),
+            }
+        return overrides
+    except Exception:
+        return {}
+
 def load_data():
     path = get_path()
     df = pd.read_excel(path, sheet_name="クリニック一覧")
@@ -1081,6 +1113,28 @@ def load_data():
     excl = "猶予期限（業態転換後の院が開院するまでの期間）"
     if excl in df.columns:
         df[excl] = df[excl].apply(parse_limit)
+    # 「業態転換・名称変更履歴」シートがあれば、その内容で転換関連の列を上書きする
+    # （クリニック一覧側は今後このシートと重複入力しなくてよい）
+    overrides = load_conversion_overrides(path)
+    if overrides and "正式名称" in df.columns and "院ID" in df.columns:
+        for idx in df.index:
+            name = str(df.at[idx, "正式名称"] or "").strip()
+            cid_raw = df.at[idx, "院ID"]
+            if pd.isna(cid_raw):
+                continue
+            try:
+                cid = int(float(str(cid_raw)))
+            except (ValueError, TypeError):
+                continue
+            ov = overrides.get((cid, name))
+            if not ov:
+                continue
+            if pd.notna(ov["業態転換日"]):
+                df.at[idx, "業態転換日"] = ov["業態転換日"]
+            if ov["転換後院名"]:
+                df.at[idx, "転換後院名"] = ov["転換後院名"]
+            if ov["転換後業態"]:
+                df.at[idx, "転換後業態"] = ov["転換後業態"]
     # Excelに新ブランドが追加されていたら自動でリストに追加
     _auto_add_new_brands(df)
     return df
