@@ -1636,6 +1636,8 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
                     houjin = str(row.get("法人名", "") or "").strip()
                     if houjin in members:
                         brand = get_brand(row)
+                        if not brand or brand not in target_brands:
+                            continue
                         if brand in excl_brands:
                             continue
                         gyoutai = str(row.get("業態", "") or "").strip()
@@ -1759,8 +1761,8 @@ def build_timeseries_html(all_data, brand_cols=None):
     for region, grp in groupby(region_seq, key=lambda x: x[0]):
         cnt = sum(g[1] for g in grp)
         header0 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{region}</th>'
-    header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
-    header0 += f'<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:80px;white-space:normal;text-align:center">{LABEL_ALL}</th>'
+    header0 += f'<th rowspan="4" title="ブランド設定シートで「既存グループ合計」に○が付いたブランドだけの合計（法人グループの区分とは無関係）" style="padding:4px 6px;border:1px solid #555;border-left:4px solid #fff;background:#117864;min-width:60px">既存G合計</th>'
+    header0 += f'<th rowspan="4" title="表示している全ての法人グループ・全ブランドを合計した数" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:80px;white-space:normal;text-align:center">{LABEL_ALL}</th>'
     header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px;white-space:normal;text-align:center">IR・広報用（除：Holdingsへの収益貢献なし）</th>'
     header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
     header0 += f'<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:70px;white-space:normal;text-align:center">{LABEL_IR}</th>'
