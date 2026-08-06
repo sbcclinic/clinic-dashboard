@@ -1726,9 +1726,9 @@ def build_timeseries_html(all_data, brand_cols=None):
                     parts = key.split("|", 2)
                     if len(parts) == 3:
                         combos_seen.add((parts[1], parts[2]))
-        # JIKEI_BRAND_COLS の順序で並べ直す
+        # ブランド設定シート（brand_cols）の順序で並べ直す
         jikei_order = []
-        for brand, gyoutai in JIKEI_BRAND_COLS:
+        for brand, gyoutai in brand_cols:
             g = gyoutai or ""
             if (brand, g) in combos_seen:
                 jikei_order.append((brand, g))
