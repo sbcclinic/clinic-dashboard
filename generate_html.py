@@ -1402,19 +1402,42 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
     for year in hist_years:
         monthly = history[year]
         if mode == "openclose":
-            ytotal_o = sum(len([x for x in v["opened"] if "業態転換" not in x.get("種別","")]) for v in monthly.values())
-            ytotal_c = sum(len([x for x in v["closed"]  if "業態転換" not in x.get("種別","")]) for v in monthly.values())
-            ytotal_k = sum(len(v["convert"]) for v in monthly.values())
+            year_opened_new  = [x for m in monthly.values() for x in m["opened"] if "業態転換" not in x.get("種別","")]
+            year_closed_real = [x for m in monthly.values() for x in m["closed"]  if "業態転換" not in x.get("種別","")]
+            year_convert     = [x for m in monthly.values() for x in m["convert"]]
+            ytotal_o, ytotal_c, ytotal_k = len(year_opened_new), len(year_closed_real), len(year_convert)
             if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0: continue
             year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🔵 業態転換 {ytotal_k} 院"
             color = C_HEADER
+
+            year_inner = ""
+            if ytotal_o > 0:
+                year_inner += f'<div style="border-left:4px solid #27AE60;background:#D5F5E3;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟢 開院　{ytotal_o}院</div>'
+                year_inner += df_to_html_table(pd.DataFrame(year_opened_new), highlight_last=False)
+                year_inner += "<br>"
+            if ytotal_c > 0:
+                year_inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{ytotal_c}院</div>'
+                year_inner += df_to_html_table(pd.DataFrame(year_closed_real), highlight_last=False)
+                if ytotal_k > 0: year_inner += "<br>"
+            if ytotal_k > 0:
+                year_inner += f'<div style="border-left:4px solid {C_BLUE};background:#D6EAF8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔵 業態転換　{ytotal_k}院</div>'
+                year_inner += df_to_html_table(pd.DataFrame(year_convert), highlight_last=False)
         else:
             ytotal_k = sum(len(v["convert"]) for v in monthly.values())
             if ytotal_k == 0: continue
             year_label = f"📅 {year}年　｜　🔵 業態転換 {ytotal_k} 院"
             color = C_BLUE
+            year_inner = ""
 
-        html += f'<div style="background:{color};color:white;padding:10px 16px;font-weight:bold;font-size:16px;border-radius:6px;margin-top:20px">{year_label}</div>'
+        html += f"""
+<div style="margin-top:20px;border-radius:6px;overflow:hidden">
+  <div onclick="toggleAcc('{prefix}yacc{year}','{prefix}yarr{year}')" style="background:{color};color:white;padding:10px 16px;font-weight:bold;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:10px">
+    <span id="{prefix}yarr{year}" style="font-size:13px">▶</span> {year_label}
+  </div>
+  <div id="{prefix}yacc{year}" style="display:none;padding:16px;border:1px solid #ddd;border-top:none">
+    {year_inner}
+  </div>
+</div>"""
 
         for month in range(1, 13):
             opened  = monthly[month]["opened"]
@@ -2218,7 +2241,6 @@ def generate():
     print("開院・閉院・業態転換履歴を集計中...")
     history, hist_years = build_history(df, [b for b,_ in brand_cols], exclude_pr, after_by_idname, after_by_name_noid)
     openclose_html = build_history_html(history, hist_years, mode="openclose", prefix="oc")
-    convert_html   = build_history_html(history, hist_years, mode="convert",   prefix="cv")
 
     # 期間セレクターの選択肢生成
     year_options = "".join(f'<option value="{yr}">{yr}</option>' for yr in range(2021, today.year+1))
@@ -2248,17 +2270,17 @@ def generate():
   .period-bar select{{padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}}
   .period-bar button{{padding:6px 16px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px}}
   .period-bar button:hover{{background:#1a6fa8}}
-  .tabs{{display:flex;background:#f0f2f5;padding:10px 20px;flex-wrap:wrap;gap:8px;border-bottom:1px solid #ddd}}
+  .tabs-groups{{background:#f0f2f5;border-bottom:1px solid #ddd;padding:10px 20px 6px;display:flex;flex-wrap:wrap;gap:20px}}
+  .tabs-group-label{{font-size:11px;font-weight:bold;color:#888;letter-spacing:1px;margin-bottom:6px}}
+  .tabs{{display:flex;flex-wrap:wrap;gap:8px}}
   .tab{{padding:7px 16px;cursor:pointer;border-radius:20px;font-size:13px;font-weight:bold;
         color:white;opacity:0.6;transition:opacity 0.2s,box-shadow 0.2s;white-space:nowrap}}
   .tab:hover{{opacity:0.85}}
   .tab.active{{opacity:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)}}
   .tab-brand{{background:#2980B9}}
-  .tab-region{{background:#27AE60}}
   .tab-houjin{{background:#8E44AD}}
   .tab-trend{{background:#E67E22}}
   .tab-history{{background:#E74C3C}}
-  .tab-convert{{background:#16A085}}
   .tab-snapshot{{background:#2C3E50}}
   .tab-director{{background:#1A5276}}
   .tab-movement{{background:#B7950B}}
@@ -2292,16 +2314,24 @@ def generate():
   </div>
 </div>
 
-<div class="tabs">
-  <div class="tab tab-brand active" onclick="showTab('brand',this)">📋 ブランド別・業態別集計（月末時点）</div>
-  <div class="tab tab-region" onclick="showTab('region',this)">🌏 地域・法人別 集計（月末時点）</div>
-  <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別集計（フィー計算）</div>
-  <div class="tab tab-trend" onclick="showTab('trend',this)">📅 年月別 院数サマリー</div>
-  <div class="tab tab-history" onclick="showTab('history',this)">🏥 開院・閉院履歴</div>
-  <div class="tab tab-convert" onclick="showTab('convert',this)">🔵 業態転換履歴</div>
-  <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
-  <div class="tab tab-director" onclick="showTab('director',this)">👨‍⚕️ 院長履歴</div>
-  <div class="tab tab-movement" onclick="showTab('movement',this)">🔀 先生の異動履歴</div>
+<div class="tabs-groups">
+  <div class="tabs-group">
+    <div class="tabs-group-label">院情報</div>
+    <div class="tabs">
+      <div class="tab tab-brand active" onclick="showTab('brand',this)">📋 クリニック集計（月末時点）</div>
+      <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別集計（フィー計算）</div>
+      <div class="tab tab-trend" onclick="showTab('trend',this)">📅 年月別 院数サマリー</div>
+      <div class="tab tab-history" onclick="showTab('history',this)">🏥 開院・閉院履歴</div>
+      <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
+    </div>
+  </div>
+  <div class="tabs-group">
+    <div class="tabs-group-label">院長の異動情報</div>
+    <div class="tabs">
+      <div class="tab tab-director" onclick="showTab('director',this)">👨‍⚕️ 院長履歴</div>
+      <div class="tab tab-movement" onclick="showTab('movement',this)">🔀 先生の異動履歴</div>
+    </div>
+  </div>
 </div>
 
 <div id="brand" class="content active">
@@ -2326,6 +2356,10 @@ def generate():
     </div>
   </div>
   <div class="box" style="margin-top:20px">
+    <div class="section-title" id="regionTableTitle">{report_date} 国内／海外×法人</div>
+    <div id="regionTableContainer">{region_table_html_str}</div>
+  </div>
+  <div class="box" style="margin-top:20px">
     <div class="section-title">期間比較（開始月 vs 終了月）</div>
     <div class="period-bar" style="background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <span style="font-weight:bold;font-size:13px">表示期間：</span>
@@ -2339,21 +2373,6 @@ def generate():
     <div id="compareTableContainer"><p style="color:#999;font-size:13px">期間を選択して「適用」を押すと比較表が表示されます。</p></div>
   </div>
   <div class="box" style="margin-top:20px">{chart2_html}</div>
-</div>
-
-<div id="region" class="content">
-  <div class="box">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
-      <div class="section-title" id="regionTableTitle" style="margin-bottom:0">{report_date} 国内／海外×法人</div>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:6px 12px">
-        <span style="font-size:13px;font-weight:bold;color:#2C3E50">月末時点：</span>
-        <select id="regionSelYear" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>年
-        <select id="regionSelMonth" style="padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px"></select>月
-        <button onclick="applyRegionMonth()" style="padding:4px 12px;background:{C_BLUE};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">表示</button>
-      </div>
-    </div>
-    <div id="regionTableContainer">{region_table_html_str}</div>
-  </div>
 </div>
 
 <div id="houjin" class="content">
@@ -2377,11 +2396,6 @@ def generate():
   <div id="historyContainer">
     {openclose_html}
   </div>
-</div>
-
-<div id="convert" class="content">
-  <h3 style="margin-top:0">業態転換 年別・月別履歴</h3>
-  {convert_html}
 </div>
 
 <div id="snapshot" class="content">
@@ -2620,7 +2634,9 @@ function renderBrandTable(ym) {{
 }}
 
 function applyBrandMonth() {{
-  renderBrandTable(_getPickerYm('brandSelYear','brandSelMonth'));
+  const ym = _getPickerYm('brandSelYear','brandSelMonth');
+  renderBrandTable(ym);
+  renderRegionTable(ym);
 }}
 
 // ── 地域・法人別集計テーブル描画 ──────────────────────────────
@@ -2686,17 +2702,12 @@ function renderRegionTable(ym) {{
   document.getElementById('regionTableTitle').textContent = yr + '年' + parseInt(mo) + '月末 国内／海外×法人';
 }}
 
-function applyRegionMonth() {{
-  renderRegionTable(_getPickerYm('regionSelYear','regionSelMonth'));
-}}
-
 // ── ページ読み込み時に月選択を初期化 ──────────────────────────────
 (function() {{
   // 報告月（25日より前は前月末、25日以降は当月末）をPythonから埋め込み
   const reportYm = '{y}/{m:02d}';
   const defaultYm = ALL_DATA[reportYm] ? reportYm : Object.keys(ALL_DATA).sort().slice(-1)[0];
   _initMonthPicker('brandSelYear', 'brandSelMonth', defaultYm);
-  _initMonthPicker('regionSelYear', 'regionSelMonth', defaultYm);
 }})();
 
 function showTab(id, el) {{
