@@ -1759,25 +1759,25 @@ def build_timeseries_html(all_data, brand_cols=None):
     header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:70px;white-space:normal;text-align:center">{LABEL_IR}</th>'
     header1 += '</tr>'
 
-    # ── ヘッダー行2：ブランド名 ──
+    # ── ヘッダー行2：業態名（同じ業態が連続する場合は結合） ──
     header2 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:24px;z-index:3">'
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
         if not combos:
             continue
         grouped = []
-        for brand, grp in groupby(combos, key=lambda x: x[0]):
-            grouped.append((brand, len(list(grp))))
-        for brand, cnt in grouped:
-            header2 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{brand}</th>'
+        for gyoutai, grp in groupby(combos, key=lambda x: x[1] or "―"):
+            grouped.append((gyoutai, len(list(grp))))
+        for gyoutai, cnt in grouped:
+            header2 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{gyoutai}</th>'
     header2 += '</tr>'
 
-    # ── ヘッダー行3：業態名 ──
+    # ── ヘッダー行3：ブランド名 ──
     header3 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:48px;z-index:3">'
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
         for brand, gyoutai in combos:
-            header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px">{gyoutai if gyoutai else "―"}</th>'
+            header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px">{brand}</th>'
     header3 += '</tr>'
 
     # ── データ行 ──
@@ -2341,7 +2341,7 @@ def generate():
       <div class="tab tab-brand active" onclick="showTab('brand',this)">📋 クリニック集計（月末時点）</div>
       <div class="tab tab-houjin" onclick="showTab('houjin',this)">🏢 法人別集計（フィー計算）</div>
       <div class="tab tab-trend" onclick="showTab('trend',this)">📅 年月別 院数サマリー</div>
-      <div class="tab tab-history" onclick="showTab('history',this)">🏥 開院・閉院履歴</div>
+      <div class="tab tab-history" onclick="showTab('history',this)">🏥 院数変動履歴</div>
       <div class="tab tab-snapshot" onclick="showTab('snapshot',this)">🏥 在院一覧（月末時点）</div>
     </div>
   </div>
@@ -2412,7 +2412,7 @@ def generate():
 </div>
 
 <div id="history" class="content">
-  <h3 style="margin-top:0">開院・閉院 年別・月別履歴</h3>
+  <h3 style="margin-top:0">院数変動 年別・月別履歴（開院・閉院・M&A・業態転換）</h3>
   <div id="historyContainer">
     {openclose_html}
   </div>
