@@ -1708,12 +1708,27 @@ def build_all_monthly_data(df, target_brands, exclude_pr, brand_cols=None, exist
     return all_data
 
 
-def build_timeseries_html(all_data, brand_cols=None):
+def build_timeseries_html(all_data, brand_cols=None, existing_flags=None):
     """時系列推移テーブルHTMLを生成（法人グループ×ブランド×業態の3段階層ヘッダー付き）"""
     if not all_data:
         return "<p>データなし</p>"
     if not brand_cols:
         brand_cols = JIKEI_BRAND_COLS
+    if not existing_flags:
+        existing_flags = [False] * len(brand_cols)
+
+    # (brand, gyoutai) → 既存G合計に含まれるか。gyoutai未指定の設定行は、そのブランドの全業態に適用する
+    existing_by_exact = {}
+    existing_by_brand = {}
+    for (b, g), flag in zip(brand_cols, existing_flags):
+        if g is not None:
+            existing_by_exact[(b, g)] = flag
+        else:
+            existing_by_brand[b] = existing_by_brand.get(b, False) or flag
+    def is_existing(brand, gyoutai):
+        if (brand, gyoutai) in existing_by_exact:
+            return existing_by_exact[(brand, gyoutai)]
+        return existing_by_brand.get(brand, False)
 
     months = sorted(all_data.keys())
 
@@ -1796,12 +1811,13 @@ def build_timeseries_html(all_data, brand_cols=None):
             header2 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{gyoutai}</th>'
     header2 += '</tr>'
 
-    # ── ヘッダー行3：ブランド名 ──
+    # ── ヘッダー行3：ブランド名（既存G合計に含むブランドは背景色で区別） ──
     header3 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:72px;z-index:3">'
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
         for brand, gyoutai in combos:
-            header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px">{brand}</th>'
+            bg = 'background:#117864' if is_existing(brand, gyoutai) else ''
+            header3 += f'<th style="padding:4px 6px;border:1px solid #555;min-width:50px;{bg}">{brand}</th>'
     header3 += '</tr>'
 
     # ── データ行 ──
@@ -2201,7 +2217,7 @@ def generate():
         brand_cols=brand_cols, existing_flags=existing_flags,
         ot_settings=ot_settings
     )
-    timeseries_html = build_timeseries_html(all_monthly_data, brand_cols=brand_cols)
+    timeseries_html = build_timeseries_html(all_monthly_data, brand_cols=brand_cols, existing_flags=existing_flags)
 
     # JSON埋め込み用（シングルクォートをエスケープ）
     json_str = json.dumps(all_monthly_data, ensure_ascii=False).replace("'", "\\'")
@@ -2429,6 +2445,10 @@ def generate():
 <div id="trend" class="content">
   <div class="box">
     <div class="section-title">時系列推移 2021/01〜{y}/{m:02d}</div>
+    <div style="font-size:12px;color:#555;margin-bottom:8px">
+      <span style="display:inline-block;width:12px;height:12px;background:#117864;vertical-align:middle;margin-right:4px;border-radius:2px"></span>
+      色付きのブランド列＝「既存G合計」に含まれるブランド
+    </div>
     <div id="trendTableWrapper">
       {timeseries_html}
     </div>
