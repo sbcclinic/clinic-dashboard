@@ -1727,19 +1727,47 @@ def build_timeseries_html(all_data, brand_cols=None):
                     if len(parts) == 3:
                         combos_seen.add((parts[1], parts[2]))
         # ブランド設定シート（brand_cols）の順序で並べ直す
+        # 業態が空欄のブランドは、そのブランドに実在する業態を（複数あれば全て）そのまま採用する
         jikei_order = []
         for brand, gyoutai in brand_cols:
-            g = gyoutai or ""
-            if (brand, g) in combos_seen:
-                jikei_order.append((brand, g))
+            if gyoutai is not None:
+                matches = [(b, g) for (b, g) in combos_seen if b == brand and g == gyoutai]
+            else:
+                matches = [(b, g) for (b, g) in combos_seen if b == brand]
+            for combo in sorted(matches):
+                if combo not in jikei_order:
+                    jikei_order.append(combo)
         for combo in sorted(combos_seen):
             if combo not in jikei_order:
                 jikei_order.append(combo)
         group_cols[gname] = jikei_order
 
-    # ── ヘッダー行1：法人グループ名（構成法人内訳）+ 集計列 ──
-    header1 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:0;z-index:3">'
-    header1 += '<th rowspan="3" style="position:sticky;left:0;z-index:4;background:#2C3E50;min-width:70px;padding:4px 6px">年月</th>'
+    # 各法人グループが国内・海外どちらかを判定（法人設定シートの国内／海外リストを参照）
+    ovs_houjin_set = set(REGION_HOUJIN_ORDER.get("海外", []))
+    def group_region(members):
+        return "海外" if any(m in ovs_houjin_set for m in members) else "国内"
+
+    # ── ヘッダー行0：国内・海外（連続するグループは結合）+ 年月・集計列 ──
+    header0 = '<tr style="background:#1a252f;color:white;font-size:11px;position:sticky;top:0;z-index:3">'
+    header0 += '<th rowspan="4" style="position:sticky;left:0;z-index:4;background:#2C3E50;min-width:70px;padding:4px 6px">年月</th>'
+    region_seq = []
+    for gname, members in HOUJIN_GROUPS:
+        combos = group_cols.get(gname, [])
+        if not combos:
+            continue
+        region_seq.append((group_region(members), len(combos)))
+    for region, grp in groupby(region_seq, key=lambda x: x[0]):
+        cnt = sum(g[1] for g in grp)
+        header0 += f'<th colspan="{cnt}" style="padding:4px 6px;border:1px solid #555;text-align:center">{region}</th>'
+    header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
+    header0 += f'<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:80px;white-space:normal;text-align:center">{LABEL_ALL}</th>'
+    header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px;white-space:normal;text-align:center">IR・広報用（除：Holdingsへの収益貢献なし）</th>'
+    header0 += '<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
+    header0 += f'<th rowspan="4" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:70px;white-space:normal;text-align:center">{LABEL_IR}</th>'
+    header0 += '</tr>'
+
+    # ── ヘッダー行1：法人グループ名（構成法人内訳） ──
+    header1 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:24px;z-index:3">'
     # 法人グループ列（ブランド削除）
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
@@ -1751,16 +1779,10 @@ def build_timeseries_html(all_data, brand_cols=None):
         else:
             member_label = " / ".join(members)
         header1 += f'<th colspan="{len(combos)}" style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:10px">{member_label}</th>'
-    # 集計列（末尾）
-    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:60px">既存G合計</th>'
-    header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#1a5276;min-width:80px;white-space:normal;text-align:center">{LABEL_ALL}</th>'
-    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#8e44ad;color:white;min-width:70px;white-space:normal;text-align:center">IR・広報用（除：Holdingsへの収益貢献なし）</th>'
-    header1 += '<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:60px">OrangeTwist</th>'
-    header1 += f'<th rowspan="3" style="padding:4px 6px;border:1px solid #555;background:#d35400;min-width:70px;white-space:normal;text-align:center">{LABEL_IR}</th>'
     header1 += '</tr>'
 
     # ── ヘッダー行2：業態名（同じ業態が連続する場合は結合） ──
-    header2 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:24px;z-index:3">'
+    header2 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:48px;z-index:3">'
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
         if not combos:
@@ -1773,7 +1795,7 @@ def build_timeseries_html(all_data, brand_cols=None):
     header2 += '</tr>'
 
     # ── ヘッダー行3：ブランド名 ──
-    header3 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:48px;z-index:3">'
+    header3 = '<tr style="background:#2C3E50;color:white;font-size:11px;position:sticky;top:72px;z-index:3">'
     for gname, members in HOUJIN_GROUPS:
         combos = group_cols.get(gname, [])
         for brand, gyoutai in combos:
@@ -1818,7 +1840,7 @@ def build_timeseries_html(all_data, brand_cols=None):
     table = f'''
     <div style="overflow-x:auto;overflow-y:auto;max-height:70vh">
     <table style="border-collapse:collapse;font-size:12px;white-space:nowrap">
-    <thead>{header1}{header2}{header3}</thead>
+    <thead>{header0}{header1}{header2}{header3}</thead>
     <tbody>{rows_html}</tbody>
     </table>
     </div>'''
