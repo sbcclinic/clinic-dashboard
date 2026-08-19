@@ -221,6 +221,24 @@ main{padding:26px 34px 60px;max-width:1180px;}
 .kpi-label{font-size:11.5px;color:var(--text-muted);font-weight:700;letter-spacing:.02em;margin-bottom:8px;}
 .kpi-value{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;}
 .kpi-sub{margin-top:9px;font-size:11.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.kpi-avg{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.kpi-tip{margin-top:6px;font-size:10.5px;color:var(--text-faint);line-height:1.5;}
+
+/* 自院の立ち位置（クリニック比較ページ） */
+.sp-summary{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:16px;}
+.sp-rank{font-size:14px;font-weight:800;color:var(--accent-strong);}
+.sp-value{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.sp-avg{font-size:12px;color:var(--text-muted);}
+.sp-track{position:relative;height:8px;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good));border-radius:99px;margin:22px 4px 8px;}
+.sp-avg-mark{position:absolute;top:-6px;width:2px;height:20px;background:var(--text);opacity:.55;transform:translateX(-1px);}
+.sp-self-mark{position:absolute;top:-11px;width:16px;height:16px;border-radius:50%;background:var(--accent-strong);border:3px solid var(--surface);box-shadow:var(--shadow);transform:translateX(-8px);}
+.sp-self-mark::after{content:"自院";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:800;color:var(--accent-strong);white-space:nowrap;}
+.sp-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-faint);padding:0 4px;}
+
+.compare-trend-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.compare-trend-legend .ctl-item{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);}
+.compare-trend-legend .ctl-item.self{font-weight:800;color:var(--accent-strong);}
+.compare-trend-legend .ctl-dot{width:10px;height:10px;border-radius:50%;flex:none;}
 .delta{font-weight:800;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:2px;}
 .delta.up{color:var(--good);}
 .delta.down{color:var(--bad);}
@@ -478,11 +496,45 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
         <div class="head-controls">
           <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="kpi-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
           <div class="seg" id="kpi-seg">
             <button class="active" data-view="month">月次</button>
             <button data-view="year">年間</button>
           </div>
         </div>
+      </div>
+
+      <div id="kpi-cards-month" class="kpi-grid">
+        <div class="kpi-card" style="--bar:var(--accent)">
+          <div class="kpi-label">セッション数（SNS）</div>
+          <div class="kpi-value">4,217</div>
+          <div class="kpi-sub">前月 3,961 <span class="delta up">▲+6.5%</span></div>
+        </div>
+        <div class="kpi-card" style="--bar:var(--accent)">
+          <div class="kpi-label">アクティブユーザー</div>
+          <div class="kpi-value">3,458</div>
+          <div class="kpi-sub">前月 3,088 <span class="delta up">▲+12.0%</span></div>
+        </div>
+        <div class="kpi-card" style="--bar:var(--bad)">
+          <div class="kpi-label">SNS予約貢献数</div>
+          <div class="kpi-value">61件</div>
+          <div class="kpi-sub">前月 85件 <span class="delta down">▼-28.2%</span></div>
+        </div>
+        <div class="kpi-card" style="--bar:var(--warn)">
+          <div class="kpi-label">新規MYSBC登録</div>
+          <div class="kpi-value">14件</div>
+          <div class="kpi-sub">前月 16件 <span class="delta down">▼-12.5%</span></div>
+        </div>
+      </div>
+      <div id="kpi-cards-year" class="annual-cards" style="display:none">
+        <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計セッション数</div><div class="kpi-value">48,960</div><div class="kpi-sub">前年比 <span class="delta up">▲+15%</span></div></div>
+        <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計SNS予約貢献数</div><div class="kpi-value">912件</div><div class="kpi-sub">前年比 <span class="delta up">▲+6%</span></div></div>
+        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">年間累計新規MYSBC登録</div><div class="kpi-value">168件</div><div class="kpi-sub">前年比 <span class="delta flat">横ばい</span></div></div>
       </div>
 
       <div class="panel funnel-panel">
@@ -600,33 +652,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div id="kpi-month-view">
-        <div class="kpi-grid">
-          <div class="kpi-card" style="--bar:var(--accent)">
-            <div class="kpi-label">セッション数（SNS）</div>
-            <div class="kpi-value">4,217</div>
-            <div class="kpi-sub">前月 3,961 <span class="delta up">▲+6.5%</span></div>
-          </div>
-          <div class="kpi-card" style="--bar:var(--accent)">
-            <div class="kpi-label">アクティブユーザー</div>
-            <div class="kpi-value">3,458</div>
-            <div class="kpi-sub">前月 3,088 <span class="delta up">▲+12.0%</span></div>
-          </div>
-          <div class="kpi-card" style="--bar:var(--bad)">
-            <div class="kpi-label">SNS予約貢献数</div>
-            <div class="kpi-value">61件</div>
-            <div class="kpi-sub">前月 85件 <span class="delta down">▼-28.2%</span></div>
-          </div>
-          <div class="kpi-card" style="--bar:var(--warn)">
-            <div class="kpi-label">新規MYSBC登録</div>
-            <div class="kpi-value">14件</div>
-            <div class="kpi-sub">前月 16件 <span class="delta down">▼-12.5%</span></div>
-          </div>
-        </div>
-
         <div class="panel">
           <div class="panel-title"><span class="bar"></span>指標推移（予約種別実績）　<small>2月〜5月・前月比・前年同月比・評価</small></div>
           <div class="table-scroll">
-          <table>
+          <table id="tbl-kpi-reservation">
             <thead><tr><th>指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>前月比</th><th>前年同月比</th><th>評価</th></tr></thead>
             <tbody>
               <tr><td>SNSセッション数</td><td>4,082</td><td>4,401</td><td>3,961</td><td class="cur">4,217</td><td><span class="delta up">▲+6.5%</span></td><td><span class="delta up">▲+18%</span></td><td><span class="pill good">回復</span></td></tr>
@@ -644,7 +673,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel">
           <div class="panel-title"><span class="bar"></span>指標推移（媒体パフォーマンス）　<small>2月〜5月・前月比・前年同月比・評価　※上表とは別軸（予約の種類ではなく媒体ごとの実績）</small></div>
           <div class="table-scroll">
-          <table>
+          <table id="tbl-kpi-media">
             <thead><tr><th>指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>前月比</th><th>前年同月比</th><th>評価</th></tr></thead>
             <tbody>
               <tr><td>IGプロフィール予約率</td><td>3.26%</td><td>3.72%</td><td>4.51%</td><td class="cur">4.25%</td><td><span class="delta flat">▼微減</span></td><td><span class="delta up">▲+0.6pt</span></td><td><span class="pill good">高水準維持</span></td></tr>
@@ -652,6 +681,24 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <tr><td>TikTok予約数</td><td>13</td><td>7</td><td>8</td><td class="cur">3</td><td><span class="delta down">▼-62.5%</span></td><td><span class="delta down">▼-54%</span></td><td><span class="pill bad">大幅減</span></td></tr>
             </tbody>
           </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>月次推移・前年同月比較<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="seg" id="kpi-chart-metric-seg">
+              <button class="active" data-metric="sessions">SNSセッション数</button>
+              <button data-metric="activeUsers">アクティブユーザー</button>
+              <button data-metric="bookings">SNS予約貢献数</button>
+              <button data-metric="mysbc">新規MYSBC登録</button>
+            </div>
+            <div class="chart-legend" style="margin-top:10px">
+              <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+              <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            </div>
+            <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
+            <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※前年同月の値は実測ではありません。各指標の実測「前年同月比」（5月時点）をもとに、同じ伸び率が2〜4月にも一律で働いたと仮定して逆算した推定値です。●は年月選択で選んだ月を示します。</p>
           </div>
         </div>
 
@@ -682,12 +729,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div id="kpi-year-view" style="display:none">
         <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。実データ接続後、直近12ヶ月の実績に置き換わります。</div></div>
-
-        <div class="annual-cards">
-          <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計セッション数</div><div class="kpi-value">48,960</div><div class="kpi-sub">前年比 <span class="delta up">▲+15%</span></div></div>
-          <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計SNS予約貢献数</div><div class="kpi-value">912件</div><div class="kpi-sub">前年比 <span class="delta up">▲+6%</span></div></div>
-          <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">年間累計新規MYSBC登録</div><div class="kpi-value">168件</div><div class="kpi-sub">前年比 <span class="delta flat">横ばい</span></div></div>
-        </div>
 
         <div class="panel">
           <div class="panel-title"><span class="bar"></span>年間トレンド（サンプル）<small>1月〜12月・当年 vs 前年</small></div>
@@ -721,6 +762,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。予約率・予約数のみ全体KPIシートの実数値、その他はサンプル値です。フィードとストーリーで指標が異なるため、上部の切替でご覧いただけます。</div></div>
 
       <div id="ig-feed-view">
+      <div class="seg" id="ig-feed-month-seg" style="margin-bottom:14px">
+        <button data-month="0">2月</button>
+        <button data-month="1">3月</button>
+        <button data-month="2">4月</button>
+        <button class="active" data-month="3">5月</button>
+      </div>
+      <div class="kpi-grid" id="ig-feed-kpi-grid"></div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（Instagramフィード）<small>投稿量→エンゲージメント→リーチ→プロフィール→タップ→予約</small></div>
         <div class="panel-body">
@@ -762,15 +811,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リーチ数</div><div class="kpi-value">18.4万</div><div class="kpi-sub">前月 15.9万 <span class="delta up">▲+15.7%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">プロフィールアクセス数</div><div class="kpi-value">6,120</div><div class="kpi-sub">前月 5,540 <span class="delta up">▲+10.5%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">IGプロフィール予約率</div><div class="kpi-value">4.25%</div><div class="kpi-sub">前月 4.51% <span class="delta flat">▼微減</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">IGプロフィール予約数</div><div class="kpi-value">58件</div><div class="kpi-sub">前月 62件 <span class="delta down">▼-6.5%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">フォロワー純増</div><div class="kpi-value">+412人</div><div class="kpi-sub">前月 +366人 <span class="delta up">▲+12.6%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">保存数</div><div class="kpi-value">3,050</div><div class="kpi-sub">前月 2,610 <span class="delta up">▲+16.9%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">シェア数</div><div class="kpi-value">870</div><div class="kpi-sub">前月 910 <span class="delta down">▼-4.4%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">24本</div><div class="kpi-sub">前月 21本 <span class="delta up">▲大幅増</span></div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="ig-feed-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※IGプロフィール予約数は実測値（全体KPIシートと共通）。前年同月値は前年同月比+11%をもとに逆算した推定値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -791,6 +841,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div id="ig-story-view" style="display:none">
+      <div class="seg" id="ig-story-month-seg" style="margin-bottom:14px">
+        <button data-month="0">2月</button>
+        <button data-month="1">3月</button>
+        <button data-month="2">4月</button>
+        <button class="active" data-month="3">5月</button>
+      </div>
+      <div class="kpi-grid" id="ig-story-kpi-grid"></div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（Instagramストーリー）<small>投稿量→エンゲージメント→表示→リンクタップ→予約タップ→予約</small></div>
         <div class="panel-body">
@@ -832,15 +890,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">ストーリー表示回数</div><div class="kpi-value">92,000</div><div class="kpi-sub">前月 78,500 <span class="delta up">▲+17.2%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リンクスタンプタップ数</div><div class="kpi-value">3,850</div><div class="kpi-sub">前月 3,120 <span class="delta up">▲+23.4%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">完了率（最後まで視聴）</div><div class="kpi-value">68.4%</div><div class="kpi-sub">前月 71.2% <span class="delta down">▼-2.8pt</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">返信数（DM）</div><div class="kpi-value">210</div><div class="kpi-sub">前月 165 <span class="delta up">▲+27.3%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約タップ数</div><div class="kpi-value">520<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">リンクスタンプ経由</div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">22件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">ストーリー経由の予約</div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">45本</div><div class="kpi-sub">前月 38本 <span class="delta up">▲+18.4%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿頻度</div><div class="kpi-value">週10.5本</div><div class="kpi-sub">フィードの約1.9倍の頻度</div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="ig-story-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -905,8 +964,18 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <h1>YouTube分析 <span class="platform-chip chip-yt">認知・視聴者教育</span></h1>
           <p>Shorts投稿数が大幅増加し総視聴回数が過去最高水準に（5月）</p>
         </div>
-        <div class="head-controls"><div class="select-fake">キム先生（豊胸領域）</div></div>
+        <div class="head-controls">
+          <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="yt-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
+        </div>
       </div>
+
+      <div class="kpi-grid" id="yt-kpi-grid"></div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（YouTube）<small>投稿量→エンゲージメント→視聴→チャンネル→タップ→予約</small></div>
@@ -949,15 +1018,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">総視聴回数</div><div class="kpi-value">20.8万</div><div class="kpi-sub">前月 15.9万 <span class="delta up">▲+30.8%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">月間視聴者数</div><div class="kpi-value">4.0万</div><div class="kpi-sub">前月 3.7万 <span class="delta up">▲+8.1%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">チャンネル登録増</div><div class="kpi-value">+94人</div><div class="kpi-sub">前月 +98人 <span class="delta flat">▼微減</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">インプレッションCTR</div><div class="kpi-value">5.7%</div><div class="kpi-sub">前月 5.7% <span class="delta flat">横ばい</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">Shorts視聴回数</div><div class="kpi-value">16.9万</div><div class="kpi-sub">前月 11.8万 <span class="delta up">▲+43.2%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">通常動画視聴</div><div class="kpi-value">3.8万</div><div class="kpi-sub">前月 3.9万 <span class="delta flat">横ばい</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">インプレッション数</div><div class="kpi-value">95.2万</div><div class="kpi-sub">前月 90.3万 <span class="delta up">▲+5.4%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">公開Shorts本数</div><div class="kpi-value">31本</div><div class="kpi-sub">前月 9本 <span class="delta up">▲大幅増</span></div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="yt-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -1019,8 +1089,18 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <h1>TikTok分析 <span class="platform-chip chip-tt">認知＋予約</span></h1>
           <p>視聴数・フォロワーは増加。おすすめ規制の影響で予約への転換が低下（5月）</p>
         </div>
-        <div class="head-controls"><div class="select-fake">キム先生（豊胸領域）</div></div>
+        <div class="head-controls">
+          <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="tt-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
+        </div>
       </div>
+
+      <div class="kpi-grid" id="tt-kpi-grid"></div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（TikTok）<small>投稿量→エンゲージメント→視聴→プロフィール→タップ→予約</small></div>
@@ -1063,15 +1143,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">投稿視聴数</div><div class="kpi-value">1.6M</div><div class="kpi-sub">前月 1.3M <span class="delta up">▲+23.6%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">プロフィール表示</div><div class="kpi-value">58K</div><div class="kpi-sub">前月 46K <span class="delta up">▲+26.1%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">いいね</div><div class="kpi-value">26K</div><div class="kpi-sub">前月 23K <span class="delta up">▲+13.0%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">シェア</div><div class="kpi-value">205</div><div class="kpi-sub">前月 347 <span class="delta down">▼-40.9%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">コメント</div><div class="kpi-value">103</div><div class="kpi-sub">前月 46 <span class="delta up">▲+123.9%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">フォロワー総数</div><div class="kpi-value">40,342</div><div class="kpi-sub">純増 +583人 <span class="delta up">▲（前月+427）</span></div></div>
-        <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約率</div><div class="kpi-value">0.16%</div><div class="kpi-sub">前月 0.52% <span class="delta down">▼大幅低下</span></div></div>
-        <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約合計</div><div class="kpi-value">3件</div><div class="kpi-sub">前月 8件 <span class="delta down">▼-62.5%</span></div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="tt-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数は実測値（全体KPIシートと共通）。前年同月値は前年同月比-54%をもとに逆算した推定値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -1138,10 +1219,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <h1>特集記事(SEO)分析 <span class="platform-chip chip-seo">検索流入・記事コンテンツ</span></h1>
           <p>オーガニック検索からの流入と、予約への転換状況（5月）</p>
         </div>
-        <div class="head-controls"><div class="select-fake">キム先生（豊胸領域）</div></div>
+        <div class="head-controls">
+          <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="seo-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
+        </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>特集記事(SEO)は今回新たに追加した分析ビューです。検索流入セッション数・掲載順位など一部指標を除き、全体的にサンプル値でのたたき台となります。</div></div>
+
+      <div class="kpi-grid" id="seo-kpi-grid"></div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（特集記事・SEO）<small>記事量→記事エンゲージメント→検索流入→記事内CTA→タップ→予約</small></div>
@@ -1184,15 +1275,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">検索流入セッション数</div><div class="kpi-value">38,500</div><div class="kpi-sub">前月 34,200 <span class="delta up">▲+12.6%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">平均掲載順位</div><div class="kpi-value">4.2位</div><div class="kpi-sub">前月 5.1位 <span class="delta up">▲改善</span></div></div>
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">検索表示回数</div><div class="kpi-value">61.2万</div><div class="kpi-sub">前月 58.0万 <span class="delta up">▲+5.5%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">検索CTR</div><div class="kpi-value">6.3%</div><div class="kpi-sub">前月 5.9% <span class="delta up">▲改善</span></div></div>
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">直近公開記事本数</div><div class="kpi-value">6本</div><div class="kpi-sub">前月 4本 <span class="delta up">▲増加</span></div></div>
-        <div class="kpi-card" style="--bar:var(--seo)"><div class="kpi-label">更新頻度</div><div class="kpi-value">週1.4本</div><div class="kpi-sub">前月 週0.9本 <span class="delta up">▲増加</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約タップ数</div><div class="kpi-value">480<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">記事内CTA経由</div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">14件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">記事経由の予約</div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="seo-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -1241,63 +1333,61 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="page-head">
         <div>
           <h1>MYSBC公式アプリ分析 <span class="platform-chip chip-app">既存顧客・アプリ内予約</span></h1>
-          <p>アプリ起動からクーポン閲覧、予約への転換状況（5月）</p>
+          <p>新規インストールから配信対象の拡大、予約への転換状況（5月）</p>
         </div>
-        <div class="head-controls"><div class="select-fake">キム先生（豊胸領域）</div></div>
+        <div class="head-controls">
+          <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="app-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
+        </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>MYSBC公式アプリは今回新たに追加した分析ビューです。アプリ起動回数・クーポン表示数は連携予定の実測値イメージ、予約タップ数以降はサンプル値です。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>MYSBC公式アプリは今回新たに追加した分析ビューです。クーポン表示数は連携予定の実測値イメージ、予約タップ数以降・合計配信者数はサンプル／推定値です（合計配信者数はお知らせ開封数÷開封率から逆算した推定値）。4月の値は実測データが少ないため一部推定を含みます。</div></div>
+
+      <div class="kpi-grid" id="page-app-kpi-grid"></div>
 
       <div class="panel funnel-panel">
-        <div class="panel-title"><span class="bar"></span>予約ファネル分析（MYSBC公式アプリ）<small>配信量→エンゲージメント→起動→クーポン表示→予約タップ→予約</small></div>
+        <div class="panel-title"><span class="bar"></span>予約ファネル分析（MYSBC公式アプリ）<small>新規インストール数→合計配信者数→予約タップ→予約</small></div>
         <div class="panel-body">
           <div class="funnel-scroll"><div class="funnel-flow">
             <div class="flow-node">
-              <div class="node-title">お知らせ配信量</div>
-              <div class="driver-chip"><span class="dc-label">配信本数</span><span class="dc-value">18本<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">配信頻度</span><span class="dc-value">週4.2本<span class="tag-sample">サンプル</span></span></div>
-            </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">配信↑で開封・登録↑</span></div>
-            <div class="flow-node">
-              <div class="node-title">エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">お知らせ開封数</span><span class="dc-value">15,600<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">お気に入り登録数</span><span class="dc-value">680<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">プッシュ通知タップ数</span><span class="dc-value">4,900<span class="tag-sample">サンプル</span></span></div>
-            </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">開封・登録↑で起動↑</span></div>
-            <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">アプリ起動回数</span><span class="fs-value">28,400</span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">新規インストール数</span><span class="fs-value" id="app-fs-newinstall">640</span></div>
               <div class="fs-mag"><i style="width:100%;--fill:var(--app-fill)"></i></div>
             </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 32.4%</span><span class="drop">離脱 67.6%</span></div>
+            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">新規インストールが配信対象の母数を拡大</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">クーポン/施術ページ表示数</span><span class="fs-value">9,200</span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">合計配信者数<span class="tag-sample">推定</span></span><span class="fs-value" id="app-fs-subscribers">49,680</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--app-fill)"></i></div>
             </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 12.5%</span><span class="drop">離脱 87.5%</span></div>
+            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good" id="app-conv-1">転換 2.3%</span><span class="drop" id="app-drop-1">離脱 97.7%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">1,150<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value" id="app-fs-taps">1,150<span class="tag-sample">サンプル</span></span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--app-fill)"></i></div>
             </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 4.0%</span><span class="drop">離脱 96.0%</span></div>
+            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good" id="app-conv-2">転換 4.0%</span><span class="drop" id="app-drop-2">離脱 96.0%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約数</span><span class="fs-value">46件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約数</span><span class="fs-value" id="app-fs-bookings">46件<span class="tag-sample">サンプル</span></span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--app-fill)"></i></div>
             </div>
           </div></div>
-          <p class="funnel-note">既存アプリ利用者は来院・治療への関心が既に高い層のため、全チャネル中で最も効率が良い（予約1件あたりの起動数が最小）傾向。SEO・SNSからのアプリ誘導を強化する余地がある。</p>
+          <p class="funnel-note">既存アプリ利用者は来院・治療への関心が既に高い層のため、全チャネル中で最も効率が良い傾向。新規インストールで配信対象の母数を増やすことが、予約タップ・予約数を押し上げる起点になる。</p>
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">アプリ起動回数</div><div class="kpi-value">28,400</div><div class="kpi-sub">前月 26,100 <span class="delta up">▲+8.8%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">クーポン/施術ページ表示数</div><div class="kpi-value">9,200</div><div class="kpi-sub">前月 8,050 <span class="delta up">▲+14.3%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">新規インストール数</div><div class="kpi-value">640</div><div class="kpi-sub">前月 590 <span class="delta up">▲+8.5%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">7日後継続利用率</div><div class="kpi-value">54.2%</div><div class="kpi-sub">前月 51.8% <span class="delta up">▲+2.4pt</span></div></div>
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">プッシュ通知開封率</div><div class="kpi-value">31.4%</div><div class="kpi-sub">前月 29.0% <span class="delta up">▲+2.4pt</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約タップ数</div><div class="kpi-value">1,150<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">クーポン/施術ページ経由</div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">46件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">アプリ経由の予約</div></div>
-        <div class="kpi-card" style="--bar:var(--app)"><div class="kpi-label">お知らせ配信本数</div><div class="kpi-value">18本</div><div class="kpi-sub">前月 15本 <span class="delta up">▲増加</span></div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="app-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -1319,7 +1409,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="callout good">
           <h4>✅ よかった点</h4>
           <ul>
-            <li>アプリ起動回数が26,100→28,400（+8.8%）と増加。7日後継続利用率も51.8%→54.2%に改善</li>
+            <li>合計配信者数が約49,040人→49,680人（推定、+1.3%）に増加。7日後継続利用率も51.8%→54.2%に改善</li>
             <li>クーポン/施術ページ表示数が+14.3%と伸長。プッシュ通知開封率も29.0%→31.4%に改善</li>
             <li>既存顧客チャネルのため予約タップ→予約の転換率が全チャネル中で最も高い水準</li>
           </ul>
@@ -1347,10 +1437,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <h1>メルマガ分析 <span class="platform-chip chip-mail">既存リスト・再来院促進</span></h1>
           <p>配信到達から開封、クリック、予約への転換状況（5月）</p>
         </div>
-        <div class="head-controls"><div class="select-fake">キム先生（豊胸領域）</div></div>
+        <div class="head-controls">
+          <div class="select-fake">キム先生（豊胸領域）</div>
+          <div class="seg" id="mail-month-seg">
+            <button data-month="0">2月</button>
+            <button data-month="1">3月</button>
+            <button data-month="2">4月</button>
+            <button class="active" data-month="3">5月</button>
+          </div>
+        </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>メルマガは今回新たに追加した分析ビューです。配信数・開封数は配信システムとの連携イメージ、予約タップ数以降はサンプル値です。</div></div>
+
+      <div class="kpi-grid" id="mail-kpi-grid"></div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（メルマガ）<small>配信量→リスト健全性→到達→開封→クリック→予約</small></div>
@@ -1393,15 +1493,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">配信到達数</div><div class="kpi-value">42,000</div><div class="kpi-sub">前月 41,200 <span class="delta up">▲+1.9%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">開封率</div><div class="kpi-value">28.1%</div><div class="kpi-sub">前月 26.5% <span class="delta up">▲+1.6pt</span></div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">クリック率（CTR）</div><div class="kpi-value">11.2%</div><div class="kpi-sub">前月 10.5% <span class="delta up">▲+0.7pt</span></div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">新規登録数</div><div class="kpi-value">320人</div><div class="kpi-sub">前月 285人 <span class="delta up">▲+12.3%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">配信停止率</div><div class="kpi-value">0.8%</div><div class="kpi-sub">前月 0.9% <span class="delta up">▲改善</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">31件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">メルマガ経由の予約</div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">配信本数</div><div class="kpi-value">8本</div><div class="kpi-sub">前月 7本 <span class="delta up">▲増加</span></div></div>
-        <div class="kpi-card" style="--bar:var(--mail)"><div class="kpi-label">配信頻度</div><div class="kpi-value">週1.9本</div><div class="kpi-sub">前月比 横ばい</div></div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
+            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+          </div>
+          <svg id="mail-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+        </div>
       </div>
 
       <div class="two-col panel">
@@ -1457,6 +1558,18 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div class="compare-layout">
         <div class="compare-main">
+          <div class="panel" id="self-position-panel">
+            <div class="panel-title"><span class="bar"></span>自院の立ち位置<small id="self-position-kpi-label">SNSセッション数（5月）</small></div>
+            <div class="panel-body">
+              <div class="sp-summary">
+                <div class="sp-rank" id="self-position-rank">キム先生：14院中 1位</div>
+                <div class="sp-value" id="self-position-value">4,217</div>
+                <div class="sp-avg" id="self-position-avg-value">全院平均 2,573</div>
+              </div>
+              <div id="self-position-gauge"></div>
+            </div>
+          </div>
+
           <div class="compare-toolbar" style="flex-direction:column;align-items:stretch;gap:12px">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:11px;font-weight:800;color:var(--text-muted);white-space:nowrap">媒体</span>
@@ -1476,6 +1589,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
                 <button data-kpi="igRate">IGプロフィール予約率</button>
               </div>
               <div class="heat-legend"><span>低い</span><span class="bar"></span><span>高い</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><span class="bar"></span><span class="compare-kpi-inline"></span>の月別推移（全院重ね表示）<small>自院（キム先生）を太線で強調、院ごとに色分け</small></div>
+            <div class="panel-body chart-wrap">
+              <svg id="compare-trend-chart" viewBox="0 0 780 260" style="width:100%;height:auto;overflow:visible"></svg>
+              <div class="compare-trend-legend" id="compare-trend-legend"></div>
             </div>
           </div>
 
@@ -1590,6 +1711,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var v = btn.getAttribute('data-view');
       document.getElementById('kpi-month-view').style.display = (v==='month') ? '' : 'none';
       document.getElementById('kpi-year-view').style.display = (v==='year') ? '' : 'none';
+      document.getElementById('kpi-cards-month').style.display = (v==='month') ? '' : 'none';
+      document.getElementById('kpi-cards-year').style.display = (v==='year') ? '' : 'none';
+      document.getElementById('kpi-month-seg').style.display = (v==='month') ? '' : 'none';
       if(v==='year' && !window.__yearChartDrawn){ drawYearChart(); window.__yearChartDrawn = true; }
     });
   });
@@ -1604,6 +1728,255 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       document.getElementById('ig-story-view').style.display = (v==='story') ? '' : 'none';
     });
   });
+
+  /* ================= 汎用：各ページ共通の年月選択・予約数推移グラフ ================= */
+  var MONTHS4 = ['2月','3月','4月','5月'];
+
+  function autoBack2(v4, v5){
+    var rate = v4 ? (v5-v4)/v4 : 0;
+    var v3 = v4/(1+rate*0.7);
+    var v2 = v3/(1+rate*0.5);
+    return [v2, v3];
+  }
+  function series4(v4, v5){ var b = autoBack2(v4, v5); return [b[0], b[1], v4, v5]; }
+
+  function fmtInt(v){ return Math.round(v).toLocaleString(); }
+  function fmtMan(v,d){ return (v/10000).toFixed(d==null?1:d)+'万'; }
+  function fmtK(v){ return Math.round(v/1000)+'K'; }
+  function fmtM(v){ return (v/1000000).toFixed(1)+'M'; }
+  function fmtPct(v,d){ return v.toFixed(d==null?1:d)+'%'; }
+  function fmtCount(v,suf){ return Math.round(v)+(suf||'件'); }
+  function fmtHon(v,d){ return v.toFixed(d==null?0:d)+'本'; }
+
+  function fmtDeltaPct(prev, cur){
+    if(prev==null) return '<span class="delta flat">基準月</span>';
+    var pct = (cur-prev)/prev*100;
+    var cls = pct>0.5?'up':(pct<-0.5?'down':'flat');
+    var sign = pct>0.05?'▲+':(pct<-0.05?'▼':'');
+    return '<span class="delta '+cls+'">'+sign+Math.abs(pct).toFixed(1)+'%</span>';
+  }
+  function fmtDeltaPt(prev, cur, digits){
+    if(prev==null) return '<span class="delta flat">基準月</span>';
+    var diff = cur-prev;
+    var cls = diff>0.005?'up':(diff<-0.005?'down':'flat');
+    var sign = diff>0.005?'▲+':(diff<-0.005?'▼':'');
+    return '<span class="delta '+cls+'">'+sign+Math.abs(diff).toFixed(digits==null?1:digits)+'pt</span>';
+  }
+  function fmtDeltaRaw(prev, cur, suffix){
+    if(prev==null) return '<span class="delta flat">基準月</span>';
+    var diff = cur-prev;
+    var cls = diff>=0?'up':'down';
+    var sign = diff>=0?'▲+':'▼';
+    return '<span class="delta '+cls+'">'+sign+Math.abs(Math.round(diff))+(suffix||'')+'</span>';
+  }
+
+  function renderGenericKpiGrid(gridId, metrics, monthIdx){
+    var el = document.getElementById(gridId);
+    if(!el) return;
+    el.innerHTML = metrics.map(function(m){
+      var cur = m.values[monthIdx];
+      var prev = monthIdx>0 ? m.values[monthIdx-1] : null;
+      var sub;
+      if(m.deltaType==='none'){
+        sub = m.staticSub || '';
+      } else if(prev==null){
+        sub = '<span class="delta flat">基準月（それ以前のデータなし）</span>';
+      } else if(m.deltaType==='pt'){
+        sub = '前月 '+m.fmt(prev)+' '+fmtDeltaPt(prev,cur,m.ptDigits);
+      } else if(m.deltaType==='raw'){
+        sub = '前月 '+m.fmt(prev)+' '+fmtDeltaRaw(prev,cur,m.rawSuffix);
+      } else {
+        sub = '前月 '+m.fmt(prev)+' '+fmtDeltaPct(prev,cur);
+      }
+      var tag = m.tag ? '<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">'+m.tag+'</span>' : '';
+      return '<div class="kpi-card" style="--bar:'+m.bar+'"><div class="kpi-label">'+m.label+'</div><div class="kpi-value">'+m.fmt(cur)+tag+'</div><div class="kpi-sub">'+sub+'</div></div>';
+    }).join('');
+  }
+
+  function drawBookingsChart(svgId, values, yoyPct, monthIdx, fmt){
+    var svg = document.getElementById(svgId);
+    if(!svg) return;
+    var lastYear = values.map(function(v){ return v/(1+yoyPct/100); });
+    var W=760, H=220, padL=44, padR=14, padT=16, padB=32;
+    var groupW = (W-padL-padR)/values.length;
+    var barW = groupW*0.4;
+    var maxV = Math.max.apply(null, values.concat(lastYear)) * 1.18;
+    function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
+    function xForGroup(i){ return padL + groupW*i; }
+    var gridLines = '';
+    for(var g=0; g<=3; g++){
+      var gy = padT + (H-padT-padB)*g/3;
+      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
+    }
+    var bars = values.map(function(v,i){
+      var x = xForGroup(i) + groupW/2 - barW/2;
+      var y = yFor(v);
+      var isSel = i===monthIdx;
+      return '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="4" fill="'+(isSel?'var(--accent-strong)':'var(--accent)')+'"/>'+
+        '<text x="'+(x+barW/2)+'" y="'+(y-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>';
+    }).join('');
+    var linePts = lastYear.map(function(v,i){ return xForGroup(i)+groupW/2+','+yFor(v); }).join(' ');
+    var lineDots = lastYear.map(function(v,i){ return '<circle cx="'+(xForGroup(i)+groupW/2)+'" cy="'+yFor(v)+'" r="3.5" fill="var(--bad)"/>'; }).join('');
+    var labels = MONTHS4.map(function(m,i){
+      return '<text x="'+(xForGroup(i)+groupW/2)+'" y="'+(H-8)+'" font-size="11" font-weight="'+(i===monthIdx?'800':'400')+'" fill="'+(i===monthIdx?'var(--accent-strong)':'var(--text-faint)')+'" text-anchor="middle">'+m+(i===monthIdx?' ●':'')+'</text>';
+    }).join('');
+    svg.innerHTML = gridLines + bars +
+      '<polyline points="'+linePts+'" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      lineDots + labels;
+  }
+
+  function setupPageMonthSelector(segId, onSelect){
+    var btns = document.querySelectorAll('#'+segId+' button');
+    Array.prototype.forEach.call(btns, function(btn){
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(btns, function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        onSelect(parseInt(btn.getAttribute('data-month'), 10));
+      });
+    });
+    onSelect(3);
+  }
+
+  /* ---------- MYSBC公式アプリ ---------- */
+  (function(){
+    var metrics = [
+      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:series4(590,640), fmt:fmtInt, deltaType:'pct'},
+      {key:'subscribers', label:'合計配信者数', tag:'推定', bar:'var(--app)', values:series4(49040,49680), fmt:fmtInt, deltaType:'pct'},
+      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(1050,1150), fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(42,46), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
+      {key:'announcements', label:'お知らせ配信本数', bar:'var(--app)', values:series4(15,18), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:series4(15,18), fmt:function(v){return fmtHon(v);}, deltaType:'pct'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('page-app-kpi-grid', metrics, monthIdx);
+      var newi = metrics[0].values[monthIdx], sub = metrics[1].values[monthIdx], taps = metrics[2].values[monthIdx], book = metrics[3].values[monthIdx];
+      document.getElementById('app-fs-newinstall').textContent = fmtInt(newi);
+      document.getElementById('app-fs-subscribers').textContent = fmtInt(sub);
+      document.getElementById('app-fs-taps').innerHTML = fmtInt(taps)+'<span class="tag-sample">サンプル</span>';
+      document.getElementById('app-fs-bookings').innerHTML = fmtCount(book)+'<span class="tag-sample">サンプル</span>';
+      var conv1 = (taps/sub*100), conv2 = (book/taps*100);
+      document.getElementById('app-conv-1').textContent = '転換 '+conv1.toFixed(1)+'%';
+      document.getElementById('app-drop-1').textContent = '離脱 '+(100-conv1).toFixed(1)+'%';
+      document.getElementById('app-conv-2').textContent = '転換 '+conv2.toFixed(1)+'%';
+      document.getElementById('app-drop-2').textContent = '離脱 '+(100-conv2).toFixed(1)+'%';
+      drawBookingsChart('app-booking-chart', metrics[3].values, 10, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('app-month-seg', render);
+  })();
+
+  /* ---------- Instagram フィード ---------- */
+  (function(){
+    var metrics = [
+      {key:'reach', label:'リーチ数', bar:'var(--ig)', values:series4(159000,184000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'profileAccess', label:'プロフィールアクセス数', bar:'var(--ig)', values:series4(5540,6120), fmt:fmtInt, deltaType:'pct'},
+      {key:'igRate', label:'IGプロフィール予約率', bar:'var(--good)', values:series4(4.51,4.25), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'igBookings', label:'IGプロフィール予約数', bar:'var(--warn)', values:[47,58,62,58], fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
+      {key:'followerNet', label:'フォロワー純増', bar:'var(--ig)', values:series4(366,412), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
+      {key:'saves', label:'保存数', bar:'var(--ig)', values:series4(2610,3050), fmt:fmtInt, deltaType:'pct'},
+      {key:'shares', label:'シェア数', bar:'var(--ig)', values:series4(910,870), fmt:fmtInt, deltaType:'pct'},
+      {key:'posts', label:'投稿本数', bar:'var(--ig)', values:series4(21,24), fmt:function(v){return fmtHon(v);}, deltaType:'pct'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('ig-feed-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('ig-feed-booking-chart', metrics[3].values, 11, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('ig-feed-month-seg', render);
+  })();
+
+  /* ---------- Instagram ストーリー ---------- */
+  (function(){
+    var metrics = [
+      {key:'storyViews', label:'ストーリー表示回数', bar:'var(--ig)', values:series4(78500,92000), fmt:fmtInt, deltaType:'pct'},
+      {key:'linkTaps', label:'リンクスタンプタップ数', bar:'var(--ig)', values:series4(3120,3850), fmt:fmtInt, deltaType:'pct'},
+      {key:'completion', label:'完了率（最後まで視聴）', bar:'var(--warn)', values:series4(71.2,68.4), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'dmReplies', label:'返信数（DM）', bar:'var(--ig)', values:series4(165,210), fmt:fmtInt, deltaType:'pct'},
+      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(420,520), fmt:fmtInt, deltaType:'none', staticSub:'リンクスタンプ経由'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(17,22), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'ストーリー経由の予約'},
+      {key:'posts', label:'投稿本数', bar:'var(--ig)', values:series4(38,45), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'freq', label:'投稿頻度', bar:'var(--ig)', values:series4(8.3,10.5), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'none', staticSub:'フィードの約1.9倍の頻度'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('ig-story-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('ig-story-booking-chart', metrics[5].values, 15, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('ig-story-month-seg', render);
+  })();
+
+  /* ---------- YouTube ---------- */
+  (function(){
+    var metrics = [
+      {key:'views', label:'総視聴回数', bar:'var(--yt)', values:series4(159000,208000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'viewers', label:'月間視聴者数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'subs', label:'チャンネル登録増', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
+      {key:'ctr', label:'インプレッションCTR', bar:'var(--yt)', values:series4(5.7,5.7), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'shorts', label:'Shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'normal', label:'通常動画視聴', bar:'var(--yt)', values:series4(39000,38000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'impressions', label:'インプレッション数', bar:'var(--yt)', values:series4(903000,952000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(7,9), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('yt-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('yt-booking-chart', metrics[7].values, 5, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('yt-month-seg', render);
+  })();
+
+  /* ---------- TikTok ---------- */
+  (function(){
+    var metrics = [
+      {key:'views', label:'投稿視聴数', bar:'var(--tt)', values:series4(1300000,1600000), fmt:function(v){return fmtM(v);}, deltaType:'pct'},
+      {key:'profile', label:'プロフィール表示', bar:'var(--tt)', values:series4(46000,58000), fmt:fmtK, deltaType:'pct'},
+      {key:'likes', label:'いいね', bar:'var(--tt)', values:series4(23000,26000), fmt:fmtK, deltaType:'pct'},
+      {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'},
+      {key:'comments', label:'コメント', bar:'var(--tt)', values:series4(46,103), fmt:fmtInt, deltaType:'pct'},
+      {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:series4(39759,40342), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
+      {key:'bookingRate', label:'予約率', bar:'var(--bad)', values:series4(0.52,0.16), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'bookings', label:'予約合計', bar:'var(--bad)', values:[13,7,8,3], fmt:function(v){return fmtCount(v);}, deltaType:'pct'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('tt-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('tt-booking-chart', metrics[7].values, -54, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('tt-month-seg', render);
+  })();
+
+  /* ---------- 特集記事(SEO) ---------- */
+  (function(){
+    var metrics = [
+      {key:'sessions', label:'検索流入セッション数', bar:'var(--seo)', values:series4(34200,38500), fmt:fmtInt, deltaType:'pct'},
+      {key:'rank', label:'平均掲載順位', bar:'var(--seo)', values:series4(5.1,4.2), fmt:function(v){return v.toFixed(1)+'位';}, deltaType:'pt'},
+      {key:'impressions', label:'検索表示回数', bar:'var(--seo)', values:series4(580000,612000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'ctr', label:'検索CTR', bar:'var(--seo)', values:series4(5.9,6.3), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'articles', label:'直近公開記事本数', bar:'var(--seo)', values:series4(4,6), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'freq', label:'更新頻度', bar:'var(--seo)', values:series4(0.9,1.4), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'pct'},
+      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(11,14), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('seo-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('seo-booking-chart', metrics[7].values, 20, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('seo-month-seg', render);
+  })();
+
+  /* ---------- メルマガ ---------- */
+  (function(){
+    var metrics = [
+      {key:'reach', label:'配信到達数', bar:'var(--mail)', values:series4(41200,42000), fmt:fmtInt, deltaType:'pct'},
+      {key:'openRate', label:'開封率', bar:'var(--mail)', values:series4(26.5,28.1), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'ctr', label:'クリック率（CTR）', bar:'var(--mail)', values:series4(10.5,11.2), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'newSub', label:'新規登録数', bar:'var(--mail)', values:series4(285,320), fmt:function(v){return Math.round(v)+'人';}, deltaType:'pct'},
+      {key:'unsub', label:'配信停止率', bar:'var(--mail)', values:series4(0.9,0.8), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt', ptDigits:1},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(30,31), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
+      {key:'volume', label:'配信本数', bar:'var(--mail)', values:series4(7,8), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'freq', label:'配信頻度', bar:'var(--mail)', values:series4(1.7,1.9), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'none', staticSub:'前月比 横ばい'}
+    ];
+    function render(monthIdx){
+      renderGenericKpiGrid('mail-kpi-grid', metrics, monthIdx);
+      drawBookingsChart('mail-booking-chart', metrics[5].values, 8, monthIdx, function(v){return fmtCount(v);});
+    }
+    setupPageMonthSelector('mail-month-seg', render);
+  })();
 
   function renderRank(id, items){
     var el = document.getElementById(id);
@@ -1806,8 +2179,90 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     return currentMedia==='all' ? d.metrics[kpiKey] : platformSeries(d, currentMedia, kpiKey);
   }
 
+  function renderSelfPosition(kpiKey){
+    var defs = currentMedia==='all' ? KPI_DEFS : PLATFORM_KPI_DEFS;
+    var def = defs.filter(function(d){return d.key===kpiKey;})[0];
+    var panel = document.getElementById('self-position-panel');
+    if(!def){ if(panel) panel.style.display = 'none'; return; }
+    if(panel) panel.style.display = '';
+    var monthIdxs = MONTHS.map(function(_,i){return i;}).filter(function(i){return selMonth.has(String(i));});
+    if(monthIdxs.length===0){ monthIdxs = [MONTHS.length-1]; }
+    var lastIdx = monthIdxs[monthIdxs.length-1];
+    var all = DOCTORS.map(function(d){ return {id:d.id, v:seriesFor(d,kpiKey)[lastIdx]}; });
+    all.sort(function(a,b){ return b.v-a.v; });
+    var rank = all.map(function(x){return x.id;}).indexOf('kim') + 1;
+    var total = all.length;
+    var kimVal = all.filter(function(x){return x.id==='kim';})[0].v;
+    var vals = all.map(function(x){return x.v;});
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    var avg = vals.reduce(function(a,b){return a+b;},0) / vals.length;
+    var pct = (max>min) ? (kimVal-min)/(max-min)*100 : 50;
+    var avgPct = (max>min) ? (avg-min)/(max-min)*100 : 50;
+    var diffPct = (kimVal-avg)/avg*100;
+
+    document.getElementById('self-position-kpi-label').textContent = def.label+'（'+MONTHS[lastIdx]+'）';
+    document.getElementById('self-position-rank').textContent = 'キム先生：'+total+'院中 '+rank+'位';
+    document.getElementById('self-position-value').textContent = def.fmt(kimVal);
+    document.getElementById('self-position-avg-value').textContent = '全院平均 '+def.fmt(avg)+'（自院比 '+(diffPct>=0?'▲+':'▼')+Math.abs(diffPct).toFixed(1)+'%）';
+    document.getElementById('self-position-gauge').innerHTML =
+      '<div class="sp-track">'+
+        '<div class="sp-avg-mark" style="left:'+avgPct+'%" title="全院平均"></div>'+
+        '<div class="sp-self-mark" style="left:'+pct+'%" title="キム先生"></div>'+
+      '</div>'+
+      '<div class="sp-scale"><span>最小 '+def.fmt(min)+'</span><span>平均 '+def.fmt(avg)+'</span><span>最大 '+def.fmt(max)+'</span></div>';
+  }
+
+  function compareLineColor(idx, total){
+    var hue = Math.round((idx * 360) / Math.max(1,total));
+    return 'hsl('+hue+', 62%, 45%)';
+  }
+
+  function drawCompareTrendChart(rows, monthIdxs, kpiKey, def){
+    var svg = document.getElementById('compare-trend-chart');
+    var legendEl = document.getElementById('compare-trend-legend');
+    if(!svg) return;
+    if(rows.length===0 || monthIdxs.length===0){ svg.innerHTML = ''; if(legendEl) legendEl.innerHTML=''; return; }
+    var W=780, H=260, padL=54, padR=20, padT=16, padB=28;
+    var allVals = [];
+    rows.forEach(function(d){ var s=seriesFor(d,kpiKey); monthIdxs.forEach(function(i){ allVals.push(s[i]); }); });
+    var min = Math.min.apply(null, allVals), max = Math.max.apply(null, allVals);
+    var range = (max-min) || 1;
+    function xFor(pos){ return padL + (W-padL-padR) * (monthIdxs.length<=1 ? 0 : pos/(monthIdxs.length-1)); }
+    function yFor(v){ return padT + (H-padT-padB) * (1 - (v-min)/range); }
+
+    var gridLines = '';
+    for(var g=0; g<=3; g++){
+      var gy = padT + (H-padT-padB)*g/3;
+      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
+    }
+    var xLabels = monthIdxs.map(function(i,pos){
+      return '<text x="'+xFor(pos)+'" y="'+(H-8)+'" font-size="10.5" fill="var(--text-faint)" text-anchor="middle">'+MONTHS[i]+'</text>';
+    }).join('');
+
+    var others = rows.filter(function(d){ return d.id!=='kim'; });
+    var lines = '', selfLine = '';
+    var legendItems = [];
+    others.forEach(function(d, idx){
+      var color = compareLineColor(idx, others.length);
+      var s = seriesFor(d, kpiKey);
+      var pts = monthIdxs.map(function(i,pos){ return xFor(pos)+','+yFor(s[i]); }).join(' ');
+      lines += '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" opacity="0.9" stroke-linecap="round" stroke-linejoin="round"/>';
+      legendItems.push('<span class="ctl-item"><span class="ctl-dot" style="background:'+color+'"></span>'+d.label+'</span>');
+    });
+    var kimRow = rows.filter(function(d){ return d.id==='kim'; })[0];
+    if(kimRow){
+      var ks = seriesFor(kimRow, kpiKey);
+      var kpts = monthIdxs.map(function(i,pos){ return xFor(pos)+','+yFor(ks[i]); }).join(' ');
+      selfLine = '<polyline points="'+kpts+'" fill="none" stroke="var(--accent-strong)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      legendItems.unshift('<span class="ctl-item self"><span class="ctl-dot" style="background:var(--accent-strong)"></span>'+kimRow.label+'（自院）</span>');
+    }
+    svg.innerHTML = gridLines + lines + selfLine + xLabels;
+    if(legendEl) legendEl.innerHTML = legendItems.join('');
+  }
+
   function renderCompare(kpiKey){
     currentKpi = kpiKey;
+    renderSelfPosition(kpiKey);
     var defs = currentMedia==='all' ? KPI_DEFS : PLATFORM_KPI_DEFS;
     var def = defs.filter(function(d){return d.key===kpiKey;})[0];
     var monthIdxs = MONTHS.map(function(_,i){return i;}).filter(function(i){return selMonth.has(String(i));});
@@ -1815,6 +2270,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
     document.getElementById('compare-kpi-label').textContent = def.label;
     document.querySelectorAll('.compare-kpi-inline').forEach(function(el){ el.textContent = def.label; });
+    drawCompareTrendChart(rows, monthIdxs, kpiKey, def);
 
     if(monthIdxs.length===0 || rows.length===0){
       document.getElementById('compare-thead-row').innerHTML = '<th style="text-align:left">院 / ドクター</th>';
@@ -1979,6 +2435,146 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
   bindKpiSegButtons();
   renderCompare('sessions');
+
+  /* ---------- 全体KPI：年月選択・月次推移チャート ---------- */
+  var KPI_MONTHS_LABEL = ['2月','3月','4月','5月'];
+  var KPI_ALL_METRICS = [
+    {key:'sessions', label:'セッション数（SNS）', tableLabel:'SNSセッション数', bar:'var(--accent)', values:[4082,4401,3961,4217], yoyPct:18, fmt:function(v){return Math.round(v).toLocaleString();}},
+    {key:'activeUsers', label:'アクティブユーザー', tableLabel:'アクティブユーザー', bar:'var(--accent)', values:[3071,3320,3088,3458], yoyPct:22, fmt:function(v){return Math.round(v).toLocaleString();}},
+    {key:'bookings', label:'SNS予約貢献数', tableLabel:'SNS予約貢献数', bar:'var(--bad)', values:[75,79,85,61], yoyPct:-9, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'counseling', label:'カウンセリング予約', tableLabel:'カウンセリング予約', bar:'var(--bad)', values:[11,5,5,5], yoyPct:-31, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'monitor', label:'モニター予約', tableLabel:'モニター予約', bar:'var(--bad)', values:[39,50,41,23], yoyPct:-19, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'mymenu', label:'マイメニュー予約', tableLabel:'マイメニュー予約', bar:'var(--warn)', values:[24,22,36,19], yoyPct:4, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'mysbc', label:'新規MYSBC登録', tableLabel:'新規MYSBC登録', bar:'var(--warn)', values:[12,9,16,14], yoyPct:8, fmt:function(v){return Math.round(v)+'件';}}
+  ];
+  var KPI_CARD_KEYS = ['sessions','activeUsers','bookings','mysbc'];
+
+  function kpiDeltaHtml(prev, cur){
+    if(prev==null) return '<span class="delta flat">基準月</span>';
+    var pct = (cur-prev)/prev*100;
+    var cls = pct>0.5?'up':(pct<-0.5?'down':'flat');
+    var sign = pct>0.05?'▲+':(pct<-0.05?'▼':'');
+    return '<span class="delta '+cls+'">'+sign+Math.abs(pct).toFixed(1)+'%</span>';
+  }
+
+  function clinicAvg(metricKey, monthIdx){
+    var docIdx = monthIdx + 1; // KPI月次(0=2月)→DOCTORS月次(0=1月)へのオフセット
+    var sum = 0;
+    DOCTORS.forEach(function(d){ sum += d.metrics[metricKey][docIdx]; });
+    return sum / DOCTORS.length;
+  }
+
+  var KPI_BENCHMARK_TIPS = {
+    sessions: '認知系（TikTok・Shorts）への投稿量を維持できれば、この優位性を保てます',
+    activeUsers: 'セッション数と連動する指標のため、上と同様の運用維持が有効です',
+    bookings: '平均は上回っていますが前月比は減少傾向。TikTok経由予約の落ち込みを、アプリ・メルマガでどれだけ補えるかが今後の鍵です',
+    mysbc: '既存顧客への再来院導線（アプリ・メルマガ配信）を強化すると、さらに伸ばせます'
+  };
+
+  function renderKpiCardsMonth(monthIdx){
+    var el = document.getElementById('kpi-cards-month');
+    if(!el) return;
+    var sessionsAvg = clinicAvg('sessions', monthIdx);
+    var bookingsAvg = clinicAvg('bookings', monthIdx);
+    var mysbcAvg = clinicAvg('mysbc', monthIdx);
+    var kimSessions = KPI_ALL_METRICS.filter(function(m){return m.key==='sessions';})[0].values[monthIdx];
+    var kimActiveUsers = KPI_ALL_METRICS.filter(function(m){return m.key==='activeUsers';})[0].values[monthIdx];
+    var activeUsersAvg = sessionsAvg * (kimActiveUsers/kimSessions);
+    var avgMap = {sessions:sessionsAvg, activeUsers:activeUsersAvg, bookings:bookingsAvg, mysbc:mysbcAvg};
+
+    el.innerHTML = KPI_CARD_KEYS.map(function(key){
+      var d = KPI_ALL_METRICS.filter(function(m){return m.key===key;})[0];
+      var cur = d.values[monthIdx];
+      var prev = monthIdx>0 ? d.values[monthIdx-1] : null;
+      var sub = prev!=null ? ('前月 '+d.fmt(prev)+' '+kpiDeltaHtml(prev,cur)) : '当ページで遡れる最初の月（前月データなし）';
+      var avg = avgMap[key];
+      var diffPct = (cur-avg)/avg*100;
+      var avgCls = diffPct>=0?'up':'down';
+      var avgSign = diffPct>=0?'▲+':'▼';
+      var estTag = key==='activeUsers' ? '<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn);font-size:8.5px;padding:1px 5px;border-radius:99px;margin-left:4px">推定</span>' : '';
+      var avgLine = '<div class="kpi-avg">全院平均 '+d.fmt(avg)+estTag+' <span class="delta '+avgCls+'">'+avgSign+Math.abs(diffPct).toFixed(1)+'%</span></div>';
+      var tipLine = '<div class="kpi-tip">💡 '+(KPI_BENCHMARK_TIPS[key]||'')+'</div>';
+      return '<div class="kpi-card" style="--bar:'+d.bar+'"><div class="kpi-label">'+d.label+'</div><div class="kpi-value">'+d.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div>'+avgLine+tipLine+'</div>';
+    }).join('');
+  }
+
+  function highlightKpiTableColumn(tableId, monthIdx){
+    var table = document.getElementById(tableId);
+    if(!table) return;
+    Array.prototype.forEach.call(table.querySelectorAll('tbody tr'), function(tr){
+      var tds = tr.querySelectorAll('td');
+      for(var i=1; i<=4; i++){ if(tds[i]) tds[i].classList.remove('cur'); }
+      if(tds[monthIdx+1]) tds[monthIdx+1].classList.add('cur');
+    });
+  }
+
+  var kpiChartMetric = 'sessions';
+  var kpiSelectedMonth = 3;
+
+  function drawKpiMonthChart(metricKey, monthIdx){
+    var svg = document.getElementById('kpi-month-chart');
+    if(!svg) return;
+    var def = KPI_ALL_METRICS.filter(function(m){return m.key===metricKey;})[0];
+    var thisYear = def.values;
+    var lyScale = 1/(1+def.yoyPct/100);
+    var lastYear = thisYear.map(function(v){return v*lyScale;});
+    var W=760, H=240, padL=48, padR=14, padT=18, padB=34;
+    var groupW = (W-padL-padR)/thisYear.length;
+    var barW = groupW*0.4;
+    var maxV = Math.max.apply(null, thisYear.concat(lastYear)) * 1.18;
+    function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
+    function xForGroup(i){ return padL + groupW*i; }
+    var gridLines = '';
+    for(var g=0; g<=3; g++){
+      var gy = padT + (H-padT-padB)*g/3;
+      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
+    }
+    var bars = thisYear.map(function(v,i){
+      var x = xForGroup(i) + groupW/2 - barW/2;
+      var y = yFor(v);
+      var isSel = i===monthIdx;
+      return '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="4" fill="'+(isSel?'var(--accent-strong)':'var(--accent)')+'"/>'+
+        '<text x="'+(x+barW/2)+'" y="'+(y-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+def.fmt(v)+'</text>';
+    }).join('');
+    var linePts = lastYear.map(function(v,i){ return xForGroup(i)+groupW/2+','+yFor(v); }).join(' ');
+    var lineDots = lastYear.map(function(v,i){ return '<circle cx="'+(xForGroup(i)+groupW/2)+'" cy="'+yFor(v)+'" r="3.5" fill="var(--bad)"/>'; }).join('');
+    var labels = KPI_MONTHS_LABEL.map(function(m,i){
+      return '<text x="'+(xForGroup(i)+groupW/2)+'" y="'+(H-10)+'" font-size="11" font-weight="'+(i===monthIdx?'800':'400')+'" fill="'+(i===monthIdx?'var(--accent-strong)':'var(--text-faint)')+'" text-anchor="middle">'+m+(i===monthIdx?' ●':'')+'</text>';
+    }).join('');
+    svg.innerHTML = gridLines + bars +
+      '<polyline points="'+linePts+'" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      lineDots + labels;
+  }
+
+  function updateKpiMonthSelection(monthIdx){
+    kpiSelectedMonth = monthIdx;
+    renderKpiCardsMonth(monthIdx);
+    highlightKpiTableColumn('tbl-kpi-reservation', monthIdx);
+    highlightKpiTableColumn('tbl-kpi-media', monthIdx);
+    drawKpiMonthChart(kpiChartMetric, monthIdx);
+  }
+
+  var kpiMonthSegBtns = document.querySelectorAll('#kpi-month-seg button');
+  Array.prototype.forEach.call(kpiMonthSegBtns, function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(kpiMonthSegBtns, function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      updateKpiMonthSelection(parseInt(btn.getAttribute('data-month'), 10));
+    });
+  });
+
+  var kpiChartMetricBtns = document.querySelectorAll('#kpi-chart-metric-seg button');
+  Array.prototype.forEach.call(kpiChartMetricBtns, function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(kpiChartMetricBtns, function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      kpiChartMetric = btn.getAttribute('data-metric');
+      drawKpiMonthChart(kpiChartMetric, kpiSelectedMonth);
+    });
+  });
+
+  renderKpiCardsMonth(kpiSelectedMonth);
+  drawKpiMonthChart(kpiChartMetric, kpiSelectedMonth);
 
   function drawYearChart(){
     var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
