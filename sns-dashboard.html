@@ -226,7 +226,17 @@ main{padding:26px 34px 60px;max-width:1180px;}
 
 /* 自院の立ち位置（クリニック比較ページ） */
 .sp-summary{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:16px;}
-.sp-rank{font-size:14px;font-weight:800;color:var(--accent-strong);}
+.sp-rank{font-size:13px;font-weight:800;padding:6px 14px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;}
+.sp-rank::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;}
+.sp-rank.tier-good{background:var(--good-soft);color:var(--good);}
+.sp-rank.tier-warn{background:var(--warn-soft);color:var(--warn);}
+.sp-rank.tier-bad{background:var(--bad-soft);color:var(--bad);}
+.sp-self-mark.tier-good{background:var(--good);}
+.sp-self-mark.tier-warn{background:var(--warn);}
+.sp-self-mark.tier-bad{background:var(--bad);}
+.sp-self-mark.tier-good::after{color:var(--good);}
+.sp-self-mark.tier-warn::after{color:var(--warn);}
+.sp-self-mark.tier-bad::after{color:var(--bad);}
 .sp-value{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
 .sp-avg{font-size:12px;color:var(--text-muted);}
 .sp-track{position:relative;height:8px;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good));border-radius:99px;margin:22px 4px 8px;}
@@ -235,6 +245,7 @@ main{padding:26px 34px 60px;max-width:1180px;}
 .sp-self-mark::after{content:"自院";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:800;color:var(--accent-strong);white-space:nowrap;}
 .sp-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-faint);padding:0 4px;}
 
+.rank-booking-badge{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;color:var(--accent-strong);margin-left:8px;white-space:nowrap;}
 .compare-trend-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
 .compare-trend-legend .ctl-item{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);}
 .compare-trend-legend .ctl-item.self{font-weight:800;color:var(--accent-strong);}
@@ -538,58 +549,40 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel funnel-panel">
-        <div class="panel-title"><span class="bar"></span>予約ファネル（全体・7チャネル合算）<small>投稿量→エンゲージメント→リーチ→プロフィール→タップ→予約を左から右へ、離脱ポイントを確認</small></div>
+        <div class="panel-title"><span class="bar"></span>予約ファネル（全体・SNS）<small>セッション数→クリック数→予約数</small></div>
         <div class="panel-body">
           <div class="funnel-scroll"><div class="funnel-flow">
             <div class="flow-node">
-              <div class="node-title">投稿・配信量（SNS4＋アプリ＋メルマガ）</div>
-              <div class="driver-chip"><span class="dc-label">投稿・配信本数（合計）</span><span class="dc-value">148本<span class="tag-sample">一部サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">投稿・配信頻度（合計）</span><span class="dc-value">週34.5本<span class="tag-sample">一部サンプル</span></span></div>
-            </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">投稿を増やすと反応が増える</span></div>
-            <div class="flow-node">
-              <div class="node-title">エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">保存数（合計）</span><span class="dc-value">4,550<span class="tag-sample">一部サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">シェア数（合計）</span><span class="dc-value">1,455<span class="tag-sample">一部サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">いいね数（合計）</span><span class="dc-value">42,600<span class="tag-sample">一部サンプル</span></span></div>
-            </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">反応が増えるとリーチが伸びる</span></div>
-            <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">視聴数/再生数/リーチ数（7チャネル合計）</span><span class="fs-value">219.3万</span></div>
+              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">セッション数</span><span class="fs-value" id="main-funnel-sessions">4,217</span></div>
               <div class="fs-mag"><i style="width:100%;--fill:var(--accent-fill)"></i></div>
             </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv">転換 4.7%</span><span class="drop">離脱 95.3%</span></div>
+            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv" id="main-funnel-conv1">転換 12.0%</span><span class="drop" id="main-funnel-drop1">離脱 88.0%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">プロフィール表示/アクセス数（合計）</span><span class="fs-value">103,520</span></div>
+              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">クリック数<span class="tag-sample">推定</span></span><span class="fs-value" id="main-funnel-clicks">506</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--accent-fill)"></i></div>
             </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv">転換 5.0%</span><span class="drop">離脱 95.0%</span></div>
-            <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">予約タップ数（合計）</span><span class="fs-value">5,210<span class="tag-sample">一部サンプル</span></span></div>
-              <div class="fs-mag"><i style="width:30%;--fill:var(--accent-fill)"></i></div>
-            </div>
-            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv">転換 3.5%</span><span class="drop">離脱 96.5%</span></div>
+            <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv" id="main-funnel-conv2">転換 12.1%</span><span class="drop" id="main-funnel-drop2">離脱 87.9%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">予約数（合計・参考値）</span><span class="fs-value">183件</span></div>
+              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">予約数</span><span class="fs-value" id="main-funnel-bookings">61件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--accent-fill)"></i></div>
             </div>
           </div></div>
-          <p class="funnel-note">※ファネル部分はInstagram（フィード＋ストーリー）・YouTube・TikTok・特集記事(SEO)・MYSBC公式アプリ・メルマガの7チャネル合算値です（一部サンプル値含む）。投稿・配信量／エンゲージメント欄はSNS4チャネルのみの集計です（アプリ・メルマガは配信の性質が異なるため、詳細は各ページをご覧ください）。対象範囲が異なるため公式KPIの「SNS予約貢献数 61件」とは一致しません。</p>
+          <p class="funnel-note">シンプルに「セッション数→クリック数→予約数」の3段階に絞った表示です。セッション数・予約数はSNS全体の実測値、クリック数は参考推定値（セッションのうち何らかのリンクをクリックした割合）です。</p>
         </div>
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>媒体別サマリー<small>予約1件あたりの視聴数（効率）で比較し、縮小・撤退の判断材料に</small></div>
+        <div class="panel-title"><span class="bar"></span>媒体別サマリー<small>予約率（効率）で比較し、縮小・撤退の判断材料に</small></div>
         <div class="table-scroll">
         <table>
-          <thead><tr><th style="text-align:left">媒体</th><th>視聴数/リーチ数</th><th>予約タップ数</th><th>予約数</th><th>予約数 前月比</th><th>予約1件あたり視聴数</th><th>評価</th></tr></thead>
+          <thead><tr><th style="text-align:left">媒体</th><th>セッション数</th><th>クリック数</th><th>予約数</th><th>予約数 前月比</th><th>予約率</th><th>評価</th></tr></thead>
           <tbody>
             <tr>
               <td><span class="dot" style="background:var(--app);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>MYSBC公式アプリ</td>
               <td>28,400</td><td>1,150<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>46件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td><span class="delta up">▲+8.8%</span></td>
-              <td class="cur">617</td>
+              <td class="cur">0.162%</td>
               <td><span class="pill good">効果大・最優先強化</span></td>
             </tr>
             <tr>
@@ -597,7 +590,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>42,000</td><td>1,320</td>
               <td>31件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td><span class="delta up">▲+1.9%</span></td>
-              <td class="cur">1,355</td>
+              <td class="cur">0.074%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
@@ -605,7 +598,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>38,500</td><td>480<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>14件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td><span class="delta up">▲+27.3%</span></td>
-              <td class="cur">2,750</td>
+              <td class="cur">0.036%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
@@ -613,7 +606,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>18.4万</td><td>890<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>58件</td>
               <td><span class="delta down">▼-6.5%</span></td>
-              <td class="cur">3,172</td>
+              <td class="cur">0.032%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
@@ -621,7 +614,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>92,000<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>520<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>22件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td><span class="delta up">▲+29.4%</span></td>
-              <td class="cur">4,182</td>
+              <td class="cur">0.024%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
@@ -629,7 +622,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>20.8万</td><td>640<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>9件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td><span class="delta up">▲+28.6%</span></td>
-              <td class="cur">23,111</td>
+              <td class="cur">0.004%</td>
               <td><span class="pill warn">経過観察・要改善</span></td>
             </tr>
             <tr>
@@ -637,7 +630,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td>1.6M</td><td>210<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
               <td>3件</td>
               <td><span class="delta down">▼-62.5%</span></td>
-              <td class="cur">533,333</td>
+              <td class="cur">0.0002%</td>
               <td><span class="pill bad">縮小・撤退を検討</span></td>
             </tr>
           </tbody>
@@ -646,7 +639,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-body" style="padding-top:0">
           <div class="callout bad" style="margin-top:6px">
             <h4>🛑 撤退・縮小の判断材料</h4>
-            <p>TikTokは予約1件あたり533,333視聴を要しており、最も効率の良いMYSBC公式アプリ（617）の約864倍、メルマガ（1,355）の約394倍のリーチが必要な状態です。しかも予約数は3ヶ月連続で減少（8件→3件、▼62.5%）しており、おすすめ規制という構造要因もあるため回復の見込みが低い場合は、リソースをMYSBC公式アプリ・メルマガ・SEOへ再配分しTikTok運用を縮小する判断も選択肢に入ります。既存顧客向けの自社チャネル（アプリ・メルマガ）が軒並み最上位の効率であることは、「新規獲得はSNS/SEO、確度の高い予約転換は自社チャネルで」という役割分担の裏付けにもなります。YouTubeは効率がTikTokに次いで低いものの予約数自体は伸びており、まず概要欄タップの実測導入を優先し、継続可否はその結果を見て判断するのが妥当です。</p>
+            <p>TikTokは予約率0.0002%と最も効率の良いMYSBC公式アプリ（0.162%）の約800分の1、メルマガ（0.074%）の約370分の1の低さです。しかも予約数は3ヶ月連続で減少（8件→3件、▼62.5%）しており、おすすめ規制という構造要因もあるため回復の見込みが低い場合は、リソースをMYSBC公式アプリ・メルマガ・SEOへ再配分しTikTok運用を縮小する判断も選択肢に入ります。既存顧客向けの自社チャネル（アプリ・メルマガ）が軒並み最上位の予約率であることは、「新規獲得はSNS/SEO、確度の高い予約転換は自社チャネルで」という役割分担の裏付けにもなります。YouTubeは予約率がTikTokに次いで低いものの予約数自体は伸びており、まず概要欄タップの実測導入を優先し、継続可否はその結果を見て判断するのが妥当です。</p>
           </div>
         </div>
       </div>
@@ -659,10 +652,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <thead><tr><th>指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>前月比</th><th>前年同月比</th><th>評価</th></tr></thead>
             <tbody>
               <tr><td>SNSセッション数</td><td>4,082</td><td>4,401</td><td>3,961</td><td class="cur">4,217</td><td><span class="delta up">▲+6.5%</span></td><td><span class="delta up">▲+18%</span></td><td><span class="pill good">回復</span></td></tr>
+              <tr><td>予約率</td><td>1.84%</td><td>1.80%</td><td>2.15%</td><td class="cur">1.45%</td><td><span class="delta down">▼-32.7%</span></td><td><span class="delta down">▼-22.9%</span></td><td><span class="pill bad">大幅減</span></td></tr>
               <tr><td>アクティブユーザー</td><td>3,071</td><td>3,320</td><td>3,088</td><td class="cur">3,458</td><td><span class="delta up">▲+12.0%</span></td><td><span class="delta up">▲+22%</span></td><td><span class="pill good">大幅回復</span></td></tr>
               <tr><td>SNS予約貢献数</td><td>75</td><td>79</td><td>85</td><td class="cur">61</td><td><span class="delta down">▼-28.2%</span></td><td><span class="delta down">▼-9%</span></td><td><span class="pill bad">大幅減</span></td></tr>
               <tr><td>カウンセリング予約</td><td>11</td><td>5</td><td>5</td><td class="cur">5</td><td><span class="delta flat">横ばい</span></td><td><span class="delta down">▼-31%</span></td><td><span class="pill bad">低水準継続</span></td></tr>
               <tr><td>モニター予約</td><td>39</td><td>50</td><td>41</td><td class="cur">23</td><td><span class="delta down">▼-43.9%</span></td><td><span class="delta down">▼-19%</span></td><td><span class="pill bad">大幅減</span></td></tr>
+              <tr><td>脱毛レーザー予約<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>250</td><td>265</td><td>280</td><td class="cur">296</td><td><span class="delta up">▲+5.7%</span></td><td><span class="delta up">▲+15%</span></td><td><span class="pill good">順調</span></td></tr>
               <tr><td>マイメニュー予約</td><td>24</td><td>22</td><td>36</td><td class="cur">19</td><td><span class="delta down">▼-47.2%</span></td><td><span class="delta up">▲+4%</span></td><td><span class="pill bad">大幅減</span></td></tr>
               <tr><td>新規MYSBC登録</td><td>12</td><td>9</td><td>16</td><td class="cur">14</td><td><span class="delta down">▼-12.5%</span></td><td><span class="delta up">▲+8%</span></td><td><span class="pill warn">微減</span></td></tr>
             </tbody>
@@ -671,7 +666,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
 
         <div class="panel">
-          <div class="panel-title"><span class="bar"></span>指標推移（媒体パフォーマンス）　<small>2月〜5月・前月比・前年同月比・評価　※上表とは別軸（予約の種類ではなく媒体ごとの実績）</small></div>
+          <div class="panel-title"><span class="bar"></span>予約貢献率（媒体別）　<small>5月・全体予約数183件のうち、どの媒体がどれだけ占めるか</small></div>
+          <div class="panel-body chart-wrap" style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
+            <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:220px;height:220px;flex:none"></svg>
+            <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex:1;min-width:220px"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="display:none">
           <div class="table-scroll">
           <table id="tbl-kpi-media">
             <thead><tr><th>指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>前月比</th><th>前年同月比</th><th>評価</th></tr></thead>
@@ -840,6 +842,21 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div>
         </div>
       </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>リール分析（参考）<small>フィード投稿とは別に集計。全項目サンプル値</small></div>
+        <div class="panel-body">
+          <div class="kpi-grid" style="margin-bottom:16px">
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">6件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 4件 <span class="delta up">▲+50.0%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">予約率</div><div class="kpi-value">0.05%<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 0.04% <span class="delta up">▲+0.01pt</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">再生数</div><div class="kpi-value">12.8万<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 9.6万 <span class="delta up">▲+33.3%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">10本<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 6本 <span class="delta up">▲+66.7%</span></div></div>
+          </div>
+          <div class="panel-title" style="padding:0 0 8px;border:none">リール再生数ランキング（5月）</div>
+          <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためInstagramトップへ遷移）</p>
+          <div class="rank-list" id="ig-reel-rank"></div>
+        </div>
+      </div>
       </div>
 
       <div id="ig-story-view" style="display:none">
@@ -922,7 +939,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>他院・競合比較　<small>豊胸領域を発信する先生の投稿分析（サンプル・フィード基準）</small></div>
+        <div class="panel-title"><span class="bar"></span>他院・競合比較　<small>豊胸領域を発信する先生の投稿分析（サンプル・フィード基準・上位8件）</small></div>
         <div class="table-scroll">
         <table>
           <thead><tr><th>アカウント</th><th>投稿頻度</th><th>コンテンツ傾向</th><th>エンゲージメント率</th><th>予約タップ数</th><th>予約数</th><th>保存＋シェア数</th></tr></thead>
@@ -930,6 +947,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <tr class="self-row"><td>自院（キム先生）</td><td>週5〜6本</td><td>症例解説中心</td><td>3.8%</td><td>612</td><td>58件</td><td>3,920</td></tr>
             <tr><td>競合A院（豊胸専門医）</td><td>週3〜4本</td><td>症例のみ中心</td><td>2.9%</td><td>480</td><td>41件</td><td>2,860</td></tr>
             <tr><td>競合B院（総合美容医）</td><td>週7本以上</td><td>トレンド動画中心</td><td>4.6%</td><td>705</td><td>52件</td><td>5,140</td></tr>
+            <tr><td>競合C院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週2〜3本</td><td>症例＋解説中心</td><td>3.1%</td><td>390</td><td>33件</td><td>2,410</td></tr>
+            <tr><td>競合D院（総合美容医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週4〜5本</td><td>ドクター人柄中心</td><td>3.4%</td><td>455</td><td>37件</td><td>2,980</td></tr>
+            <tr><td>競合E院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週1〜2本</td><td>症例のみ中心</td><td>2.4%</td><td>210</td><td>18件</td><td>1,350</td></tr>
+            <tr><td>競合F院（総合美容医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週6本以上</td><td>トレンド動画中心</td><td>5.1%</td><td>820</td><td>60件</td><td>6,020</td></tr>
+            <tr><td>競合G院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週3本</td><td>Q&amp;A形式中心</td><td>3.6%</td><td>510</td><td>44件</td><td>3,150</td></tr>
           </tbody>
         </table>
         </div>
@@ -1574,6 +1596,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
                 <div class="sp-value" id="self-position-value">4,217</div>
                 <div class="sp-avg" id="self-position-avg-value">全院平均 2,573</div>
               </div>
+              <p style="font-size:11px;color:var(--text-faint);margin:0 0 4px;line-height:1.5">バッジの色は順位帯を示します（緑＝上位、黄＝中位、赤＝下位）</p>
               <div id="self-position-gauge"></div>
             </div>
           </div>
@@ -1592,7 +1615,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
               <div class="seg" id="compare-seg">
                 <button class="active" data-kpi="sessions">SNSセッション数</button>
-                <button data-kpi="bookings">SNS予約貢献数</button>
+                <button data-kpi="bookings">予約数</button>
                 <button data-kpi="mysbc">新規MYSBC登録</button>
                 <button data-kpi="igRate">IGプロフィール予約率</button>
               </div>
@@ -1682,6 +1705,27 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="dir-card"><h5>TikTok規制への対応強化</h5><p>おすすめ規制を潜り抜けるコンテンツの量産で予約転換率の回復を目指す</p></div>
           <div class="dir-card"><h5>TikTok予約転換の改善</h5><p>視聴は増えている。CTAの徹底とプロフィール導線の最適化で予約率回復へ</p></div>
           <div class="dir-card"><h5>YouTube投稿数の維持</h5><p>31本の投稿頻度を継続。Shorts→長尺への誘導で登録者+100人以上を目指す</p></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>今月の注目媒体：YouTube・TikTok<small>上の総括本文で言及している実績を数値・グラフで確認</small></div>
+        <div class="panel-body">
+          <div style="font-size:12.5px;font-weight:800;color:var(--yt);margin-bottom:10px">📺 YouTube（視聴回数が過去最高水準）</div>
+          <div class="kpi-grid" style="margin-bottom:24px">
+            <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">総視聴回数</div><div class="kpi-value">20.8万</div><div class="kpi-sub">前月 15.9万 <span class="delta up">▲+30.8%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">Shorts視聴回数</div><div class="kpi-value">16.9万</div><div class="kpi-sub">前月 11.8万 <span class="delta up">▲+43.2%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">チャンネル登録増</div><div class="kpi-value">+94人</div><div class="kpi-sub">前月 +98人 <span class="delta flat">▼微減</span></div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">9件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">公開Shorts本数：31本（前月9本）</div></div>
+          </div>
+          <div style="font-size:12.5px;font-weight:800;color:var(--tt);margin-bottom:10px">🎵 TikTok（認知拡大は継続、予約転換に課題）</div>
+          <div class="kpi-grid">
+            <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">投稿視聴数</div><div class="kpi-value">1.6M</div><div class="kpi-sub">前月 1.3M <span class="delta up">▲+23.6%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">フォロワー総数</div><div class="kpi-value">40,342</div><div class="kpi-sub">純増 +583人 <span class="delta up">▲（前月+427）</span></div></div>
+            <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約率</div><div class="kpi-value">0.16%</div><div class="kpi-sub">前月 0.52% <span class="delta down">▼大幅低下</span></div></div>
+            <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約数</div><div class="kpi-value">3件</div><div class="kpi-sub">前月 8件 <span class="delta down">▼-62.5%</span></div></div>
+          </div>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:14px;line-height:1.6">より詳しい推移・ランキングは左メニューの各チャネルページをご覧ください。</p>
         </div>
       </div>
 
@@ -2040,8 +2084,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var tag = item.url ? 'a' : 'div';
       var attrs = item.url ? ' href="'+item.url+'" target="_blank" rel="noopener noreferrer"' : '';
       var ext = item.url ? ' <span class="ext-ico">↗</span>' : '';
+      var bookingBadge = (item.b!=null) ? ' <span class="rank-booking-badge">→予約 '+item.b+'件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn);margin-left:3px">サンプル</span></span>' : '';
       return '<'+tag+' class="rank-row'+(idx===0?' r1':'')+'"'+attrs+'><div class="bg-bar" style="width:'+pct+'%"></div>'+
-        '<div class="rn">'+(idx+1)+'</div><div class="rt">'+item.t+'</div><div class="rv">'+item.vLabel+ext+'</div></'+tag+'>';
+        '<div class="rn">'+(idx+1)+'</div><div class="rt">'+item.t+bookingBadge+'</div><div class="rv">'+item.vLabel+ext+'</div></'+tag+'>';
     }).join('');
   }
 
@@ -2051,67 +2096,75 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   function googleSearchUrl(q){ return 'https://www.google.com/search?q=' + encodeURIComponent(q); }
 
   renderRank('ig-rank', [
-    {t:'術後の様子と喜びのコメントまとめ', v:52000, vLabel:'52.0K', url:IG_URL},
-    {t:'豊胸のダウンタイム、正直に話します', v:44500, vLabel:'44.5K', url:IG_URL},
-    {t:'【Q&A】豊胸のサイズ選び、失敗しないコツ', v:38200, vLabel:'38.2K', url:IG_URL},
-    {t:'症例写真だけじゃわからない触り心地の話', v:31900, vLabel:'31.9K', url:IG_URL},
-    {t:'カウンセリングで実際に聞かれる質問TOP3', v:27600, vLabel:'27.6K', url:IG_URL}
+    {t:'術後の様子と喜びのコメントまとめ', v:52000, vLabel:'52.0K', url:IG_URL, b:12},
+    {t:'豊胸のダウンタイム、正直に話します', v:44500, vLabel:'44.5K', url:IG_URL, b:9},
+    {t:'【Q&A】豊胸のサイズ選び、失敗しないコツ', v:38200, vLabel:'38.2K', url:IG_URL, b:7},
+    {t:'症例写真だけじゃわからない触り心地の話', v:31900, vLabel:'31.9K', url:IG_URL, b:5},
+    {t:'カウンセリングで実際に聞かれる質問TOP3', v:27600, vLabel:'27.6K', url:IG_URL, b:4}
+  ]);
+
+  renderRank('ig-reel-rank', [
+    {t:'【1分でわかる】豊胸の種類まとめ', v:31000, vLabel:'31.0K', url:IG_URL, b:2},
+    {t:'術後1週間の腫れの様子', v:26500, vLabel:'26.5K', url:IG_URL, b:2},
+    {t:'よくある質問に即答してみた', v:21800, vLabel:'21.8K', url:IG_URL, b:1},
+    {t:'カウンセリング室に密着', v:18200, vLabel:'18.2K', url:IG_URL, b:1},
+    {t:'症例ビフォーアフター（当日）', v:15900, vLabel:'15.9K', url:IG_URL}
   ]);
 
   renderRank('ig-story-rank', [
-    {t:'【質問箱】よくある質問に本気回答', v:18500, vLabel:'18.5K'},
-    {t:'カウントダウン告知！残り3日', v:15200, vLabel:'15.2K'},
-    {t:'【アンケート】どっちが気になる？', v:13800, vLabel:'13.8K'},
-    {t:'術後経過ここまで見せます', v:11900, vLabel:'11.9K'},
-    {t:'診察室の裏側スタッフ紹介', v:9600, vLabel:'9.6K'}
+    {t:'【質問箱】よくある質問に本気回答', v:18500, vLabel:'18.5K', b:5},
+    {t:'カウントダウン告知！残り3日', v:15200, vLabel:'15.2K', b:4},
+    {t:'【アンケート】どっちが気になる？', v:13800, vLabel:'13.8K', b:3},
+    {t:'術後経過ここまで見せます', v:11900, vLabel:'11.9K', b:2},
+    {t:'診察室の裏側スタッフ紹介', v:9600, vLabel:'9.6K', b:2}
   ]);
 
   renderRank('yt-shorts-rank', [
-    {t:'術後面会の様子をお届け！#shorts', v:8501, vLabel:'8,501', url:YT_URL},
-    {t:'【男性人気No1】二重シミュレーション', v:8402, vLabel:'8,402', url:YT_URL},
-    {t:'【眼瞼下垂セルフチェック】切らずに二重に', v:7958, vLabel:'7,958', url:YT_URL},
-    {t:'主人公想いすぎるキム先生…#shorts', v:7857, vLabel:'7,857', url:YT_URL},
+    {t:'術後面会の様子をお届け！#shorts', v:8501, vLabel:'8,501', url:YT_URL, b:3},
+    {t:'【男性人気No1】二重シミュレーション', v:8402, vLabel:'8,402', url:YT_URL, b:2},
+    {t:'【眼瞼下垂セルフチェック】切らずに二重に', v:7958, vLabel:'7,958', url:YT_URL, b:1},
+    {t:'主人公想いすぎるキム先生…#shorts', v:7857, vLabel:'7,857', url:YT_URL, b:1},
     {t:'デザイン中のキム先生はこちら！', v:6899, vLabel:'6,899', url:YT_URL}
   ]);
 
   renderRank('yt-video-rank', [
-    {t:'【二重埋没で若返り】37歳がキム先生の二重整形に', v:2238, vLabel:'2,238', url:YT_URL},
-    {t:'【目元若返り！】たるみシワ改善サーマクール', v:1607, vLabel:'1,607', url:YT_URL},
+    {t:'【二重埋没で若返り】37歳がキム先生の二重整形に', v:2238, vLabel:'2,238', url:YT_URL, b:1},
+    {t:'【目元若返り！】たるみシワ改善サーマクール', v:1607, vLabel:'1,607', url:YT_URL, b:1},
     {t:'【埋没法手術に密着！】静脈麻酔を使って', v:1085, vLabel:'1,085', url:YT_URL},
     {t:'【50代の埋没法】症例解説！まぶたのたるみ', v:1050, vLabel:'1,050', url:YT_URL},
     {t:'【美容外科医が告白！】切らない眼瞼下垂', v:948, vLabel:'948', url:YT_URL}
   ]);
 
   renderRank('tt-rank', [
-    {t:'15歳主人公と面会😳🌸 #キム先生 #金先生', v:317000, vLabel:'317K', url:TT_URL},
-    {t:'優しすぎる…。キム先生…。', v:292000, vLabel:'292K', url:TT_URL},
-    {t:'家族3人でキム先生をご指名くださった理由は？', v:152000, vLabel:'152K', url:TT_URL},
+    {t:'15歳主人公と面会😳🌸 #キム先生 #金先生', v:317000, vLabel:'317K', url:TT_URL, b:1},
+    {t:'優しすぎる…。キム先生…。', v:292000, vLabel:'292K', url:TT_URL, b:1},
+    {t:'家族3人でキム先生をご指名くださった理由は？', v:152000, vLabel:'152K', url:TT_URL, b:1},
     {t:'堅パンに挑戦するキム先生がおもしろすぎたwww', v:71000, vLabel:'71K', url:TT_URL},
     {t:'お客様との会話で可愛すぎる金先生wwwww', v:59000, vLabel:'59K', url:TT_URL}
   ]);
 
   renderRank('seo-rank', [
-    {t:'豊胸手術の失敗しない選び方 完全ガイド', v:9800, vLabel:'9,800', url:googleSearchUrl('豊胸手術の失敗しない選び方 完全ガイド')},
-    {t:'シリコンバッグ vs 脂肪注入 徹底比較', v:7400, vLabel:'7,400', url:googleSearchUrl('シリコンバッグ vs 脂肪注入 徹底比較')},
-    {t:'豊胸手術の値段相場と保険適用について', v:6150, vLabel:'6,150', url:googleSearchUrl('豊胸手術の値段相場と保険適用について')},
-    {t:'ダウンタイムはどれくらい？豊胸手術後の過ごし方', v:5320, vLabel:'5,320', url:googleSearchUrl('ダウンタイムはどれくらい？豊胸手術後の過ごし方')},
-    {t:'二重埋没法の経過と失敗例まとめ', v:4780, vLabel:'4,780', url:googleSearchUrl('二重埋没法の経過と失敗例まとめ')}
+    {t:'豊胸手術の失敗しない選び方 完全ガイド', v:9800, vLabel:'9,800', url:googleSearchUrl('豊胸手術の失敗しない選び方 完全ガイド'), b:4},
+    {t:'シリコンバッグ vs 脂肪注入 徹底比較', v:7400, vLabel:'7,400', url:googleSearchUrl('シリコンバッグ vs 脂肪注入 徹底比較'), b:3},
+    {t:'豊胸手術の値段相場と保険適用について', v:6150, vLabel:'6,150', url:googleSearchUrl('豊胸手術の値段相場と保険適用について'), b:3},
+    {t:'ダウンタイムはどれくらい？豊胸手術後の過ごし方', v:5320, vLabel:'5,320', url:googleSearchUrl('ダウンタイムはどれくらい？豊胸手術後の過ごし方'), b:2},
+    {t:'二重埋没法の経過と失敗例まとめ', v:4780, vLabel:'4,780', url:googleSearchUrl('二重埋没法の経過と失敗例まとめ'), b:1}
   ]);
 
   renderRank('app-rank', [
-    {t:'豊胸カウンセリング初回限定クーポン', v:1420, vLabel:'1,420'},
-    {t:'二重埋没法（メニュー詳細）', v:980, vLabel:'980'},
-    {t:'夏の美肌キャンペーン', v:845, vLabel:'845'},
-    {t:'モニター募集（豊胸）', v:610, vLabel:'610'},
-    {t:'ポイント2倍デー告知', v:420, vLabel:'420'}
+    {t:'豊胸カウンセリング初回限定クーポン', v:1420, vLabel:'1,420', b:12},
+    {t:'二重埋没法（メニュー詳細）', v:980, vLabel:'980', b:9},
+    {t:'夏の美肌キャンペーン', v:845, vLabel:'845', b:8},
+    {t:'モニター募集（豊胸）', v:610, vLabel:'610', b:6},
+    {t:'ポイント2倍デー告知', v:420, vLabel:'420', b:4}
   ]);
 
   renderRank('mail-rank', [
-    {t:'【期間限定】豊胸手術20%OFFキャンペーン', v:390, vLabel:'390'},
-    {t:'今月の症例ピックアップ：豊胸編', v:285, vLabel:'285'},
-    {t:'ポイント消化はお早めに！有効期限のご案内', v:240, vLabel:'240'},
-    {t:'夏に向けたダウンタイム別施術ガイド', v:205, vLabel:'205'},
-    {t:'新メニュー導入のお知らせ', v:180, vLabel:'180'}
+    {t:'【期間限定】豊胸手術20%OFFキャンペーン', v:390, vLabel:'390', b:8},
+    {t:'今月の症例ピックアップ：豊胸編', v:285, vLabel:'285', b:6},
+    {t:'ポイント消化はお早めに！有効期限のご案内', v:240, vLabel:'240', b:5},
+    {t:'夏に向けたダウンタイム別施術ガイド', v:205, vLabel:'205', b:4},
+    {t:'新メニュー導入のお知らせ', v:180, vLabel:'180', b:3}
   ]);
 
   var MONTHS = ['1月','2月','3月','4月','5月'];
@@ -2180,7 +2233,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   }
   var KPI_DEFS = [
     {key:'sessions', label:'SNSセッション数', fmt:function(v){return Math.round(v).toLocaleString();}},
-    {key:'bookings', label:'SNS予約貢献数', fmt:function(v){return Math.round(v)+'件';}},
+    {key:'bookings', label:'予約数', fmt:function(v){return Math.round(v)+'件';}},
     {key:'mysbc', label:'新規MYSBC登録', fmt:function(v){return Math.round(v)+'件';}},
     {key:'igRate', label:'IGプロフィール予約率', fmt:function(v){return v.toFixed(2)+'%';}}
   ];
@@ -2253,14 +2306,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var avgPct = (max>min) ? (avg-min)/(max-min)*100 : 50;
     var diffPct = (kimVal-avg)/avg*100;
 
+    var rankFrac = rank/total;
+    var tier = rankFrac<=1/3 ? 'tier-good' : (rankFrac<=2/3 ? 'tier-warn' : 'tier-bad');
+    var percentile = Math.max(1, Math.round(rank/total*100));
+
     document.getElementById('self-position-kpi-label').textContent = def.label+'（'+MONTHS[lastIdx]+'）';
-    document.getElementById('self-position-rank').textContent = 'キム先生：'+total+'院中 '+rank+'位';
+    var rankEl = document.getElementById('self-position-rank');
+    rankEl.className = 'sp-rank '+tier;
+    rankEl.textContent = 'キム先生：'+total+'院中 '+rank+'位（上位'+percentile+'%）';
     document.getElementById('self-position-value').textContent = def.fmt(kimVal);
     document.getElementById('self-position-avg-value').textContent = '全院平均 '+def.fmt(avg)+'（自院比 '+(diffPct>=0?'▲+':'▼')+Math.abs(diffPct).toFixed(1)+'%）';
     document.getElementById('self-position-gauge').innerHTML =
       '<div class="sp-track">'+
         '<div class="sp-avg-mark" style="left:'+avgPct+'%" title="全院平均"></div>'+
-        '<div class="sp-self-mark" style="left:'+pct+'%" title="キム先生"></div>'+
+        '<div class="sp-self-mark '+tier+'" style="left:'+pct+'%" title="キム先生"></div>'+
       '</div>'+
       '<div class="sp-scale"><span>最小 '+def.fmt(min)+'</span><span>平均 '+def.fmt(avg)+'</span><span>最大 '+def.fmt(max)+'</span></div>';
   }
@@ -2567,9 +2626,24 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     drawBookingsChart('kpi-month-chart', def.values, monthIdx, def.fmt);
   }
 
+  function renderMainFunnel(monthIdx){
+    var sessions = KPI_ALL_METRICS.filter(function(m){return m.key==='sessions';})[0].values[monthIdx];
+    var bookings = KPI_ALL_METRICS.filter(function(m){return m.key==='bookings';})[0].values[monthIdx];
+    var clicks = Math.round(sessions*0.12);
+    var conv1 = clicks/sessions*100, conv2 = bookings/clicks*100;
+    document.getElementById('main-funnel-sessions').textContent = fmtInt(sessions);
+    document.getElementById('main-funnel-clicks').textContent = fmtInt(clicks);
+    document.getElementById('main-funnel-bookings').textContent = fmtCount(bookings);
+    document.getElementById('main-funnel-conv1').textContent = '転換 '+conv1.toFixed(1)+'%';
+    document.getElementById('main-funnel-drop1').textContent = '離脱 '+(100-conv1).toFixed(1)+'%';
+    document.getElementById('main-funnel-conv2').textContent = '転換 '+conv2.toFixed(1)+'%';
+    document.getElementById('main-funnel-drop2').textContent = '離脱 '+(100-conv2).toFixed(1)+'%';
+  }
+
   function updateKpiMonthSelection(monthIdx){
     kpiSelectedMonth = monthIdx;
     renderKpiCardsMonth(monthIdx);
+    renderMainFunnel(monthIdx);
     highlightKpiTableColumn('tbl-kpi-reservation', monthIdx);
     highlightKpiTableColumn('tbl-kpi-media', monthIdx);
     drawKpiMonthChart(kpiChartMetric, monthIdx);
@@ -2594,7 +2668,49 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     });
   });
 
+  function drawContribDonut(){
+    var svg = document.getElementById('contrib-donut-chart');
+    if(!svg) return;
+    var data = [
+      {label:'MYSBC公式アプリ', value:46, color:'var(--app)'},
+      {label:'メルマガ', value:31, color:'var(--mail)'},
+      {label:'特集記事(SEO)', value:14, color:'var(--seo)'},
+      {label:'Instagramフィード', value:58, color:'var(--ig)'},
+      {label:'Instagramストーリー', value:22, color:'#d6336c'},
+      {label:'YouTube', value:9, color:'var(--yt)'},
+      {label:'TikTok', value:3, color:'var(--tt)'}
+    ];
+    var total = data.reduce(function(a,b){return a+b.value;},0);
+    var cx=110, cy=110, rOuter=100, rInner=58;
+    var angle = -90;
+    var paths = '';
+    data.forEach(function(d){
+      var frac = d.value/total;
+      var sweep = frac*360;
+      var a0 = angle*Math.PI/180, a1=(angle+sweep)*Math.PI/180;
+      var x0=cx+rOuter*Math.cos(a0), y0=cy+rOuter*Math.sin(a0);
+      var x1=cx+rOuter*Math.cos(a1), y1=cy+rOuter*Math.sin(a1);
+      var xi0=cx+rInner*Math.cos(a1), yi0=cy+rInner*Math.sin(a1);
+      var xi1=cx+rInner*Math.cos(a0), yi1=cy+rInner*Math.sin(a0);
+      var large = sweep>180?1:0;
+      var dPath = 'M'+x0+','+y0+' A'+rOuter+','+rOuter+' 0 '+large+' 1 '+x1+','+y1+' L'+xi0+','+yi0+' A'+rInner+','+rInner+' 0 '+large+' 0 '+xi1+','+yi1+' Z';
+      paths += '<path d="'+dPath+'" fill="'+d.color+'"><title>'+d.label+': '+(frac*100).toFixed(1)+'%</title></path>';
+      angle += sweep;
+    });
+    var centerText = '<text x="'+cx+'" y="'+(cy-4)+'" font-size="22" font-weight="800" fill="var(--text)" text-anchor="middle">'+total+'件</text>'+
+      '<text x="'+cx+'" y="'+(cy+16)+'" font-size="11" fill="var(--text-faint)" text-anchor="middle">合計予約数</text>';
+    svg.innerHTML = paths + centerText;
+    var legend = document.getElementById('contrib-donut-legend');
+    if(legend){
+      legend.innerHTML = data.map(function(d){
+        return '<span class="ctl-item"><span class="ctl-dot" style="background:'+d.color+'"></span>'+d.label+' '+d.value+'件（'+(d.value/total*100).toFixed(1)+'%）</span>';
+      }).join('');
+    }
+  }
+  drawContribDonut();
+
   renderKpiCardsMonth(kpiSelectedMonth);
+  renderMainFunnel(kpiSelectedMonth);
   drawKpiMonthChart(kpiChartMetric, kpiSelectedMonth);
 
   function drawYearChart(){
