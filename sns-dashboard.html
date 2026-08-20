@@ -685,7 +685,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
 
         <div class="panel">
-          <div class="panel-title"><span class="bar"></span>月次推移・前年同月比較<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+          <div class="panel-title"><span class="bar"></span>月次推移・今月/前月比較<small>棒グラフ：各月の実績（選択中の月は今月・前月の2本で比較）</small></div>
           <div class="panel-body chart-wrap">
             <div class="seg" id="kpi-chart-metric-seg">
               <button class="active" data-metric="sessions">SNSセッション数</button>
@@ -694,11 +694,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <button data-metric="mysbc">新規MYSBC登録</button>
             </div>
             <div class="chart-legend" style="margin-top:10px">
-              <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-              <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+              <span><i style="background:var(--accent)"></i>その他の月</span>
+              <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+              <span><i style="background:#f87171"></i>前月</span>
             </div>
             <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
-            <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※前年同月の値は実測ではありません。各指標の実測「前年同月比」（5月時点）をもとに、同じ伸び率が2〜4月にも一律で働いたと仮定して逆算した推定値です。●は年月選択で選んだ月を示します。</p>
+            <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前月」の2本棒で実績を比較できます。</p>
           </div>
         </div>
 
@@ -812,14 +813,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="ig-feed-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※IGプロフィール予約数は実測値（全体KPIシートと共通）。前年同月値は前年同月比+11%をもとに逆算した推定値です。</p>
+          <svg id="ig-feed-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※IGプロフィール予約数は実測値です（全体KPIシートと共通）。</p>
         </div>
       </div>
 
@@ -891,14 +893,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="ig-story-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+          <svg id="ig-story-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1019,14 +1022,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="yt-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+          <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1144,14 +1148,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="tt-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数は実測値（全体KPIシートと共通）。前年同月値は前年同月比-54%をもとに逆算した推定値です。</p>
+          <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数は実測値です（全体KPIシートと共通）。</p>
         </div>
       </div>
 
@@ -1276,14 +1281,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="seo-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+          <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1379,14 +1385,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="app-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+          <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1494,14 +1501,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>棒グラフ：今年の月次実績／折れ線：前年同月（推定）</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>今年（月次実績）</span>
-            <span><i style="background:var(--bad);height:2px;border-top:2px dashed var(--bad);background:none"></i>前年同月（推定）</span>
+            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月</span>
           </div>
-          <svg id="mail-booking-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数・前年同月値はいずれもサンプル／推定値です。2月・3月は4月・5月の実績から推定した値です。</p>
+          <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1793,14 +1801,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     }).join('');
   }
 
-  function drawBookingsChart(svgId, values, yoyPct, monthIdx, fmt){
+  function drawBookingsChart(svgId, values, monthIdx, fmt){
     var svg = document.getElementById(svgId);
     if(!svg) return;
-    var lastYear = values.map(function(v){ return v/(1+yoyPct/100); });
-    var W=760, H=220, padL=44, padR=14, padT=16, padB=32;
+    var W=760, H=236, padL=44, padR=14, padT=16, padB=46;
     var groupW = (W-padL-padR)/values.length;
-    var barW = groupW*0.4;
-    var maxV = Math.max.apply(null, values.concat(lastYear)) * 1.18;
+    var maxV = Math.max.apply(null, values) * 1.2;
     function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
     function xForGroup(i){ return padL + groupW*i; }
     var gridLines = '';
@@ -1808,21 +1814,33 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var gy = padT + (H-padT-padB)*g/3;
       gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
     }
-    var bars = values.map(function(v,i){
-      var x = xForGroup(i) + groupW/2 - barW/2;
-      var y = yFor(v);
+    var bars = '';
+    values.forEach(function(v, i){
       var isSel = i===monthIdx;
-      return '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="4" fill="'+(isSel?'var(--accent-strong)':'var(--accent)')+'"/>'+
-        '<text x="'+(x+barW/2)+'" y="'+(y-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>';
-    }).join('');
-    var linePts = lastYear.map(function(v,i){ return xForGroup(i)+groupW/2+','+yFor(v); }).join(' ');
-    var lineDots = lastYear.map(function(v,i){ return '<circle cx="'+(xForGroup(i)+groupW/2)+'" cy="'+yFor(v)+'" r="3.5" fill="var(--bad)"/>'; }).join('');
+      if(isSel && i>0){
+        var halfW = groupW*0.32, gap = 5;
+        var xThis = xForGroup(i) + groupW/2 - halfW - gap/2;
+        var xPrev = xForGroup(i) + groupW/2 + gap/2;
+        var yThis = yFor(v), prevV = values[i-1], yPrev = yFor(prevV);
+        bars += '<rect x="'+xThis+'" y="'+yThis+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yThis)+'" rx="4" fill="#38bdf8"/>'+
+          '<text x="'+(xThis+halfW/2)+'" y="'+(yThis-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>'+
+          '<text x="'+(xThis+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#38bdf8" text-anchor="middle">今月</text>';
+        bars += '<rect x="'+xPrev+'" y="'+yPrev+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yPrev)+'" rx="4" fill="#f87171"/>'+
+          '<text x="'+(xPrev+halfW/2)+'" y="'+(yPrev-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(prevV)+'</text>'+
+          '<text x="'+(xPrev+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#f87171" text-anchor="middle">先月</text>';
+      } else {
+        var barW = groupW*0.4;
+        var x = xForGroup(i) + groupW/2 - barW/2;
+        var y = yFor(v);
+        bars += '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="4" fill="'+(isSel?'var(--accent-strong)':'var(--accent)')+'"/>'+
+          '<text x="'+(x+barW/2)+'" y="'+(y-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>';
+      }
+    });
     var labels = MONTHS4.map(function(m,i){
       return '<text x="'+(xForGroup(i)+groupW/2)+'" y="'+(H-8)+'" font-size="11" font-weight="'+(i===monthIdx?'800':'400')+'" fill="'+(i===monthIdx?'var(--accent-strong)':'var(--text-faint)')+'" text-anchor="middle">'+m+(i===monthIdx?' ●':'')+'</text>';
     }).join('');
-    svg.innerHTML = gridLines + bars +
-      '<polyline points="'+linePts+'" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>' +
-      lineDots + labels;
+    svg.setAttribute('viewBox', '0 0 '+W+' '+H);
+    svg.innerHTML = gridLines + bars + labels;
   }
 
   function setupPageMonthSelector(segId, onSelect){
@@ -1839,17 +1857,26 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
   /* ---------- MYSBC公式アプリ ---------- */
   (function(){
+    var newinstallV = series4(590,640);
+    var subscribersV = series4(49040,49680);
+    var tapsV = series4(1050,1150);
+    var bookingsV = series4(42,46);
+    var deliveryCountV = series4(15,18);
+    var rateV = bookingsV.map(function(v,i){ return v/subscribersV[i]*100; });
+    var clickRateV = tapsV.map(function(v,i){ return v/subscribersV[i]*100; });
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:series4(590,640), fmt:fmtInt, deltaType:'pct'},
-      {key:'subscribers', label:'合計配信者数', tag:'推定', bar:'var(--app)', values:series4(49040,49680), fmt:fmtInt, deltaType:'pct'},
-      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(1050,1150), fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(42,46), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
-      {key:'announcements', label:'お知らせ配信本数', bar:'var(--app)', values:series4(15,18), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:series4(15,18), fmt:function(v){return fmtHon(v);}, deltaType:'pct'}
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
+      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'taps', label:'クリック数', tag:'サンプル', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
+      {key:'clickRate', label:'クリック率', tag:'サンプル', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'},
+      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('page-app-kpi-grid', metrics, monthIdx);
-      var newi = metrics[0].values[monthIdx], sub = metrics[1].values[monthIdx], taps = metrics[2].values[monthIdx], book = metrics[3].values[monthIdx];
+      var newi = newinstallV[monthIdx], sub = subscribersV[monthIdx], taps = tapsV[monthIdx], book = bookingsV[monthIdx];
       document.getElementById('app-fs-newinstall').textContent = fmtInt(newi);
       document.getElementById('app-fs-subscribers').textContent = fmtInt(sub);
       document.getElementById('app-fs-taps').innerHTML = fmtInt(taps)+'<span class="tag-sample">サンプル</span>';
@@ -1859,18 +1886,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       document.getElementById('app-drop-1').textContent = '離脱 '+(100-conv1).toFixed(1)+'%';
       document.getElementById('app-conv-2').textContent = '転換 '+conv2.toFixed(1)+'%';
       document.getElementById('app-drop-2').textContent = '離脱 '+(100-conv2).toFixed(1)+'%';
-      drawBookingsChart('app-booking-chart', metrics[3].values, 10, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('app-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('app-month-seg', render);
   })();
 
   /* ---------- Instagram フィード ---------- */
   (function(){
+    var reachV = series4(159000,184000);
+    var bookingsV = [47,58,62,58];
+    var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'reach', label:'リーチ数', bar:'var(--ig)', values:series4(159000,184000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'profileAccess', label:'プロフィールアクセス数', bar:'var(--ig)', values:series4(5540,6120), fmt:fmtInt, deltaType:'pct'},
-      {key:'igRate', label:'IGプロフィール予約率', bar:'var(--good)', values:series4(4.51,4.25), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'igBookings', label:'IGプロフィール予約数', bar:'var(--warn)', values:[47,58,62,58], fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
+      {key:'igBookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'reach', label:'リーチ数', bar:'var(--ig)', values:reachV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'followerNet', label:'フォロワー純増', bar:'var(--ig)', values:series4(366,412), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
       {key:'saves', label:'保存数', bar:'var(--ig)', values:series4(2610,3050), fmt:fmtInt, deltaType:'pct'},
       {key:'shares', label:'シェア数', bar:'var(--ig)', values:series4(910,870), fmt:fmtInt, deltaType:'pct'},
@@ -1878,102 +1909,124 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('ig-feed-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('ig-feed-booking-chart', metrics[3].values, 11, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('ig-feed-month-seg', render);
   })();
 
   /* ---------- Instagram ストーリー ---------- */
   (function(){
+    var storyViewsV = series4(78500,92000);
+    var bookingsV = series4(17,22);
+    var rateV = bookingsV.map(function(v,i){ return v/storyViewsV[i]*100; });
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'storyViews', label:'ストーリー表示回数', bar:'var(--ig)', values:series4(78500,92000), fmt:fmtInt, deltaType:'pct'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'ストーリー経由の予約'},
+      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'storyViews', label:'ストーリー表示回数', bar:'var(--ig)', values:storyViewsV, fmt:fmtInt, deltaType:'pct'},
       {key:'linkTaps', label:'リンクスタンプタップ数', bar:'var(--ig)', values:series4(3120,3850), fmt:fmtInt, deltaType:'pct'},
-      {key:'completion', label:'完了率（最後まで視聴）', bar:'var(--warn)', values:series4(71.2,68.4), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'dmReplies', label:'返信数（DM）', bar:'var(--ig)', values:series4(165,210), fmt:fmtInt, deltaType:'pct'},
-      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(420,520), fmt:fmtInt, deltaType:'none', staticSub:'リンクスタンプ経由'},
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(17,22), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'ストーリー経由の予約'},
       {key:'posts', label:'投稿本数', bar:'var(--ig)', values:series4(38,45), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'freq', label:'投稿頻度', bar:'var(--ig)', values:series4(8.3,10.5), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'none', staticSub:'フィードの約1.9倍の頻度'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('ig-story-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('ig-story-booking-chart', metrics[5].values, 15, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('ig-story-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('ig-story-month-seg', render);
   })();
 
   /* ---------- YouTube ---------- */
   (function(){
+    var viewsV = series4(159000,208000);
+    var bookingsV = series4(7,9);
+    var rateV = bookingsV.map(function(v,i){ return v/viewsV[i]*100; });
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'views', label:'総視聴回数', bar:'var(--yt)', values:series4(159000,208000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'},
+      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,3);}, deltaType:'pt', ptDigits:3},
+      {key:'views', label:'総視聴回数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'viewers', label:'月間視聴者数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'subs', label:'チャンネル登録増', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
-      {key:'ctr', label:'インプレッションCTR', bar:'var(--yt)', values:series4(5.7,5.7), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'shorts', label:'Shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'normal', label:'通常動画視聴', bar:'var(--yt)', values:series4(39000,38000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'impressions', label:'インプレッション数', bar:'var(--yt)', values:series4(903000,952000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(7,9), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'}
+      {key:'impressions', label:'インプレッション数', bar:'var(--yt)', values:series4(903000,952000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('yt-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('yt-booking-chart', metrics[7].values, 5, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('yt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('yt-month-seg', render);
   })();
 
   /* ---------- TikTok ---------- */
   (function(){
+    var bookingsV = [13,7,8,3];
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'views', label:'投稿視聴数', bar:'var(--tt)', values:series4(1300000,1600000), fmt:function(v){return fmtM(v);}, deltaType:'pct'},
-      {key:'profile', label:'プロフィール表示', bar:'var(--tt)', values:series4(46000,58000), fmt:fmtK, deltaType:'pct'},
-      {key:'likes', label:'いいね', bar:'var(--tt)', values:series4(23000,26000), fmt:fmtK, deltaType:'pct'},
-      {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'},
-      {key:'comments', label:'コメント', bar:'var(--tt)', values:series4(46,103), fmt:fmtInt, deltaType:'pct'},
-      {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:series4(39759,40342), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
+      {key:'bookings', label:'予約数', bar:'var(--bad)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
       {key:'bookingRate', label:'予約率', bar:'var(--bad)', values:series4(0.52,0.16), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'bookings', label:'予約合計', bar:'var(--bad)', values:[13,7,8,3], fmt:function(v){return fmtCount(v);}, deltaType:'pct'}
+      {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:series4(39759,40342), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
+      {key:'views', label:'投稿視聴数', bar:'var(--tt)', values:series4(1300000,1600000), fmt:function(v){return fmtM(v);}, deltaType:'pct'},
+      {key:'likes', label:'いいね', bar:'var(--tt)', values:series4(23000,26000), fmt:fmtK, deltaType:'pct'},
+      {key:'comments', label:'コメント', bar:'var(--tt)', values:series4(46,103), fmt:fmtInt, deltaType:'pct'},
+      {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'},
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('tt-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('tt-booking-chart', metrics[7].values, -54, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('tt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('tt-month-seg', render);
   })();
 
   /* ---------- 特集記事(SEO) ---------- */
   (function(){
+    var sessionsV = series4(34200,38500);
+    var bookingsV = series4(11,14);
+    var rateV = bookingsV.map(function(v,i){ return v/sessionsV[i]*100; });
+    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'sessions', label:'検索流入セッション数', bar:'var(--seo)', values:series4(34200,38500), fmt:fmtInt, deltaType:'pct'},
-      {key:'rank', label:'平均掲載順位', bar:'var(--seo)', values:series4(5.1,4.2), fmt:function(v){return v.toFixed(1)+'位';}, deltaType:'pt'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'},
+      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'sessions', label:'セッション数', bar:'var(--seo)', values:sessionsV, fmt:fmtInt, deltaType:'pct'},
+      {key:'taps', label:'クリック数', tag:'サンプル', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
       {key:'impressions', label:'検索表示回数', bar:'var(--seo)', values:series4(580000,612000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'ctr', label:'検索CTR', bar:'var(--seo)', values:series4(5.9,6.3), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
-      {key:'articles', label:'直近公開記事本数', bar:'var(--seo)', values:series4(4,6), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'articles', label:'公開記事本数', bar:'var(--seo)', values:series4(4,6), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'freq', label:'更新頻度', bar:'var(--seo)', values:series4(0.9,1.4), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'pct'},
-      {key:'taps', label:'予約タップ数', tag:'サンプル', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(11,14), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'}
+      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('seo-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('seo-booking-chart', metrics[7].values, 20, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('seo-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('seo-month-seg', render);
   })();
 
   /* ---------- メルマガ ---------- */
   (function(){
+    var reachV = series4(41200,42000);
+    var openRateV = series4(26.5,28.1);
+    var ctrV = series4(10.5,11.2);
+    var bookingsV = series4(30,31);
+    var opensV = reachV.map(function(v,i){ return v*openRateV[i]/100; });
+    var clicksV = opensV.map(function(v,i){ return v*ctrV[i]/100; });
+    var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
     var metrics = [
-      {key:'reach', label:'配信到達数', bar:'var(--mail)', values:series4(41200,42000), fmt:fmtInt, deltaType:'pct'},
-      {key:'openRate', label:'開封率', bar:'var(--mail)', values:series4(26.5,28.1), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
-      {key:'ctr', label:'クリック率（CTR）', bar:'var(--mail)', values:series4(10.5,11.2), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
-      {key:'newSub', label:'新規登録数', bar:'var(--mail)', values:series4(285,320), fmt:function(v){return Math.round(v)+'人';}, deltaType:'pct'},
-      {key:'unsub', label:'配信停止率', bar:'var(--mail)', values:series4(0.9,0.8), fmt:function(v){return fmtPct(v,1);}, deltaType:'pt', ptDigits:1},
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:series4(30,31), fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
+      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
+      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'volume', label:'配信本数', bar:'var(--mail)', values:series4(7,8), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'freq', label:'配信頻度', bar:'var(--mail)', values:series4(1.7,1.9), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'none', staticSub:'前月比 横ばい'}
+      {key:'reach', label:'配信到達率', bar:'var(--mail)', values:reachV, fmt:fmtInt, deltaType:'pct'},
+      {key:'clicks', label:'クリック数', bar:'var(--mail)', values:clicksV, fmt:fmtInt, deltaType:'pct'},
+      {key:'ctr', label:'クリック率（CTR）', bar:'var(--mail)', values:ctrV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'opens', label:'開封数', bar:'var(--mail)', values:opensV, fmt:fmtInt, deltaType:'pct'},
+      {key:'openRate', label:'開封率', bar:'var(--mail)', values:openRateV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('mail-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('mail-booking-chart', metrics[5].values, 8, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('mail-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
     }
     setupPageMonthSelector('mail-month-seg', render);
   })();
@@ -2441,13 +2494,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   var KPI_ALL_METRICS = [
     {key:'sessions', label:'セッション数（SNS）', tableLabel:'SNSセッション数', bar:'var(--accent)', values:[4082,4401,3961,4217], yoyPct:18, fmt:function(v){return Math.round(v).toLocaleString();}},
     {key:'activeUsers', label:'アクティブユーザー', tableLabel:'アクティブユーザー', bar:'var(--accent)', values:[3071,3320,3088,3458], yoyPct:22, fmt:function(v){return Math.round(v).toLocaleString();}},
-    {key:'bookings', label:'SNS予約貢献数', tableLabel:'SNS予約貢献数', bar:'var(--bad)', values:[75,79,85,61], yoyPct:-9, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'bookings', label:'予約数', tableLabel:'SNS予約貢献数', bar:'var(--bad)', values:[75,79,85,61], yoyPct:-9, fmt:function(v){return Math.round(v)+'件';}},
+    {key:'bookingRate', label:'予約率', tableLabel:'予約率', bar:'var(--good)', values:[1.84,1.80,2.15,1.45], yoyPct:-22.9, fmt:function(v){return v.toFixed(2)+'%';}},
     {key:'counseling', label:'カウンセリング予約', tableLabel:'カウンセリング予約', bar:'var(--bad)', values:[11,5,5,5], yoyPct:-31, fmt:function(v){return Math.round(v)+'件';}},
     {key:'monitor', label:'モニター予約', tableLabel:'モニター予約', bar:'var(--bad)', values:[39,50,41,23], yoyPct:-19, fmt:function(v){return Math.round(v)+'件';}},
     {key:'mymenu', label:'マイメニュー予約', tableLabel:'マイメニュー予約', bar:'var(--warn)', values:[24,22,36,19], yoyPct:4, fmt:function(v){return Math.round(v)+'件';}},
     {key:'mysbc', label:'新規MYSBC登録', tableLabel:'新規MYSBC登録', bar:'var(--warn)', values:[12,9,16,14], yoyPct:8, fmt:function(v){return Math.round(v)+'件';}}
   ];
-  var KPI_CARD_KEYS = ['sessions','activeUsers','bookings','mysbc'];
+  var KPI_CARD_KEYS = ['bookings','bookingRate','sessions','mysbc'];
 
   function kpiDeltaHtml(prev, cur){
     if(prev==null) return '<span class="delta flat">基準月</span>';
@@ -2468,6 +2522,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     sessions: '認知系（TikTok・Shorts）への投稿量を維持できれば、この優位性を保てます',
     activeUsers: 'セッション数と連動する指標のため、上と同様の運用維持が有効です',
     bookings: '平均は上回っていますが前月比は減少傾向。TikTok経由予約の落ち込みを、アプリ・メルマガでどれだけ補えるかが今後の鍵です',
+    bookingRate: 'セッション数の伸びに対して予約率が下がり気味。導線改善（CTA・プロフィール誘導）の余地があります',
     mysbc: '既存顧客への再来院導線（アプリ・メルマガ配信）を強化すると、さらに伸ばせます'
   };
 
@@ -2477,10 +2532,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var sessionsAvg = clinicAvg('sessions', monthIdx);
     var bookingsAvg = clinicAvg('bookings', monthIdx);
     var mysbcAvg = clinicAvg('mysbc', monthIdx);
-    var kimSessions = KPI_ALL_METRICS.filter(function(m){return m.key==='sessions';})[0].values[monthIdx];
-    var kimActiveUsers = KPI_ALL_METRICS.filter(function(m){return m.key==='activeUsers';})[0].values[monthIdx];
-    var activeUsersAvg = sessionsAvg * (kimActiveUsers/kimSessions);
-    var avgMap = {sessions:sessionsAvg, activeUsers:activeUsersAvg, bookings:bookingsAvg, mysbc:mysbcAvg};
+    var avgMap = {sessions:sessionsAvg, bookings:bookingsAvg, mysbc:mysbcAvg, bookingRate:(bookingsAvg/sessionsAvg*100)};
 
     el.innerHTML = KPI_CARD_KEYS.map(function(key){
       var d = KPI_ALL_METRICS.filter(function(m){return m.key===key;})[0];
@@ -2491,8 +2543,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var diffPct = (cur-avg)/avg*100;
       var avgCls = diffPct>=0?'up':'down';
       var avgSign = diffPct>=0?'▲+':'▼';
-      var estTag = key==='activeUsers' ? '<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn);font-size:8.5px;padding:1px 5px;border-radius:99px;margin-left:4px">推定</span>' : '';
-      var avgLine = '<div class="kpi-avg">全院平均 '+d.fmt(avg)+estTag+' <span class="delta '+avgCls+'">'+avgSign+Math.abs(diffPct).toFixed(1)+'%</span></div>';
+      var avgLine = '<div class="kpi-avg">全院平均 '+d.fmt(avg)+' <span class="delta '+avgCls+'">'+avgSign+Math.abs(diffPct).toFixed(1)+'%</span></div>';
       var tipLine = '<div class="kpi-tip">💡 '+(KPI_BENCHMARK_TIPS[key]||'')+'</div>';
       return '<div class="kpi-card" style="--bar:'+d.bar+'"><div class="kpi-label">'+d.label+'</div><div class="kpi-value">'+d.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div>'+avgLine+tipLine+'</div>';
     }).join('');
@@ -2512,38 +2563,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   var kpiSelectedMonth = 3;
 
   function drawKpiMonthChart(metricKey, monthIdx){
-    var svg = document.getElementById('kpi-month-chart');
-    if(!svg) return;
     var def = KPI_ALL_METRICS.filter(function(m){return m.key===metricKey;})[0];
-    var thisYear = def.values;
-    var lyScale = 1/(1+def.yoyPct/100);
-    var lastYear = thisYear.map(function(v){return v*lyScale;});
-    var W=760, H=240, padL=48, padR=14, padT=18, padB=34;
-    var groupW = (W-padL-padR)/thisYear.length;
-    var barW = groupW*0.4;
-    var maxV = Math.max.apply(null, thisYear.concat(lastYear)) * 1.18;
-    function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
-    function xForGroup(i){ return padL + groupW*i; }
-    var gridLines = '';
-    for(var g=0; g<=3; g++){
-      var gy = padT + (H-padT-padB)*g/3;
-      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
-    }
-    var bars = thisYear.map(function(v,i){
-      var x = xForGroup(i) + groupW/2 - barW/2;
-      var y = yFor(v);
-      var isSel = i===monthIdx;
-      return '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="4" fill="'+(isSel?'var(--accent-strong)':'var(--accent)')+'"/>'+
-        '<text x="'+(x+barW/2)+'" y="'+(y-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+def.fmt(v)+'</text>';
-    }).join('');
-    var linePts = lastYear.map(function(v,i){ return xForGroup(i)+groupW/2+','+yFor(v); }).join(' ');
-    var lineDots = lastYear.map(function(v,i){ return '<circle cx="'+(xForGroup(i)+groupW/2)+'" cy="'+yFor(v)+'" r="3.5" fill="var(--bad)"/>'; }).join('');
-    var labels = KPI_MONTHS_LABEL.map(function(m,i){
-      return '<text x="'+(xForGroup(i)+groupW/2)+'" y="'+(H-10)+'" font-size="11" font-weight="'+(i===monthIdx?'800':'400')+'" fill="'+(i===monthIdx?'var(--accent-strong)':'var(--text-faint)')+'" text-anchor="middle">'+m+(i===monthIdx?' ●':'')+'</text>';
-    }).join('');
-    svg.innerHTML = gridLines + bars +
-      '<polyline points="'+linePts+'" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>' +
-      lineDots + labels;
+    drawBookingsChart('kpi-month-chart', def.values, monthIdx, def.fmt);
   }
 
   function updateKpiMonthSelection(monthIdx){
