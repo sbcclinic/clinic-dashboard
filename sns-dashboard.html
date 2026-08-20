@@ -696,9 +696,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <button data-metric="mysbc">新規MYSBC登録</button>
             </div>
             <div class="chart-legend" style="margin-top:10px">
-              <span><i style="background:var(--accent)"></i>その他の月</span>
+              <span><i style="background:var(--accent)"></i>各月の実績</span>
+              <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
               <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-              <span><i style="background:#f87171"></i>前月</span>
+              <span><i style="background:#f87171"></i>前月（選択中）</span>
             </div>
             <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
             <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前月」の2本棒で実績を比較できます。</p>
@@ -818,9 +819,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="ig-feed-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※IGプロフィール予約数は実測値です（全体KPIシートと共通）。</p>
@@ -856,6 +858,40 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためInstagramトップへ遷移）</p>
           <div class="rank-list" id="ig-reel-rank"></div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>ストーリー分析（参考）<small>フィード投稿とは別に集計。詳細は上部「ストーリー」タブもご覧ください</small></div>
+        <div class="panel-body">
+          <div class="kpi-grid" style="margin-bottom:16px">
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">22件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 17件 <span class="delta up">▲+29.4%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">ストーリー表示回数</div><div class="kpi-value">92,000</div><div class="kpi-sub">前月 78,500 <span class="delta up">▲+17.2%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リンクスタンプタップ数</div><div class="kpi-value">3,850</div><div class="kpi-sub">前月 3,120 <span class="delta up">▲+23.4%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">45本</div><div class="kpi-sub">前月 38本 <span class="delta up">▲+18.4%</span></div></div>
+          </div>
+          <div class="panel-title" style="padding:0 0 8px;border:none">ストーリー企画別 表示回数ランキング（5月）</div>
+          <div class="rank-list" id="ig-story-rank-ref"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元投稿</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>術後の様子と喜びのコメントまとめ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>豊胸のダウンタイム、正直に話します</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
+            <tr><td>20代</td><td>女性</td><td>【Q&amp;A】豊胸のサイズ選び、失敗しないコツ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>症例写真だけじゃわからない触り心地の話</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>カウンセリングで実際に聞かれる質問TOP3</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>【1分でわかる】豊胸の種類まとめ（リール）</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
+            <tr><td>30代</td><td>男性</td><td>術後1週間の腫れの様子（リール）</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>50代</td><td>女性</td><td>よくある質問に即答してみた（リール）</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
       </div>
 
@@ -913,9 +949,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="ig-story-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
@@ -1047,9 +1084,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
@@ -1067,6 +1105,24 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためYouTubeトップへ遷移）</p>
           <div class="rank-list" id="yt-video-rank"></div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>術後面会の様子をお届け！#shorts</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>【男性人気No1】二重シミュレーション</td><td>二重埋没法</td><td>モニター</td></tr>
+            <tr><td>20代</td><td>男性</td><td>【眼瞼下垂セルフチェック】切らずに二重に</td><td>眼瞼下垂</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>主人公想いすぎるキム先生…#shorts</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>【二重埋没で若返り】37歳がキム先生の二重整形に</td><td>二重埋没法</td><td>カウンセリング</td></tr>
+            <tr><td>50代</td><td>女性</td><td>【目元若返り！】たるみシワ改善サーマクール</td><td>眼瞼下垂</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -1173,9 +1229,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数は実測値です（全体KPIシートと共通）。</p>
@@ -1198,6 +1255,21 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="rank-list" id="tt-rank"></div>
           <p style="font-size:12px;color:var(--text-muted);margin:14px 0 0;line-height:1.7">「優しすぎるキム先生…。」が292K回と新たな感情訴求型バズ動画に。患者との関係性を描いたコンテンツが引き続き高い拡散力を持つことが確認された。</p>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>10代</td><td>女性</td><td>15歳主人公と面会😳🌸 #キム先生 #金先生</td><td>カウンセリングのみ</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>優しすぎる…。キム先生…。</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+            <tr><td>30代</td><td>女性</td><td>家族3人でキム先生をご指名くださった理由は？</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。おすすめ規制の影響で母数自体が少ないため件数は僅少です。</p>
       </div>
 
       <div class="grid-2">
@@ -1306,9 +1378,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
@@ -1329,6 +1402,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>費用・比較系キーワード</span><span class="pct">21%</span></div><div class="tsbar"><i style="width:21%"></i></div></div>
           </div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元記事</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>30代</td><td>女性</td><td>豊胸手術の失敗しない選び方 完全ガイド</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>シリコンバッグ vs 脂肪注入 徹底比較</td><td>豊胸（シリコン）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>豊胸手術の値段相場と保険適用について</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>ダウンタイムはどれくらい？豊胸手術後の過ごし方</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -1410,9 +1499,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
@@ -1432,6 +1522,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>他チャネルのリンクから</span><span class="pct">17%</span></div><div class="tsbar"><i style="width:17%"></i></div></div>
           </div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元クーポン/メニュー</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>豊胸カウンセリング初回限定クーポン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>二重埋没法（メニュー詳細）</td><td>二重埋没法</td><td>マイメニュー</td></tr>
+            <tr><td>40代</td><td>女性</td><td>夏の美肌キャンペーン</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>20代</td><td>女性</td><td>モニター募集（豊胸）</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -1526,9 +1632,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>その他の月</span>
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
           <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
@@ -1548,6 +1655,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>お知らせ・季節ネタ</span><span class="pct">22%</span></div><div class="tsbar"><i style="width:22%"></i></div></div>
           </div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元配信</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>30代</td><td>女性</td><td>【期間限定】豊胸手術20%OFFキャンペーン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>今月の症例ピックアップ：豊胸編</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>ポイント消化はお早めに！有効期限のご案内</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>20代</td><td>女性</td><td>夏に向けたダウンタイム別施術ガイド</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -1861,17 +1984,21 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var bars = '';
     values.forEach(function(v, i){
       var isSel = i===monthIdx;
-      if(isSel && i>0){
+      if(i>0){
         var halfW = groupW*0.32, gap = 5;
         var xThis = xForGroup(i) + groupW/2 - halfW - gap/2;
         var xPrev = xForGroup(i) + groupW/2 + gap/2;
         var yThis = yFor(v), prevV = values[i-1], yPrev = yFor(prevV);
-        bars += '<rect x="'+xThis+'" y="'+yThis+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yThis)+'" rx="4" fill="#38bdf8"/>'+
-          '<text x="'+(xThis+halfW/2)+'" y="'+(yThis-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>'+
-          '<text x="'+(xThis+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#38bdf8" text-anchor="middle">今月</text>';
-        bars += '<rect x="'+xPrev+'" y="'+yPrev+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yPrev)+'" rx="4" fill="#f87171"/>'+
-          '<text x="'+(xPrev+halfW/2)+'" y="'+(yPrev-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(prevV)+'</text>'+
-          '<text x="'+(xPrev+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#f87171" text-anchor="middle">先月</text>';
+        var colorThis = isSel ? '#38bdf8' : 'var(--accent)';
+        var colorPrev = isSel ? '#f87171' : 'var(--border-strong)';
+        bars += '<rect x="'+xThis+'" y="'+yThis+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yThis)+'" rx="4" fill="'+colorThis+'"/>'+
+          '<text x="'+(xThis+halfW/2)+'" y="'+(yThis-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>';
+        bars += '<rect x="'+xPrev+'" y="'+yPrev+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yPrev)+'" rx="4" fill="'+colorPrev+'"/>'+
+          '<text x="'+(xPrev+halfW/2)+'" y="'+(yPrev-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(prevV)+'</text>';
+        if(isSel){
+          bars += '<text x="'+(xThis+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#38bdf8" text-anchor="middle">今月</text>'+
+            '<text x="'+(xPrev+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#f87171" text-anchor="middle">先月</text>';
+        }
       } else {
         var barW = groupW*0.4;
         var x = xForGroup(i) + groupW/2 - barW/2;
@@ -2111,13 +2238,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     {t:'症例ビフォーアフター（当日）', v:15900, vLabel:'15.9K', url:IG_URL}
   ]);
 
-  renderRank('ig-story-rank', [
+  var IG_STORY_RANK_DATA = [
     {t:'【質問箱】よくある質問に本気回答', v:18500, vLabel:'18.5K', b:5},
     {t:'カウントダウン告知！残り3日', v:15200, vLabel:'15.2K', b:4},
     {t:'【アンケート】どっちが気になる？', v:13800, vLabel:'13.8K', b:3},
     {t:'術後経過ここまで見せます', v:11900, vLabel:'11.9K', b:2},
     {t:'診察室の裏側スタッフ紹介', v:9600, vLabel:'9.6K', b:2}
-  ]);
+  ];
+  renderRank('ig-story-rank', IG_STORY_RANK_DATA);
+  renderRank('ig-story-rank-ref', IG_STORY_RANK_DATA);
 
   renderRank('yt-shorts-rank', [
     {t:'術後面会の様子をお届け！#shorts', v:8501, vLabel:'8,501', url:YT_URL, b:3},
