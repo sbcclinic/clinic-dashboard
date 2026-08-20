@@ -2033,6 +2033,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var tapsV = series4(1050,1150);
     var bookingsV = series4(42,46);
     var deliveryCountV = series4(15,18);
+    var announcementsV = series4(15,18);
+    var pushTapsV = series4(4200,4900);
     var rateV = bookingsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var clickRateV = tapsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
@@ -2042,6 +2044,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       {key:'taps', label:'クリック数', tag:'サンプル', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
       {key:'clickRate', label:'クリック率', tag:'サンプル', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'announcements', label:'お知らせ配信本数', bar:'var(--app)', values:announcementsV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
+      {key:'pushTaps', label:'プッシュ通知タップ数', tag:'サンプル', bar:'var(--app)', values:pushTapsV, fmt:fmtInt, deltaType:'pct'},
       {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'},
       {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
