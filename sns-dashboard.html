@@ -408,11 +408,9 @@ a.rank-row:hover .rt{color:var(--accent-strong);text-decoration:underline;}
 .funnel-flow{display:inline-flex;align-items:center;gap:0;min-width:100%;padding:4px 2px 12px;}
 .flow-node{display:flex;flex-direction:column;gap:7px;flex:none;width:140px;}
 .flow-node .node-title{font-size:10px;font-weight:800;color:var(--text-muted);text-align:center;letter-spacing:.02em;}
-.tag-sample{font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:4px;white-space:nowrap;}
 .driver-chip{background:var(--surface-muted);border:1px solid var(--border);border-radius:9px;padding:8px 10px;text-align:center;flex:none;}
 .driver-chip .dc-label{display:block;font-size:9.5px;color:var(--text-muted);font-weight:700;margin-bottom:3px;line-height:1.3;}
 .driver-chip .dc-value{display:block;font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2;}
-.driver-chip .tag-sample{background:var(--warn-soft);color:var(--warn);}
 
 .flow-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex:none;width:92px;padding:0 2px;color:var(--text-faint);}
 .flow-arrow .arrow-glyph{font-size:15px;line-height:1;color:var(--text-faint);}
@@ -426,12 +424,15 @@ a.rank-row:hover .rt{color:var(--accent-strong);text-decoration:underline;}
 .fs-card{width:140px;border-radius:10px;padding:11px 12px;color:#fff;background:var(--fill,var(--accent-fill));box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;flex:none;}
 .fs-card .fs-label{font-size:10.3px;font-weight:700;line-height:1.35;}
 .fs-card .fs-value{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums;}
-.fs-card .tag-sample{background:rgba(255,255,255,.28);color:#fff;}
 .fs-mag{height:4px;border-radius:99px;background:var(--surface-muted);overflow:hidden;}
 .fs-mag i{display:block;height:100%;border-radius:99px;background:var(--fill,var(--accent-fill));opacity:.55;}
 .flow-node.final .fs-card{box-shadow:0 0 0 3px var(--accent-soft),var(--shadow);}
 .funnel-note{font-size:11px;color:var(--text-faint);text-align:center;margin:6px 0 0;line-height:1.65;}
 @media (max-width:860px){.flow-node,.fs-card{width:120px;}.flow-arrow{width:64px;}}
+.info-hint{border-bottom:1px dotted var(--text-faint);cursor:help;}
+.global-data-notice{display:flex;align-items:flex-start;gap:10px;background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:12px 16px;margin:0 0 16px;font-size:12.5px;line-height:1.7;color:var(--text);}
+.global-data-notice .gdn-icon{font-size:16px;flex:none;line-height:1.4;}
+.global-data-notice b{color:var(--warn);}
 
 /* ---------- clinic × month compare ---------- */
 .compare-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
@@ -498,6 +499,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
   <main>
 
+    <div class="global-data-notice"><span class="gdn-icon">⚠</span><div><b>このダッシュボードは現在、画面構成・見やすさをご確認いただくためのデモです。</b>表示されている数値はページ内の値も含めすべて仮のものです。内容にご意見があればお寄せください。問題なければ、実際の数値へ順次差し替えていきます。</div></div>
+
     <!-- ============ 1. 全体KPI ============ -->
     <section class="page active" id="page-kpi">
       <div class="page-head">
@@ -558,7 +561,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv" id="main-funnel-conv1">転換 12.0%</span><span class="drop" id="main-funnel-drop1">離脱 88.0%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">クリック数<span class="tag-sample">推定</span></span><span class="fs-value" id="main-funnel-clicks">506</span></div>
+              <div class="fs-card" style="--fill:var(--accent-fill)"><span class="fs-label">クリック数</span><span class="fs-value" id="main-funnel-clicks">506</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--accent-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv" id="main-funnel-conv2">転換 12.1%</span><span class="drop" id="main-funnel-drop2">離脱 87.9%</span></div>
@@ -567,7 +570,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <div class="fs-mag"><i style="width:15%;--fill:var(--accent-fill)"></i></div>
             </div>
           </div></div>
-          <p class="funnel-note">シンプルに「セッション数→クリック数→予約数」の3段階に絞った表示です。セッション数・予約数はSNS全体の実測値、クリック数は参考推定値（セッションのうち何らかのリンクをクリックした割合）です。</p>
+          <p class="funnel-note">シンプルに「セッション数→クリック数→予約数」の3段階に絞った表示です。クリック数はセッションのうち何らかのリンクをクリックした割合から算出しています。</p>
         </div>
       </div>
 
@@ -579,8 +582,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <tbody>
             <tr>
               <td><span class="dot" style="background:var(--app);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>MYSBC公式アプリ</td>
-              <td>28,400</td><td>1,150<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
-              <td>46件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>28,400</td><td>1,150</td>
+              <td>46件</td>
               <td><span class="delta up">▲+8.8%</span></td>
               <td class="cur">0.162%</td>
               <td><span class="pill good">効果大・最優先強化</span></td>
@@ -588,22 +591,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <tr>
               <td><span class="dot" style="background:var(--mail);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>メルマガ</td>
               <td>42,000</td><td>1,320</td>
-              <td>31件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>31件</td>
               <td><span class="delta up">▲+1.9%</span></td>
               <td class="cur">0.074%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--seo);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>特集記事(SEO)</td>
-              <td>38,500</td><td>480<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
-              <td>14件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>38,500</td><td>480</td>
+              <td>14件</td>
               <td><span class="delta up">▲+27.3%</span></td>
               <td class="cur">0.036%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagramフィード</td>
-              <td>18.4万</td><td>890<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>18.4万</td><td>890</td>
               <td>58件</td>
               <td><span class="delta down">▼-6.5%</span></td>
               <td class="cur">0.032%</td>
@@ -611,23 +614,23 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagramストーリー</td>
-              <td>92,000<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>520<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
-              <td>22件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>92,000</td><td>520</td>
+              <td>22件</td>
               <td><span class="delta up">▲+29.4%</span></td>
               <td class="cur">0.024%</td>
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--yt);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>YouTube</td>
-              <td>20.8万</td><td>640<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
-              <td>9件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>20.8万</td><td>640</td>
+              <td>9件</td>
               <td><span class="delta up">▲+28.6%</span></td>
               <td class="cur">0.004%</td>
               <td><span class="pill warn">経過観察・要改善</span></td>
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--tt);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>TikTok</td>
-              <td>1.6M</td><td>210<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td>
+              <td>1.6M</td><td>210</td>
               <td>3件</td>
               <td><span class="delta down">▼-62.5%</span></td>
               <td class="cur">0.0002%</td>
@@ -657,7 +660,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <tr><td>SNS予約貢献数</td><td>75</td><td>79</td><td>85</td><td class="cur">61</td><td><span class="delta down">▼-28.2%</span></td><td><span class="delta down">▼-9%</span></td><td><span class="pill bad">大幅減</span></td></tr>
               <tr><td>カウンセリング予約</td><td>11</td><td>5</td><td>5</td><td class="cur">5</td><td><span class="delta flat">横ばい</span></td><td><span class="delta down">▼-31%</span></td><td><span class="pill bad">低水準継続</span></td></tr>
               <tr><td>モニター予約</td><td>39</td><td>50</td><td>41</td><td class="cur">23</td><td><span class="delta down">▼-43.9%</span></td><td><span class="delta down">▼-19%</span></td><td><span class="pill bad">大幅減</span></td></tr>
-              <tr><td>脱毛レーザー予約<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>250</td><td>265</td><td>280</td><td class="cur">296</td><td><span class="delta up">▲+5.7%</span></td><td><span class="delta up">▲+15%</span></td><td><span class="pill good">順調</span></td></tr>
+              <tr><td>脱毛レーザー予約</td><td>250</td><td>265</td><td>280</td><td class="cur">296</td><td><span class="delta up">▲+5.7%</span></td><td><span class="delta up">▲+15%</span></td><td><span class="pill good">順調</span></td></tr>
               <tr><td>マイメニュー予約</td><td>24</td><td>22</td><td>36</td><td class="cur">19</td><td><span class="delta down">▼-47.2%</span></td><td><span class="delta up">▲+4%</span></td><td><span class="pill bad">大幅減</span></td></tr>
               <tr><td>新規MYSBC登録</td><td>12</td><td>9</td><td>16</td><td class="cur">14</td><td><span class="delta down">▼-12.5%</span></td><td><span class="delta up">▲+8%</span></td><td><span class="pill warn">微減</span></td></tr>
             </tbody>
@@ -729,10 +732,23 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <h4>🤖 AI分析</h4>
           <p>セッション数・アクティブユーザーは前月比でそれぞれ+6.5%・+12.0%と回復傾向にありますが、SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。Instagramプロフィールの予約率は4.25%と引き続き高水準を維持しており、予約獲得チャネルとしての質は崩れていません。一方でTikTok経由の予約が3件（前月8件）と急減しており、おすすめ規制の影響による露出機会の減少が全体予約数を押し下げた主因と考えられます。カウンセリング予約は5件のまま3ヶ月横ばいが続いており、高単価施術への入口強化が引き続き最重要課題です。</p>
         </div>
+
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
+          <div class="panel-body">
+            <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
+            <ul class="todo">
+              <li><span class="pdot high"></span>TikTok経由の予約急減分を補うため、アプリ・メルマガでの配信量を6月中に増やし、SNS予約貢献数の下げ止まりを図る</li>
+              <li><span class="pdot mid"></span>カウンセリング予約が3ヶ月横ばいのため、高単価施術（豊胸カウンセリング）への入口となる投稿・導線を各チャネルで強化する</li>
+              <li><span class="pdot mid"></span>YouTube・TikTok・SEOで未整備のタップ計測の導入を進め、来月以降はファネルの精度を上げる</li>
+              <li><span class="pdot low"></span>媒体別サマリーの「評価」欄をもとに、TikTokへの投稿量配分を見直すかどうかを役職者・ドクターと6月中に協議する</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div id="kpi-year-view" style="display:none">
-        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。実データ接続後、直近12ヶ月の実績に置き換わります。</div></div>
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
 
         <div class="panel">
           <div class="panel-title"><span class="bar"></span>年間トレンド（サンプル）<small>1月〜12月・当年 vs 前年</small></div>
@@ -763,7 +779,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。予約率・予約数のみ全体KPIシートの実数値、その他はサンプル値です。フィードとストーリーで指標が異なるため、上部の切替でご覧いただけます。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。フィードとストーリーで指標が異なるため、上部の切替でご覧いただけます。</div></div>
 
       <div id="ig-feed-view">
       <div class="seg" id="ig-feed-month-seg" style="margin-bottom:14px">
@@ -788,7 +804,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <div class="node-title">エンゲージメント</div>
               <div class="driver-chip"><span class="dc-label">保存数</span><span class="dc-value">3,050</span></div>
               <div class="driver-chip"><span class="dc-label">シェア数</span><span class="dc-value">870</span></div>
-              <div class="driver-chip"><span class="dc-label">いいね数</span><span class="dc-value">12,400<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">いいね数</span><span class="dc-value">12,400</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">保存・シェア↑でリーチ↑</span></div>
             <div class="flow-node">
@@ -802,7 +818,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 14.5%</span><span class="drop">離脱 85.5%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">890<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">890</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--ig-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 6.5%</span><span class="drop">離脱 93.5%</span></div>
@@ -825,7 +841,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="ig-feed-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※IGプロフィール予約数は実測値です（全体KPIシートと共通）。</p>
         </div>
       </div>
 
@@ -849,10 +864,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>リール分析（参考）<small>フィード投稿とは別に集計。全項目サンプル値</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">6件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 4件 <span class="delta up">▲+50.0%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">予約率</div><div class="kpi-value">0.05%<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 0.04% <span class="delta up">▲+0.01pt</span></div></div>
-            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">再生数</div><div class="kpi-value">12.8万<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 9.6万 <span class="delta up">▲+33.3%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">10本<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 6本 <span class="delta up">▲+66.7%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">6件</div><div class="kpi-sub">前月 4件 <span class="delta up">▲+50.0%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">予約率</div><div class="kpi-value">0.05%</div><div class="kpi-sub">前月 0.04% <span class="delta up">▲+0.01pt</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">再生数</div><div class="kpi-value">12.8万</div><div class="kpi-sub">前月 9.6万 <span class="delta up">▲+33.3%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">10本</div><div class="kpi-sub">前月 6本 <span class="delta up">▲+66.7%</span></div></div>
           </div>
           <div class="panel-title" style="padding:0 0 8px;border:none">リール再生数ランキング（5月）</div>
           <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためInstagramトップへ遷移）</p>
@@ -864,7 +879,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="panel-title"><span class="bar"></span>ストーリー分析（参考）<small>フィード投稿とは別に集計。詳細は上部「ストーリー」タブもご覧ください</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">22件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">前月 17件 <span class="delta up">▲+29.4%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">22件</div><div class="kpi-sub">前月 17件 <span class="delta up">▲+29.4%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">ストーリー表示回数</div><div class="kpi-value">92,000</div><div class="kpi-sub">前月 78,500 <span class="delta up">▲+17.2%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リンクスタンプタップ数</div><div class="kpi-value">3,850</div><div class="kpi-sub">前月 3,120 <span class="delta up">▲+23.4%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">45本</div><div class="kpi-sub">前月 38本 <span class="delta up">▲+18.4%</span></div></div>
@@ -910,34 +925,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="funnel-scroll"><div class="funnel-flow">
             <div class="flow-node">
               <div class="node-title">投稿量</div>
-              <div class="driver-chip"><span class="dc-label">投稿本数</span><span class="dc-value">45本<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週10.5本<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">投稿本数</span><span class="dc-value">45本</span></div>
+              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週10.5本</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">投稿↑で返信・反応↑</span></div>
             <div class="flow-node">
               <div class="node-title">エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">返信数（DM）</span><span class="dc-value">210<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">質問箱回答数</span><span class="dc-value">640<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">リポスト数</span><span class="dc-value">95<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">返信数（DM）</span><span class="dc-value">210</span></div>
+              <div class="driver-chip"><span class="dc-label">質問箱回答数</span><span class="dc-value">640</span></div>
+              <div class="driver-chip"><span class="dc-label">リポスト数</span><span class="dc-value">95</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">反応↑で表示回数↑</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">ストーリー表示回数</span><span class="fs-value">92,000<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">ストーリー表示回数</span><span class="fs-value">92,000</span></div>
               <div class="fs-mag"><i style="width:100%;--fill:var(--ig-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-warn">転換 4.2%</span><span class="drop">離脱 95.8%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">リンクスタンプタップ数</span><span class="fs-value">3,850<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">リンクスタンプタップ数</span><span class="fs-value">3,850</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--ig-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 13.5%</span><span class="drop">離脱 86.5%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">520<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">520</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--ig-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-warn">転換 4.2%</span><span class="drop">離脱 95.8%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約数</span><span class="fs-value">22件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--ig-fill)"><span class="fs-label">予約数</span><span class="fs-value">22件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--ig-fill)"></i></div>
             </div>
           </div></div>
@@ -955,7 +970,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="ig-story-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -984,11 +998,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <tr class="self-row"><td>自院（キム先生）</td><td>週5〜6本</td><td>症例解説中心</td><td>3.8%</td><td>612</td><td>58件</td><td>3,920</td></tr>
             <tr><td>競合A院（豊胸専門医）</td><td>週3〜4本</td><td>症例のみ中心</td><td>2.9%</td><td>480</td><td>41件</td><td>2,860</td></tr>
             <tr><td>競合B院（総合美容医）</td><td>週7本以上</td><td>トレンド動画中心</td><td>4.6%</td><td>705</td><td>52件</td><td>5,140</td></tr>
-            <tr><td>競合C院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週2〜3本</td><td>症例＋解説中心</td><td>3.1%</td><td>390</td><td>33件</td><td>2,410</td></tr>
-            <tr><td>競合D院（総合美容医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週4〜5本</td><td>ドクター人柄中心</td><td>3.4%</td><td>455</td><td>37件</td><td>2,980</td></tr>
-            <tr><td>競合E院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週1〜2本</td><td>症例のみ中心</td><td>2.4%</td><td>210</td><td>18件</td><td>1,350</td></tr>
-            <tr><td>競合F院（総合美容医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週6本以上</td><td>トレンド動画中心</td><td>5.1%</td><td>820</td><td>60件</td><td>6,020</td></tr>
-            <tr><td>競合G院（豊胸専門医）<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></td><td>週3本</td><td>Q&amp;A形式中心</td><td>3.6%</td><td>510</td><td>44件</td><td>3,150</td></tr>
+            <tr><td>競合C院（豊胸専門医）</td><td>週2〜3本</td><td>症例＋解説中心</td><td>3.1%</td><td>390</td><td>33件</td><td>2,410</td></tr>
+            <tr><td>競合D院（総合美容医）</td><td>週4〜5本</td><td>ドクター人柄中心</td><td>3.4%</td><td>455</td><td>37件</td><td>2,980</td></tr>
+            <tr><td>競合E院（豊胸専門医）</td><td>週1〜2本</td><td>症例のみ中心</td><td>2.4%</td><td>210</td><td>18件</td><td>1,350</td></tr>
+            <tr><td>競合F院（総合美容医）</td><td>週6本以上</td><td>トレンド動画中心</td><td>5.1%</td><td>820</td><td>60件</td><td>6,020</td></tr>
+            <tr><td>競合G院（豊胸専門医）</td><td>週3本</td><td>Q&amp;A形式中心</td><td>3.6%</td><td>510</td><td>44件</td><td>3,150</td></tr>
           </tbody>
         </table>
         </div>
@@ -1016,6 +1030,19 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>フィードはリーチ数が前月比+15.7%と伸長し、プロフィール流入・保存数も改善傾向にあります。予約率4.25%は依然として高水準ですが、予約数は58件（▼6.5%）とやや減少しており、リーチの伸びを予約数の伸びに変換しきれていません。ストーリーはリンクスタンプという直接的な導線を持つため「表示→タップ」以降の転換率がフィードより高く、表示回数自体を伸ばせば予約数の上積みが期待できます。フィードで信頼を作り、ストーリーで即時の行動を促すという役割分担を意識した運用が次月の伸びしろです。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
+        <div class="panel-body">
+          <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
+          <ul class="todo">
+            <li><span class="pdot high"></span>フィードのリーチ増加を予約数に繋げるため、投稿末尾やキャプションに予約導線（プロフィールリンク誘導文言）を明示的に追加する</li>
+            <li><span class="pdot mid"></span>ストーリーの冒頭2枚以内で要点が伝わる構成に見直し、完了率の低下（71.2%→68.4%）に歯止めをかける</li>
+            <li><span class="pdot mid"></span>フィード・ストーリーの予約タップ数の計測タグを導入し、サンプル値から実測値に置き換える</li>
+            <li><span class="pdot low"></span>反応の良かった投稿（Q&amp;A形式、症例のダウンタイム紹介）の企画を6月も継続する</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -1046,14 +1073,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="flow-node">
               <div class="node-title">投稿量</div>
               <div class="driver-chip"><span class="dc-label">公開Shorts本数</span><span class="dc-value">31本</span></div>
-              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週7.2本<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週7.2本</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">Shorts↑で高評価・共有↑</span></div>
             <div class="flow-node">
               <div class="node-title">エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">保存数（再生リスト追加）</span><span class="dc-value">260<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">シェア数</span><span class="dc-value">380<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">高評価（いいね）数</span><span class="dc-value">4,200<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">保存数（再生リスト追加）</span><span class="dc-value">260</span></div>
+              <div class="driver-chip"><span class="dc-label">シェア数</span><span class="dc-value">380</span></div>
+              <div class="driver-chip"><span class="dc-label">高評価（いいね）数</span><span class="dc-value">4,200</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">高評価・共有↑で視聴↑</span></div>
             <div class="flow-node">
@@ -1062,17 +1089,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 6.0%</span><span class="drop">離脱 94.0%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">チャンネルページ表示数</span><span class="fs-value">12,400<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">チャンネルページ表示数</span><span class="fs-value">12,400</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--yt-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-warn">転換 5.2%</span><span class="drop">離脱 94.8%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">概要欄予約タップ数</span><span class="fs-value">640<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">概要欄予約タップ数</span><span class="fs-value">640</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--yt-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-warn">転換 1.4%</span><span class="drop">離脱 98.6%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">予約数</span><span class="fs-value">9件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--yt-fill)"><span class="fs-label">予約数</span><span class="fs-value">9件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--yt-fill)"></i></div>
             </div>
           </div></div>
@@ -1090,7 +1117,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1190,13 +1216,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="funnel-scroll"><div class="funnel-flow">
             <div class="flow-node">
               <div class="node-title">投稿量</div>
-              <div class="driver-chip"><span class="dc-label">投稿本数</span><span class="dc-value">22本<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週5.1本<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">投稿本数</span><span class="dc-value">22本</span></div>
+              <div class="driver-chip"><span class="dc-label">投稿頻度</span><span class="dc-value">週5.1本</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">投稿↑でいいね・シェア↑</span></div>
             <div class="flow-node">
               <div class="node-title">エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">保存数</span><span class="dc-value">1,240<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">保存数</span><span class="dc-value">1,240</span></div>
               <div class="driver-chip"><span class="dc-label">シェア数</span><span class="dc-value">205</span></div>
               <div class="driver-chip"><span class="dc-label">いいね数</span><span class="dc-value">26,000</span></div>
             </div>
@@ -1212,7 +1238,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-bad">転換 0.4%</span><span class="drop">離脱 99.6%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--tt-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">210<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--tt-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">210</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--tt-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-warn">転換 1.4%</span><span class="drop">離脱 98.6%</span></div>
@@ -1235,7 +1261,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数は実測値です（全体KPIシートと共通）。</p>
         </div>
       </div>
 
@@ -1329,7 +1354,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>特集記事(SEO)は今回新たに追加した分析ビューです。検索流入セッション数・掲載順位など一部指標を除き、全体的にサンプル値でのたたき台となります。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>特集記事(SEO)は今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
       <div class="kpi-grid" id="seo-kpi-grid"></div>
 
@@ -1345,9 +1370,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">記事数↑で滞在・シェア↑</span></div>
             <div class="flow-node">
               <div class="node-title">記事エンゲージメント</div>
-              <div class="driver-chip"><span class="dc-label">平均滞在時間</span><span class="dc-value">2:48<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">内部リンククリック数</span><span class="dc-value">1,860<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">SNSシェア数</span><span class="dc-value">95<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">平均滞在時間</span><span class="dc-value">2:48</span></div>
+              <div class="driver-chip"><span class="dc-label">内部リンククリック数</span><span class="dc-value">1,860</span></div>
+              <div class="driver-chip"><span class="dc-label">SNSシェア数</span><span class="dc-value">95</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">エンゲージ↑で検索流入↑</span></div>
             <div class="flow-node">
@@ -1356,17 +1381,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 5.6%</span><span class="drop">離脱 94.4%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">記事内CTAクリック数</span><span class="fs-value">2,150<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">記事内CTAクリック数</span><span class="fs-value">2,150</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--seo-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 22.3%</span><span class="drop">離脱 77.7%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">480<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value">480</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--seo-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-bad">転換 2.9%</span><span class="drop">離脱 97.1%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">予約数</span><span class="fs-value">14件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--seo-fill)"><span class="fs-label">予約数</span><span class="fs-value">14件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--seo-fill)"></i></div>
             </div>
           </div></div>
@@ -1384,7 +1409,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1443,6 +1467,19 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <h4>🤖 AI分析</h4>
         <p>検索流入は前月比+12.6%、平均掲載順位も改善しており、SEO施策自体は順調に成果を出しています。一方で「記事を読む→予約する」までの導線は他チャネルに比べて弱く、特に記事内CTAクリック以降が実測データを欠くため改善余地の特定が難しい状態です。まずはCTAクリックのタグ計測を導入し、どの記事のどの位置でクリックが発生しているかを可視化することが次の一手になります。</p>
       </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
+        <div class="panel-body">
+          <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
+          <ul class="todo">
+            <li><span class="pdot high"></span>記事内CTAクリックの計測タグを導入し、どの記事のどの位置でクリックが発生しているかを可視化する</li>
+            <li><span class="pdot mid"></span>予約転換が高い「費用・比較系」記事の比率を上げるため、6月の新規記事のうち最低1〜2本を費用・比較テーマにする</li>
+            <li><span class="pdot mid"></span>「タップ→予約」の転換率がInstagramより低い要因を探るため、記事内の予約導線（ボタン位置・文言）を見直す</li>
+            <li><span class="pdot low"></span>平均掲載順位が改善した記事のタイトル・見出しパターンを他記事にも横展開する</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 6. MYSBC公式アプリ ============ -->
@@ -1463,7 +1500,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>MYSBC公式アプリは今回新たに追加した分析ビューです。クーポン表示数は連携予定の実測値イメージ、予約タップ数以降・合計配信者数はサンプル／推定値です（合計配信者数はお知らせ開封数÷開封率から逆算した推定値）。4月の値は実測データが少ないため一部推定を含みます。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>MYSBC公式アプリは今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
       <div class="kpi-grid" id="page-app-kpi-grid"></div>
 
@@ -1477,17 +1514,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">新規インストールが配信対象の母数を拡大</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">合計配信者数<span class="tag-sample">推定</span></span><span class="fs-value" id="app-fs-subscribers">49,680</span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">合計配信者数</span><span class="fs-value" id="app-fs-subscribers">49,680</span></div>
               <div class="fs-mag"><i style="width:55%;--fill:var(--app-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good" id="app-conv-1">転換 2.3%</span><span class="drop" id="app-drop-1">離脱 97.7%</span></div>
             <div class="flow-node">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value" id="app-fs-taps">1,150<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約タップ数</span><span class="fs-value" id="app-fs-taps">1,150</span></div>
               <div class="fs-mag"><i style="width:30%;--fill:var(--app-fill)"></i></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good" id="app-conv-2">転換 4.0%</span><span class="drop" id="app-drop-2">離脱 96.0%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約数</span><span class="fs-value" id="app-fs-bookings">46件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--app-fill)"><span class="fs-label">予約数</span><span class="fs-value" id="app-fs-bookings">46件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--app-fill)"></i></div>
             </div>
           </div></div>
@@ -1505,7 +1542,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1544,7 +1580,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="callout good">
           <h4>✅ よかった点</h4>
           <ul>
-            <li>合計配信者数が約49,040人→49,680人（推定、+1.3%）に増加。7日後継続利用率も51.8%→54.2%に改善</li>
+            <li>合計配信者数が約49,040人→49,680人（+1.3%）に増加。7日後継続利用率も51.8%→54.2%に改善</li>
             <li>クーポン/施術ページ表示数が+14.3%と伸長。プッシュ通知開封率も29.0%→31.4%に改善</li>
             <li>既存顧客チャネルのため予約タップ→予約の転換率が全チャネル中で最も高い水準</li>
           </ul>
@@ -1562,6 +1598,19 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>MYSBC公式アプリは既存顧客・来院検討済み層が中心のため、他チャネルと比べて予約への転換効率が際立って高いことが見込まれます。一方で新規インストール数の伸びが小さく、母数（アプリ利用者数）自体を増やす打ち手が手薄です。SNS・SEO・メルマガの各ページにアプリダウンロードへの誘導を明示的に配置し、「認知チャネルで集めた興味をアプリに集約し、アプリ内で予約に変換する」導線を強化することが次の成長ドライバーになります。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
+        <div class="panel-body">
+          <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
+          <ul class="todo">
+            <li><span class="pdot high"></span>SNS・SEO・メルマガの各ページにアプリダウンロード誘導リンクを明示的に設置し、新規インストール数を増やす</li>
+            <li><span class="pdot mid"></span>予約タップ数・予約数の計測タグをアプリ内に実装し、サンプル値から実測値に置き換える</li>
+            <li><span class="pdot mid"></span>起動きっかけの他チャネル経由比率（17%）を踏まえ、メルマガ・SNS投稿からのアプリ誘導文言を強化する</li>
+            <li><span class="pdot low"></span>7日後継続利用率の改善（51.8%→54.2%）につながった配信内容を分析し、6月の配信企画に反映する</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -1583,7 +1632,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>メルマガは今回新たに追加した分析ビューです。配信数・開封数は配信システムとの連携イメージ、予約タップ数以降はサンプル値です。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>メルマガは今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
       <div class="kpi-grid" id="mail-kpi-grid"></div>
 
@@ -1593,15 +1642,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="funnel-scroll"><div class="funnel-flow">
             <div class="flow-node">
               <div class="node-title">配信量</div>
-              <div class="driver-chip"><span class="dc-label">配信本数</span><span class="dc-value">8本<span class="tag-sample">サンプル</span></span></div>
-              <div class="driver-chip"><span class="dc-label">配信頻度</span><span class="dc-value">週1.9本<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">配信本数</span><span class="dc-value">8本</span></div>
+              <div class="driver-chip"><span class="dc-label">配信頻度</span><span class="dc-value">週1.9本</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">配信↑でリストが育つ</span></div>
             <div class="flow-node">
               <div class="node-title">リスト健全性</div>
-              <div class="driver-chip"><span class="dc-label">新規登録数</span><span class="dc-value">320人<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">新規登録数</span><span class="dc-value">320人</span></div>
               <div class="driver-chip"><span class="dc-label">平均開封率</span><span class="dc-value">28.1%</span></div>
-              <div class="driver-chip"><span class="dc-label">配信停止率</span><span class="dc-value">0.8%<span class="tag-sample">サンプル</span></span></div>
+              <div class="driver-chip"><span class="dc-label">配信停止率</span><span class="dc-value">0.8%</span></div>
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="arrow-text">リストが育つと到達数が増える</span></div>
             <div class="flow-node">
@@ -1620,7 +1669,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </div>
             <div class="flow-arrow"><span class="arrow-glyph">→</span><span class="conv conv-good">転換 2.3%</span><span class="drop">離脱 97.7%</span></div>
             <div class="flow-node final">
-              <div class="fs-card" style="--fill:var(--mail-fill)"><span class="fs-label">予約数</span><span class="fs-value">31件<span class="tag-sample">サンプル</span></span></div>
+              <div class="fs-card" style="--fill:var(--mail-fill)"><span class="fs-label">予約数</span><span class="fs-value">31件</span></div>
               <div class="fs-mag"><i style="width:15%;--fill:var(--mail-fill)"></i></div>
             </div>
           </div></div>
@@ -1638,7 +1687,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">※予約数はサンプル値です。2月・3月は4月・5月の実績から推定した値です。</p>
         </div>
       </div>
 
@@ -1696,6 +1744,19 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <h4>🤖 AI分析</h4>
         <p>メルマガは既存リストへの配信という性質上、開封・クリックの転換率が高く、少ない到達数でも安定して予約を獲得できているチャネルです。開封率・クリック率が両方改善傾向にあり、件名や配信内容の見直しが着実に効果を出しています。一方でリスト自体の増加ペースが緩やかなため、他チャネル（SNS・SEO・アプリ）からのメルマガ登録誘導を強化し、母数を増やすことが今後の成長余地です。</p>
       </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
+        <div class="panel-body">
+          <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
+          <ul class="todo">
+            <li><span class="pdot high"></span>予約数の計測タグを予約ページ側に実装し、サンプル値から実測値に置き換える</li>
+            <li><span class="pdot mid"></span>配信リストの増加ペースを上げるため、SNS・SEO・アプリからのメルマガ登録導線を強化する</li>
+            <li><span class="pdot mid"></span>キャンペーン・お得情報系（45%）に偏っている配信内容に、症例紹介・Q&amp;A系など新しい切り口を1〜2本追加する</li>
+            <li><span class="pdot low"></span>開封率・クリック率が改善した件名パターンを蓄積し、6月配信のテンプレートに反映する</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 8. クリニック比較 ============ -->
@@ -1707,7 +1768,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>キム先生（新宿院・豊胸領域）以外のドクター・院公式アカウント、および1月分の数値は比較機能のデモ用に追加した参考値です。実データ接続時は各院・各アカウントの実績に置き換わります。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>キム先生（新宿院・豊胸領域）以外のドクター・院公式アカウント、および1月分の数値は、比較機能の見え方をご覧いただくために追加した参考値です。キム先生分も含め、この画面の数値はすべて仮の値です。</div></div>
 
       <div class="compare-layout">
         <div class="compare-main">
@@ -1839,7 +1900,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">総視聴回数</div><div class="kpi-value">20.8万</div><div class="kpi-sub">前月 15.9万 <span class="delta up">▲+30.8%</span></div></div>
             <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">Shorts視聴回数</div><div class="kpi-value">16.9万</div><div class="kpi-sub">前月 11.8万 <span class="delta up">▲+43.2%</span></div></div>
             <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">チャンネル登録増</div><div class="kpi-value">+94人</div><div class="kpi-sub">前月 +98人 <span class="delta flat">▼微減</span></div></div>
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">9件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span></div><div class="kpi-sub">公開Shorts本数：31本（前月9本）</div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">9件</div><div class="kpi-sub">公開Shorts本数：31本（前月9本）</div></div>
           </div>
           <div style="font-size:12.5px;font-weight:800;color:var(--tt);margin-bottom:10px">🎵 TikTok（認知拡大は継続、予約転換に課題）</div>
           <div class="kpi-grid">
@@ -1923,6 +1984,57 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   function fmtCount(v,suf){ return Math.round(v)+(suf||'件'); }
   function fmtHon(v,d){ return v.toFixed(d==null?0:d)+'本'; }
 
+  function escAttr(s){ return String(s).replace(/"/g,'&quot;'); }
+
+  /* 指標定義ノート（素案）に基づく「なぜこの数字を見るのか」の要約。
+     指標名（表示ラベル）をキーに一致した項目だけ、見出しに説明を付ける。 */
+  var HINTS = {
+    'セッション数（SNS）': '予約の母数となる入口の量です。ここが縮小すると、予約率が良くても予約の絶対数は増えません。',
+    'アクティブユーザー': 'セッション数と連動する指標で、実際に活動したユーザーの規模を示します。',
+    '予約数': 'SNS経由の予約という結果そのものです。効率（予約率）とあわせて見ることで、媒体ごとの評価がしやすくなります。',
+    '予約率': 'セッション数のうち何%が予約に至ったかという導線の質を示す指標です。件数だけでなく効率で見ることで、他媒体・他院との比較がしやすくなります。',
+    'カウンセリング予約': '高単価施術（豊胸など）への入口となる予約です。ここが細ると、将来の売上の入り口が狭まっている可能性があります。',
+    'モニター予約': '予約種別の一つです。種別ごとに追うことで、特定施術への偏りがないかを確認できます。',
+    'マイメニュー予約': '予約種別の一つです。種別ごとの構成比を見ることで、施術メニューの偏りを把握できます。',
+    '新規MYSBC登録': '単発の接触で終わらせず、継続的な接点に変えられているかを示す指標です。',
+    'クリック数': 'セッションの中で実際に行動（リンククリック等）まで進んだ数です。ここが低ければ、見られているが興味を持たれていない可能性があります。',
+    'クリック率': '通知や画面から、次のアクション（クーポン・施術ページ等）にどれだけ進んだかを示す指標です。',
+    'クリック率（CTR）': '開封された本文の内容・訴求がどれだけ響いたかを示す指標です。',
+    '予約貢献率': '全体予約のうち、この媒体が何%を稼いでいるかを示す指標です。効率（予約率）だけでなく、量的なインパクトを見るために使います。',
+    '配信本数': '配信の運用量そのものです。少なすぎれば接点不足、多すぎれば配信停止・反応低下を招く可能性があります。',
+    'お知らせ配信本数': '配信の運用量の内訳です。他の配信本数と合わせて量を判断します。',
+    'プッシュ通知タップ数': '配信した通知が実際に開かれたかという一次反応です。低い場合は通知文言・配信タイミングの見直しが必要というサインになります。',
+    '新規インストール数': 'アプリという母数そのものの拡大ペースです。SNS・SEO側からのアプリ誘導が機能しているかの裏付けにもなります。',
+    'リーチ数': 'フォロワー以外にどれだけ新しく届いているかを示す、認知の広がりの指標です。',
+    'フォロワー純増': '一過性の閲覧で終わらず、関係として蓄積されたかどうかを示す指標です。',
+    '保存数': '「いいね」より一段強い反応で、コンテンツの実用性・共感度を測る指標です。',
+    'シェア数': '投稿がどれだけ拡散されたかを示す指標です。感情に刺さった投稿ほどシェアされやすい傾向があります。',
+    '投稿本数': '運用量そのものです。他の指標と合わせて見ることで、投稿を増やせば伸びる段階か、質を見直す段階かを判断できます。',
+    'ストーリー表示回数': 'ストーリーがどれだけ表示されたかを示す量の指標です。',
+    'リンクスタンプタップ数': 'ストーリーから次のアクションへ進んだ数です。表示回数と合わせて見ることで導線の効率がわかります。',
+    '返信数（DM）': '投稿への反応の中でも、直接のコミュニケーションに至った数です。',
+    '投稿頻度': '一定期間あたりの投稿量です。他チャネルや他院との運用量の比較に使います。',
+    '総視聴回数': '視聴の総量です。ここが伸びているかで認知の広がりを判断します。',
+    '月間視聴者数': '視聴回数は「延べ」の数字のため、実際に何人に届いているかを見るための実人数の指標です。',
+    'チャンネル登録増': '見ただけで終わらず「また見たい」と思われたかというファン化の指標です。',
+    'Shorts視聴回数': 'Shorts頼みで伸びているのか、コンテンツ配分を判断するための指標です。',
+    '通常動画視聴': '長尺コンテンツも育っているかを見るための指標です。',
+    'インプレッション数': 'アルゴリズムからどれだけおすすめ表示されているかを示す指標です。伸びれば能動的な集客をしなくても露出が増えている状態と判断できます。',
+    'フォロワー総数': '投稿ごとの瞬間的なバズではなく、蓄積されたファン基盤の大きさを示します。',
+    '投稿視聴数': '認知拡大の規模そのものです。拡散力が強い媒体ほど急伸・急落しやすいため、頻繁な確認が有効です。',
+    'いいね': 'どの投稿が感情に刺さったかを見る指標の一つです。',
+    'コメント': '視聴者の反応の中でも、能動的な関与度が高い指標です。',
+    'シェア': '投稿がどれだけ拡散されたかを示す指標です。',
+    'セッション数': '予約の母数となる入口の量です。ここが縮小すると、効率（予約率）が良くても予約の絶対数は増えません。',
+    '検索表示回数': '検索エンジン上でどれだけ表示されているかを示す競争力の指標です。',
+    '公開記事本数': '検索流入を増やすためのコンテンツ資産の増加ペースです。',
+    '更新頻度': 'コンテンツを更新するペースです。検索エンジンからの評価にも影響します。',
+    '合計配信者数': '情報を届けられる対象の規模です。新規インストールがそのまま積み上がっているかを確認する指標です。',
+    '開封数': '配信が実際に開かれたかを示す、件名・配信タイミングの効果が最も表れる指標です。',
+    '開封率': '配信数に対して何%が開封されたかを示す指標です。低い場合は本文より先に件名を見直すべきというサインになります。',
+    '配信到達率': '送った配信が迷惑メール判定などで弾かれず、相手に届いているかを示す、リストの健全性の指標です。'
+  };
+
   function fmtDeltaPct(prev, cur){
     if(prev==null) return '<span class="delta flat">基準月</span>';
     var pct = (cur-prev)/prev*100;
@@ -1963,8 +2075,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       } else {
         sub = '前月 '+m.fmt(prev)+' '+fmtDeltaPct(prev,cur);
       }
-      var tag = m.tag ? '<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">'+m.tag+'</span>' : '';
-      return '<div class="kpi-card" style="--bar:'+m.bar+'"><div class="kpi-label">'+m.label+'</div><div class="kpi-value">'+m.fmt(cur)+tag+'</div><div class="kpi-sub">'+sub+'</div></div>';
+      var hint = HINTS[m.label] || m.hint;
+      var labelHtml = hint ? '<div class="kpi-label info-hint" title="'+escAttr(hint)+'">'+m.label+'</div>' : '<div class="kpi-label">'+m.label+'</div>';
+      return '<div class="kpi-card" style="--bar:'+m.bar+'">'+labelHtml+'<div class="kpi-value">'+m.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div></div>';
     }).join('');
   }
 
@@ -2039,23 +2152,23 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var clickRateV = tapsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
-      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'taps', label:'クリック数', tag:'サンプル', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
-      {key:'clickRate', label:'クリック率', tag:'サンプル', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'taps', label:'クリック数', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
+      {key:'clickRate', label:'クリック率', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'announcements', label:'お知らせ配信本数', bar:'var(--app)', values:announcementsV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'pushTaps', label:'プッシュ通知タップ数', tag:'サンプル', bar:'var(--app)', values:pushTapsV, fmt:fmtInt, deltaType:'pct'},
+      {key:'pushTaps', label:'プッシュ通知タップ数', bar:'var(--app)', values:pushTapsV, fmt:fmtInt, deltaType:'pct'},
       {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('page-app-kpi-grid', metrics, monthIdx);
       var newi = newinstallV[monthIdx], sub = subscribersV[monthIdx], taps = tapsV[monthIdx], book = bookingsV[monthIdx];
       document.getElementById('app-fs-newinstall').textContent = fmtInt(newi);
       document.getElementById('app-fs-subscribers').textContent = fmtInt(sub);
-      document.getElementById('app-fs-taps').innerHTML = fmtInt(taps)+'<span class="tag-sample">サンプル</span>';
-      document.getElementById('app-fs-bookings').innerHTML = fmtCount(book)+'<span class="tag-sample">サンプル</span>';
+      document.getElementById('app-fs-taps').innerHTML = fmtInt(taps);
+      document.getElementById('app-fs-bookings').innerHTML = fmtCount(book);
       var conv1 = (taps/sub*100), conv2 = (book/taps*100);
       document.getElementById('app-conv-1').textContent = '転換 '+conv1.toFixed(1)+'%';
       document.getElementById('app-drop-1').textContent = '離脱 '+(100-conv1).toFixed(1)+'%';
@@ -2096,9 +2209,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var rateV = bookingsV.map(function(v,i){ return v/storyViewsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'ストーリー経由の予約'},
-      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'ストーリー経由の予約'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'storyViews', label:'ストーリー表示回数', bar:'var(--ig)', values:storyViewsV, fmt:fmtInt, deltaType:'pct'},
       {key:'linkTaps', label:'リンクスタンプタップ数', bar:'var(--ig)', values:series4(3120,3850), fmt:fmtInt, deltaType:'pct'},
       {key:'dmReplies', label:'返信数（DM）', bar:'var(--ig)', values:series4(165,210), fmt:fmtInt, deltaType:'pct'},
@@ -2119,12 +2232,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var rateV = bookingsV.map(function(v,i){ return v/viewsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'},
-      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,3);}, deltaType:'pt', ptDigits:3},
+      {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,3);}, deltaType:'pt', ptDigits:3},
       {key:'views', label:'総視聴回数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'viewers', label:'月間視聴者数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'subs', label:'チャンネル登録増', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'shorts', label:'Shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'normal', label:'通常動画視聴', bar:'var(--yt)', values:series4(39000,38000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'impressions', label:'インプレッション数', bar:'var(--yt)', values:series4(903000,952000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
@@ -2164,14 +2277,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var rateV = bookingsV.map(function(v,i){ return v/sessionsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'},
-      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'sessions', label:'セッション数', bar:'var(--seo)', values:sessionsV, fmt:fmtInt, deltaType:'pct'},
-      {key:'taps', label:'クリック数', tag:'サンプル', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
+      {key:'taps', label:'クリック数', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
       {key:'impressions', label:'検索表示回数', bar:'var(--seo)', values:series4(580000,612000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'articles', label:'公開記事本数', bar:'var(--seo)', values:series4(4,6), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'freq', label:'更新頻度', bar:'var(--seo)', values:series4(0.9,1.4), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', tag:'サンプル', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('seo-kpi-grid', metrics, monthIdx);
@@ -2190,8 +2303,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var clicksV = opensV.map(function(v,i){ return v*ctrV[i]/100; });
     var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
     var metrics = [
-      {key:'bookings', label:'予約数', tag:'サンプル', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
-      {key:'bookingRate', label:'予約率', tag:'サンプル', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
+      {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'volume', label:'配信本数', bar:'var(--mail)', values:series4(7,8), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'reach', label:'配信到達率', bar:'var(--mail)', values:reachV, fmt:fmtInt, deltaType:'pct'},
       {key:'clicks', label:'クリック数', bar:'var(--mail)', values:clicksV, fmt:fmtInt, deltaType:'pct'},
@@ -2215,7 +2328,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var tag = item.url ? 'a' : 'div';
       var attrs = item.url ? ' href="'+item.url+'" target="_blank" rel="noopener noreferrer"' : '';
       var ext = item.url ? ' <span class="ext-ico">↗</span>' : '';
-      var bookingBadge = (item.b!=null) ? ' <span class="rank-booking-badge">→予約 '+item.b+'件<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn);margin-left:3px">サンプル</span></span>' : '';
+      var bookingBadge = (item.b!=null) ? ' <span class="rank-booking-badge">→予約 '+item.b+'件</span>' : '';
       return '<'+tag+' class="rank-row'+(idx===0?' r1':'')+'"'+attrs+'><div class="bg-bar" style="width:'+pct+'%"></div>'+
         '<div class="rn">'+(idx+1)+'</div><div class="rt">'+item.t+bookingBadge+'</div><div class="rv">'+item.vLabel+ext+'</div></'+tag+'>';
     }).join('');
@@ -2550,8 +2663,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       } else {
         deltaHtml = '<span class="delta flat">—</span>';
       }
-      var sampleTag = d.sample ? '<span class="tag-sample" style="background:var(--warn-soft);color:var(--warn)">サンプル</span>' : '';
-      return '<tr><td><div class="clinic-row-name"><b>'+d.label+'</b>'+sampleTag+'</div><span class="zone-tag">'+d.facility+'</span><span class="zone-tag">'+d.zone+'</span></td>'+
+      return '<tr><td><div class="clinic-row-name"><b>'+d.label+'</b></div><span class="zone-tag">'+d.facility+'</span><span class="zone-tag">'+d.zone+'</span></td>'+
         cells+
         '<td>'+deltaHtml+'</td>'+
         '<td class="spark-cell">'+sparkline(vals)+'</td></tr>';
@@ -2737,7 +2849,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var avgSign = diffPct>=0?'▲+':'▼';
       var avgLine = '<div class="kpi-avg">全院平均 '+d.fmt(avg)+' <span class="delta '+avgCls+'">'+avgSign+Math.abs(diffPct).toFixed(1)+'%</span></div>';
       var tipLine = '<div class="kpi-tip">💡 '+(KPI_BENCHMARK_TIPS[key]||'')+'</div>';
-      return '<div class="kpi-card" style="--bar:'+d.bar+'"><div class="kpi-label">'+d.label+'</div><div class="kpi-value">'+d.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div>'+avgLine+tipLine+'</div>';
+      var hint2 = HINTS[d.label];
+      var labelHtml2 = hint2 ? '<div class="kpi-label info-hint" title="'+escAttr(hint2)+'">'+d.label+'</div>' : '<div class="kpi-label">'+d.label+'</div>';
+      return '<div class="kpi-card" style="--bar:'+d.bar+'">'+labelHtml2+'<div class="kpi-value">'+d.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div>'+avgLine+tipLine+'</div>';
     }).join('');
   }
 
