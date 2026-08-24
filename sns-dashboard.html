@@ -638,34 +638,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div id="kpi-cards-month" class="kpi-grid">
-        <div class="kpi-card" style="--bar:var(--accent)">
-          <div class="kpi-label">セッション数（SNS）</div>
-          <div class="kpi-value">4,217</div>
-          <div class="kpi-sub">前月 3,961 <span class="delta up">▲+6.5%</span></div>
-        </div>
-        <div class="kpi-card" style="--bar:var(--accent)">
-          <div class="kpi-label">アクティブユーザー</div>
-          <div class="kpi-value">3,458</div>
-          <div class="kpi-sub">前月 3,088 <span class="delta up">▲+12.0%</span></div>
-        </div>
-        <div class="kpi-card" style="--bar:var(--bad)">
-          <div class="kpi-label">SNS予約貢献数</div>
-          <div class="kpi-value">61件</div>
-          <div class="kpi-sub">前月 85件 <span class="delta down">▼-28.2%</span></div>
-        </div>
-        <div class="kpi-card" style="--bar:var(--warn)">
-          <div class="kpi-label">新規MYSBC登録</div>
-          <div class="kpi-value">14件</div>
-          <div class="kpi-sub">前月 16件 <span class="delta down">▼-12.5%</span></div>
-        </div>
-      </div>
-      <div id="kpi-cards-year" class="annual-cards" style="display:none">
-        <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計セッション数</div><div class="kpi-value">48,960</div><div class="kpi-sub">前年比 <span class="delta up">▲+15%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">年間累計SNS予約貢献数</div><div class="kpi-value">912件</div><div class="kpi-sub">前年比 <span class="delta up">▲+6%</span></div></div>
-        <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">年間累計新規MYSBC登録</div><div class="kpi-value">168件</div><div class="kpi-sub">前年比 <span class="delta flat">横ばい</span></div></div>
-      </div>
-
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル（全体・SNS）<small>セッション数→クリック数→予約数</small></div>
         <div class="panel-body">
@@ -2062,8 +2034,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var v = btn.getAttribute('data-view');
       document.getElementById('kpi-month-view').style.display = (v==='month') ? '' : 'none';
       document.getElementById('kpi-year-view').style.display = (v==='year') ? '' : 'none';
-      document.getElementById('kpi-cards-month').style.display = (v==='month') ? '' : 'none';
-      document.getElementById('kpi-cards-year').style.display = (v==='year') ? '' : 'none';
       document.getElementById('kpi-month-seg').style.display = (v==='month') ? '' : 'none';
       if(v==='year' && !window.__yearChartDrawn){ drawYearChart(); window.__yearChartDrawn = true; }
     });
