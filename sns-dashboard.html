@@ -755,20 +755,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div id="kpi-month-view">
         <div class="panel">
-          <div class="panel-title"><span class="bar"></span>指標推移（予約種別実績）　<small>2月〜5月・前月比・前年同月比・評価</small></div>
+          <div class="panel-title"><span class="bar"></span>流入元別のアクセス数<small>5月・セッションの参照元/メディア別・予約種別内訳</small></div>
           <div class="table-scroll">
-          <table id="tbl-kpi-reservation">
-            <thead><tr><th>指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>前月比</th><th>前年同月比</th><th>評価</th></tr></thead>
+          <table>
+            <thead><tr><th style="text-align:left">セッションの参照元/メディア</th><th>セッション</th><th>予約率</th><th>カウンセリング予約</th><th>モニター予約</th><th>脱毛やレーザー系予約</th><th>マイメニュー予約</th><th>MSD&amp;YELL予約</th><th>予約(合算)</th></tr></thead>
             <tbody>
-              <tr><td>SNSセッション数</td><td>4,082</td><td>4,401</td><td>3,961</td><td class="cur">4,217</td><td><span class="delta up">▲+6.5%</span></td><td><span class="delta up">▲+18%</span></td><td><span class="pill good">回復</span></td></tr>
-              <tr><td>予約率</td><td>1.84%</td><td>1.80%</td><td>2.15%</td><td class="cur">1.45%</td><td><span class="delta down">▼-32.7%</span></td><td><span class="delta down">▼-22.9%</span></td><td><span class="pill bad">大幅減</span></td></tr>
-              <tr><td>アクティブユーザー</td><td>3,071</td><td>3,320</td><td>3,088</td><td class="cur">3,458</td><td><span class="delta up">▲+12.0%</span></td><td><span class="delta up">▲+22%</span></td><td><span class="pill good">大幅回復</span></td></tr>
-              <tr><td>SNS予約貢献数</td><td>75</td><td>79</td><td>85</td><td class="cur">61</td><td><span class="delta down">▼-28.2%</span></td><td><span class="delta down">▼-9%</span></td><td><span class="pill bad">大幅減</span></td></tr>
-              <tr><td>カウンセリング予約</td><td>11</td><td>5</td><td>5</td><td class="cur">5</td><td><span class="delta flat">横ばい</span></td><td><span class="delta down">▼-31%</span></td><td><span class="pill bad">低水準継続</span></td></tr>
-              <tr><td>モニター予約</td><td>39</td><td>50</td><td>41</td><td class="cur">23</td><td><span class="delta down">▼-43.9%</span></td><td><span class="delta down">▼-19%</span></td><td><span class="pill bad">大幅減</span></td></tr>
-              <tr><td>脱毛レーザー予約</td><td>250</td><td>265</td><td>280</td><td class="cur">296</td><td><span class="delta up">▲+5.7%</span></td><td><span class="delta up">▲+15%</span></td><td><span class="pill good">順調</span></td></tr>
-              <tr><td>マイメニュー予約</td><td>24</td><td>22</td><td>36</td><td class="cur">19</td><td><span class="delta down">▼-47.2%</span></td><td><span class="delta up">▲+4%</span></td><td><span class="pill bad">大幅減</span></td></tr>
-              <tr><td>新規MYSBC登録</td><td>12</td><td>9</td><td>16</td><td class="cur">14</td><td><span class="delta down">▼-12.5%</span></td><td><span class="delta up">▲+8%</span></td><td><span class="pill warn">微減</span></td></tr>
+              <tr><td>1. app / push</td><td>187,930</td><td class="cur">6.79%</td><td>240</td><td>259</td><td>10,310</td><td>1,954</td><td>0</td><td>12,763</td></tr>
+              <tr><td>2. instagram / stories</td><td>42,064</td><td>2.3%</td><td>36</td><td>375</td><td>363</td><td>193</td><td>0</td><td>967</td></tr>
+              <tr><td>3. mail / mailmagazine</td><td>40,415</td><td>2.16%</td><td>17</td><td>53</td><td>668</td><td>133</td><td>0</td><td>871</td></tr>
+              <tr><td>4. instagram / profile</td><td>35,613</td><td>4.87%</td><td>65</td><td>691</td><td>582</td><td>396</td><td>0</td><td>1,734</td></tr>
+              <tr><td>5. line / linemessage</td><td>13,665</td><td>2.9%</td><td>10</td><td>8</td><td>310</td><td>68</td><td>0</td><td>396</td></tr>
+              <tr><td>6. line / linerichmenu</td><td>10,008</td><td>5.15%</td><td>4</td><td>6</td><td>379</td><td>126</td><td>0</td><td>515</td></tr>
+              <tr><td>7. tiktok / profile</td><td>9,258</td><td>0.96%</td><td>1</td><td>66</td><td>9</td><td>13</td><td>0</td><td>89</td></tr>
+              <tr><td>8. youtube / profile</td><td>6,172</td><td>1.22%</td><td>5</td><td>40</td><td>12</td><td>18</td><td>0</td><td>75</td></tr>
+              <tr><td>9. graphic / qr</td><td>4,600</td><td>8.52%</td><td>1</td><td>3</td><td>356</td><td>32</td><td>0</td><td>392</td></tr>
+              <tr><td>10. youtube / comment</td><td>3,723</td><td>0.3%</td><td>1</td><td>4</td><td>2</td><td>4</td><td>0</td><td>11</td></tr>
+              <tr style="font-weight:800"><td>総計</td><td>363,793</td><td>5.01%</td><td>384</td><td>1,650</td><td>13,188</td><td>2,988</td><td>0</td><td>18,210</td></tr>
             </tbody>
           </table>
           </div>
@@ -855,6 +857,51 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
       <div class="kpi-grid" id="ig-feed-kpi-grid"></div>
 
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="ig-feed-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="ig-feed-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="ig-feed-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>予約は水曜日・土曜日・日曜日に多く、平日夜（20時〜22時）と休日昼（12時〜14時）が2大ピークになっています。仕事帰り・休日にゆっくりSNSを見るタイミングでの投稿・ストーリー配信が予約行動につながりやすいと考えられるため、投稿時間をこの2つの山に合わせて集中させることで、同じ投稿本数でも予約への転換効率を高められる可能性があります。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元投稿</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>術後の様子と喜びのコメントまとめ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>豊胸のダウンタイム、正直に話します</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
+            <tr><td>20代</td><td>女性</td><td>【Q&amp;A】豊胸のサイズ選び、失敗しないコツ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>症例写真だけじゃわからない触り心地の話</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>カウンセリングで実際に聞かれる質問TOP3</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>【1分でわかる】豊胸の種類まとめ（リール）</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
+            <tr><td>30代</td><td>男性</td><td>術後1週間の腫れの様子（リール）</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>50代</td><td>女性</td><td>よくある質問に即答してみた（リール）</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（Instagramフィード）<small>投稿量→エンゲージメント→リーチ→プロフィール→タップ→予約</small></div>
         <div class="panel-body">
@@ -894,6 +941,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div></div>
           <p class="funnel-note">フィードは「プロフィール訪問→タップ」「タップ→予約」の転換率が全チャネル中でも高く、症例解説型コンテンツが信頼形成に寄与している一方、「リーチ→プロフィール訪問」の転換は伸びしろがある。</p>
         </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>「リーチ→プロフィール訪問」の転換率3.3%が全体のボトルネックになっています。一方で「プロフィール訪問→タップ」14.5%、「タップ→予約」6.5%はいずれも高水準で、プロフィールに到達しさえすれば予約につながりやすい導線ができています。投稿本数・投稿頻度を維持しつつ、キャプション末尾やコメント欄でのプロフィール誘導文言を強化し、リーチした人をより多くプロフィールへ呼び込むことが次の伸びしろです。</p>
+          </div>
+        </div>
       </div>
 
       <div class="panel">
@@ -907,6 +960,24 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div>
           <svg id="ig-feed-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>予約数は62件（4月）→58件（5月、▼6.5%）とやや減少していますが、2〜4月の推移（47件→58件→62件）を見ると大きな流れは増加基調にあり、5月は踊り場と捉えられます。リーチ数自体は前月比+15.7%と伸びているため、予約数の減少は導線側（プロフィール誘導・タップ率）の課題である可能性が高く、コンテンツの量よりも「見た人を予約に導く導線」の見直しを優先すべき局面です。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>投稿ギャラリー（フィード・リーチ数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small></div>
+        <div class="panel-body" style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 52.0K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 44.5K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 38.2K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 31.9K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 27.6K<br>投稿本数 1本</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:0 17px 14px;line-height:1.6">※フィードリーチ数ランキング（5月）上位5投稿分のプレースホルダーです。投稿画像を頂き次第、差し替えます。</p>
       </div>
 
       <div class="two-col panel">
@@ -925,12 +996,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
+      <div class="grid-2">
+        <div class="callout good">
+          <h4>✅ よかった点</h4>
+          <ul>
+            <li>リーチ数が前月比+15.7%と伸長し、フィード全体の認知が拡大している</li>
+            <li>症例＋解説（Q&A形式）が投稿の44%を占め、最も反応の良いフォーマットとして定着</li>
+            <li>「プロフィール訪問→タップ」「タップ→予約」の転換率は全チャネル中でも高水準</li>
+          </ul>
+        </div>
+        <div class="callout bad">
+          <h4>🔴 課題・改善点</h4>
+          <ul>
+            <li>予約数は58件（▼6.5%）とやや減少。リーチの伸びを予約数の伸びに変換しきれていない</li>
+            <li>「リーチ→プロフィール訪問」の転換率3.3%が全体のボトルネック</li>
+            <li>予約タップ数はサンプル値のみで実測未導入。効果検証にはタグ実装が必要</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>フィード投稿はリーチ数が前月比+15.7%と伸びており、症例＋解説（Q&A形式）を中心としたコンテンツが認知拡大に寄与しています。一方で予約数は58件（▼6.5%）とやや減少しており、リーチした人をプロフィール訪問・予約タップへ導く導線（「リーチ→プロフィール訪問」転換率3.3%）が全体のボトルネックです。投稿本数・頻度を維持しつつ、キャプションや投稿末尾でのプロフィール誘導を強化することが、リーチの伸びを予約数に変換するための次の一手です。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
         <div class="panel-title"><span class="bar"></span>リール分析（参考）<small>フィード投稿とは別に集計。全項目サンプル値</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">6件</div><div class="kpi-sub">前月 4件 <span class="delta up">▲+50.0%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">予約率</div><div class="kpi-value">0.05%</div><div class="kpi-sub">前月 0.04% <span class="delta up">▲+0.01pt</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">再生数</div><div class="kpi-value">12.8万</div><div class="kpi-sub">前月 9.6万 <span class="delta up">▲+33.3%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">10本</div><div class="kpi-sub">前月 6本 <span class="delta up">▲+66.7%</span></div></div>
           </div>
@@ -940,12 +1033,32 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
+      <div class="grid-2">
+        <div class="callout good">
+          <h4>✅ よかった点</h4>
+          <ul>
+            <li>再生数が前月比+33.3%、投稿本数も+66.7%と大幅増加。投下量の増加がそのまま再生数増に直結</li>
+            <li>「【1分でわかる】豊胸の種類まとめ」など要点整理系のリールが上位を独占</li>
+          </ul>
+        </div>
+        <div class="callout bad">
+          <h4>🔴 課題・改善点</h4>
+          <ul>
+            <li>フィード投稿とは別集計かつ全項目サンプル値のため、予約への貢献度は未計測</li>
+            <li>再生数上位でも予約への導線（プロフィールリンク誘導）が明示されていない投稿が多い</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>リールは投稿本数の増加（+66.7%）が再生数の増加（+33.3%）に直結しており、量を投下すること自体が効果につながっています。ただし予約タップ数・予約数は現状サンプル値のみで実測されていないため、再生数の伸びが実際の予約にどれだけ貢献しているかは検証できていません。まずは計測タグを導入し、フィード同様に「再生→プロフィール→予約」の転換率を可視化することが次の課題です。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
         <div class="panel-title"><span class="bar"></span>ストーリー分析（参考）<small>フィード投稿とは別に集計。詳細は上部「ストーリー」タブもご覧ください</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">22件</div><div class="kpi-sub">前月 17件 <span class="delta up">▲+29.4%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">ストーリー表示回数</div><div class="kpi-value">92,000</div><div class="kpi-sub">前月 78,500 <span class="delta up">▲+17.2%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リンクスタンプタップ数</div><div class="kpi-value">3,850</div><div class="kpi-sub">前月 3,120 <span class="delta up">▲+23.4%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">45本</div><div class="kpi-sub">前月 38本 <span class="delta up">▲+18.4%</span></div></div>
           </div>
@@ -954,24 +1067,26 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元投稿</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>20代</td><td>女性</td><td>術後の様子と喜びのコメントまとめ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>30代</td><td>女性</td><td>豊胸のダウンタイム、正直に話します</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
-            <tr><td>20代</td><td>女性</td><td>【Q&amp;A】豊胸のサイズ選び、失敗しないコツ</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>40代</td><td>女性</td><td>症例写真だけじゃわからない触り心地の話</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>30代</td><td>女性</td><td>カウンセリングで実際に聞かれる質問TOP3</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>20代</td><td>女性</td><td>【1分でわかる】豊胸の種類まとめ（リール）</td><td>豊胸（シリコン）</td><td>モニター</td></tr>
-            <tr><td>30代</td><td>男性</td><td>術後1週間の腫れの様子（リール）</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>50代</td><td>女性</td><td>よくある質問に即答してみた（リール）</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-          </tbody>
-        </table>
+      <div class="grid-2">
+        <div class="callout good">
+          <h4>✅ よかった点</h4>
+          <ul>
+            <li>リンクスタンプタップ数が前月比+23.4%、表示回数も+17.2%と両方伸びている</li>
+            <li>質問箱・アンケート企画が表示回数ランキング上位を占め、双方向の企画が反応を得やすい傾向</li>
+          </ul>
         </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+        <div class="callout bad">
+          <h4>🔴 課題・改善点</h4>
+          <ul>
+            <li>ストーリーの完了率が71.2%→68.4%に低下。冒頭で離脱されている可能性がある</li>
+            <li>投稿本数は増加しているが、1本あたりのタップ率は横ばいで頭打ちの兆候がある</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>ストーリーはリンクスタンプタップ数（+23.4%）・表示回数（+17.2%）ともに伸びており、質問箱・アンケートなど双方向企画が表示回数の獲得に貢献しています。一方で完了率が71.2%→68.4%に低下しており、投稿本数を増やしたことで1本あたりの質がやや薄まっている可能性があります。冒頭2枚以内で要点が伝わる構成に見直すことで、表示回数の伸びをタップ率の向上につなげられる余地があります。</p>
       </div>
       </div>
 
@@ -2191,6 +2306,46 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     svg.innerHTML = gridLines + bars + labels;
   }
 
+  function genDailyBookings(days, base){
+    var out = [];
+    for(var d=1; d<=days; d++){
+      var dow = (d+2) % 7; // 0=Sun..6=Sat, arbitrary anchor
+      var weekendBoost = (dow===0||dow===6) ? 1.35 : 1.0;
+      var wave = 1 + 0.18*Math.sin(d*0.55);
+      out.push(Math.max(0, Math.round(base*weekendBoost*wave)));
+    }
+    return out;
+  }
+
+  function drawDailyChart(svgId, dailyValues){
+    var svg = document.getElementById(svgId);
+    if(!svg) return;
+    var days = dailyValues.length;
+    var W=1060, H=200, padL=34, padR=8, padT=14, padB=22;
+    var barGap = 3;
+    var barW = (W-padL-padR)/days - barGap;
+    var maxV = Math.max.apply(null, dailyValues) * 1.2;
+    function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
+    var gridLines = '';
+    for(var g=0; g<=3; g++){
+      var gy = padT + (H-padT-padB)*g/3;
+      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
+    }
+    var bars = '';
+    dailyValues.forEach(function(v, i){
+      var x = padL + i*(barW+barGap);
+      var y = yFor(v);
+      bars += '<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(0,(H-padB-y))+'" rx="2" fill="var(--ig)"><title>'+(i+1)+'日：'+v+'件</title></rect>';
+    });
+    var labels = '';
+    for(var d=1; d<=days; d+=5){
+      var lx = padL + (d-1)*(barW+barGap) + barW/2;
+      labels += '<text x="'+lx+'" y="'+(H-6)+'" font-size="10" fill="var(--text-faint)" text-anchor="middle">'+d+'日</text>';
+    }
+    svg.setAttribute('viewBox', '0 0 '+W+' '+H);
+    svg.innerHTML = gridLines + bars + labels;
+  }
+
   function setupPageMonthSelector(segId, onSelect){
     var btns = document.querySelectorAll('#'+segId+' button');
     Array.prototype.forEach.call(btns, function(btn){
@@ -2248,20 +2403,38 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var reachV = series4(159000,184000);
     var bookingsV = [47,58,62,58];
     var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
-    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
       {key:'igBookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'followers', label:'フォロワー数', bar:'var(--ig)', values:series4(67940,68352), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
       {key:'reach', label:'リーチ数', bar:'var(--ig)', values:reachV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'followerNet', label:'フォロワー純増', bar:'var(--ig)', values:series4(366,412), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
       {key:'saves', label:'保存数', bar:'var(--ig)', values:series4(2610,3050), fmt:fmtInt, deltaType:'pct'},
-      {key:'shares', label:'シェア数', bar:'var(--ig)', values:series4(910,870), fmt:fmtInt, deltaType:'pct'},
-      {key:'posts', label:'投稿本数', bar:'var(--ig)', values:series4(21,24), fmt:function(v){return fmtHon(v);}, deltaType:'pct'}
+      {key:'shares', label:'シェア数', bar:'var(--ig)', values:series4(910,870), fmt:fmtInt, deltaType:'pct'}
+    ];
+    var dailyBookings = genDailyBookings(31, 58/31);
+    var DOW_RANK = [
+      {t:'水曜日', v:12, vLabel:'12件'},
+      {t:'土曜日', v:11, vLabel:'11件'},
+      {t:'日曜日', v:9, vLabel:'9件'},
+      {t:'金曜日', v:8, vLabel:'8件'},
+      {t:'火曜日', v:7, vLabel:'7件'},
+      {t:'木曜日', v:6, vLabel:'6件'},
+      {t:'月曜日', v:5, vLabel:'5件'}
+    ];
+    var HOUR_RANK = [
+      {t:'20時〜22時', v:16, vLabel:'16件'},
+      {t:'12時〜14時', v:11, vLabel:'11件'},
+      {t:'22時〜24時', v:10, vLabel:'10件'},
+      {t:'18時〜20時', v:9, vLabel:'9件'},
+      {t:'8時〜10時', v:6, vLabel:'6件'},
+      {t:'その他の時間帯', v:6, vLabel:'6件'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('ig-feed-kpi-grid', metrics, monthIdx);
       drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('ig-feed-daily-chart', dailyBookings);
+      renderRank('ig-feed-dow-rank', DOW_RANK);
+      renderRank('ig-feed-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('ig-feed-month-seg', render);
   })();
@@ -2955,7 +3128,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     kpiSelectedMonth = monthIdx;
     renderKpiCardsMonth(monthIdx);
     renderMainFunnel(monthIdx);
-    highlightKpiTableColumn('tbl-kpi-reservation', monthIdx);
     highlightKpiTableColumn('tbl-kpi-media', monthIdx);
     drawKpiMonthChart(kpiChartMetric, monthIdx);
   }
