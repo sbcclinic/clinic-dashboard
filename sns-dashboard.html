@@ -1414,6 +1414,49 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div class="kpi-grid" id="yt-kpi-grid"></div>
 
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="yt-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="yt-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="yt-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>予約は水曜日・金曜日・土曜日に多く、平日夜（20時〜22時）が最大のピークになっています。仕事帰りにゆっくり動画を見るタイミングでの投稿・概要欄誘導が予約行動につながりやすいと考えられるため、Shortsの投稿時間をこの時間帯に合わせることで、同じ投稿本数でも予約への転換効率を高められる可能性があります。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>術後面会の様子をお届け！#shorts</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>【男性人気No1】二重シミュレーション</td><td>二重埋没法</td><td>モニター</td></tr>
+            <tr><td>20代</td><td>男性</td><td>【眼瞼下垂セルフチェック】切らずに二重に</td><td>眼瞼下垂</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>主人公想いすぎるキム先生…#shorts</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>【二重埋没で若返り】37歳がキム先生の二重整形に</td><td>二重埋没法</td><td>カウンセリング</td></tr>
+            <tr><td>50代</td><td>女性</td><td>【目元若返り！】たるみシワ改善サーマクール</td><td>眼瞼下垂</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（YouTube）<small>投稿量→エンゲージメント→視聴→チャンネル→タップ→予約</small></div>
         <div class="panel-body">
@@ -1453,6 +1496,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div></div>
           <p class="funnel-note">⚠ YouTubeは現状、概要欄リンクのタップ計測が未導入のため「チャンネルページ表示数」以降はサンプル値です。計測タグ（UTM）の導入で実測化することを推奨します。</p>
         </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>「総視聴回数→チャンネルページ表示数」の転換率6.0%に対し、「チャンネルページ表示数→概要欄予約タップ数」5.2%、「予約タップ数→予約数」1.4%と、後半の転換率が全体的に低めです。特に予約タップ数から予約数への転換1.4%は改善余地が大きく、概要欄リンクのタップ計測導入と合わせて、タップ後の予約ページの見やすさ・導線を見直すことが次の一手です。</p>
+          </div>
+        </div>
       </div>
 
       <div class="panel">
@@ -1465,6 +1514,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <span><i style="background:#f87171"></i>前月（選択中）</span>
           </div>
           <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>予約数は5件→6件→7件→9件と2月から4ヶ月連続で増加しており、Shorts投稿数の増加（18本→31本）がそのまま予約数の伸びにつながっている状態です。この増加基調を維持するには、投稿頻度を落とさずに、概要欄タップの実測導入で「どのShortsが予約に効いているか」を可視化することが次のステップです。</p>
+          </div>
         </div>
       </div>
 
@@ -1479,24 +1534,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためYouTubeトップへ遷移）</p>
           <div class="rank-list" id="yt-video-rank"></div>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>20代</td><td>女性</td><td>術後面会の様子をお届け！#shorts</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>30代</td><td>女性</td><td>【男性人気No1】二重シミュレーション</td><td>二重埋没法</td><td>モニター</td></tr>
-            <tr><td>20代</td><td>男性</td><td>【眼瞼下垂セルフチェック】切らずに二重に</td><td>眼瞼下垂</td><td>カウンセリング</td></tr>
-            <tr><td>40代</td><td>女性</td><td>主人公想いすぎるキム先生…#shorts</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>30代</td><td>女性</td><td>【二重埋没で若返り】37歳がキム先生の二重整形に</td><td>二重埋没法</td><td>カウンセリング</td></tr>
-            <tr><td>50代</td><td>女性</td><td>【目元若返り！】たるみシワ改善サーマクール</td><td>眼瞼下垂</td><td>マイメニュー</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -2492,7 +2529,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var W=1060, H=200, padL=34, padR=8, padT=14, padB=22;
     var barGap = 3;
     var barW = (W-padL-padR)/days - barGap;
-    var maxV = Math.max.apply(null, dailyValues) * 1.2;
+    var maxV = Math.max.apply(null, dailyValues) * 1.2 || 1;
     function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
     var gridLines = '';
     for(var g=0; g<=3; g++){
@@ -2647,17 +2684,45 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,3);}, deltaType:'pt', ptDigits:3},
-      {key:'views', label:'総視聴回数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'viewers', label:'月間視聴者数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'subs', label:'チャンネル登録増', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
-      {key:'shorts', label:'Shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'normal', label:'通常動画視聴', bar:'var(--yt)', values:series4(39000,38000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'impressions', label:'インプレッション数', bar:'var(--yt)', values:series4(903000,952000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
+      {key:'views', label:'チャンネル登録者数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'viewers', label:'インプレッション数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
+      {key:'subs', label:'月間視聴回数', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
+      {key:'contribRate', label:'横動画視聴回数', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'shorts', label:'shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
     ];
+    var dailyBookings = new Array(31).fill(0);
+    [3,6,10,14,17,21,24,28,30].forEach(function(d){ dailyBookings[d-1] = 1; });
+    var DOW_RANK = [
+      {t:'水曜日', v:2, vLabel:'2件'},
+      {t:'金曜日', v:2, vLabel:'2件'},
+      {t:'土曜日', v:2, vLabel:'2件'},
+      {t:'月曜日', v:1, vLabel:'1件'},
+      {t:'火曜日', v:1, vLabel:'1件'},
+      {t:'木曜日', v:1, vLabel:'1件'},
+      {t:'日曜日', v:0, vLabel:'0件'}
+    ];
+    var HOUR_RANK = [
+      {t:'20時〜22時', v:3, vLabel:'3件'},
+      {t:'12時〜14時', v:2, vLabel:'2件'},
+      {t:'22時〜24時', v:2, vLabel:'2件'},
+      {t:'18時〜20時', v:1, vLabel:'1件'},
+      {t:'8時〜10時', v:1, vLabel:'1件'},
+      {t:'その他の時間帯', v:0, vLabel:'0件'}
+    ];
+    var BOOKING_GOAL = 12;
     function render(monthIdx){
       renderGenericKpiGrid('yt-kpi-grid', metrics, monthIdx);
+      var bookings = bookingsV[monthIdx];
+      var rate = bookings/BOOKING_GOAL*100;
+      var barColor = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var firstCard = document.querySelector('#yt-kpi-grid .kpi-card');
+      if(firstCard){
+        firstCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      }
       drawBookingsChart('yt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('yt-daily-chart', dailyBookings);
+      renderRank('yt-dow-rank', DOW_RANK);
+      renderRank('yt-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('yt-month-seg', render);
   })();
