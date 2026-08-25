@@ -669,9 +669,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="grid-2" style="grid-template-columns:1.7fr 1fr;align-items:start">
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>媒体別サマリー<small>予約率（効率）で比較し、縮小・撤退の判断材料に</small></div>
+        <div class="panel-title"><span class="bar"></span>媒体別サマリー・予約貢献率<small>予約率（効率）と予約貢献率（構成比）をあわせて確認し、縮小・撤退の判断材料に</small></div>
+        <div class="panel-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1.7;min-width:340px">
         <div class="table-scroll">
         <table>
           <thead><tr><th style="text-align:left">媒体</th><th>セッション数</th><th>予約数</th><th>予約数 前月比</th><th>予約率</th><th>評価</th></tr></thead>
@@ -735,21 +736,21 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </tbody>
         </table>
         </div>
+        </div>
+
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:12px;align-items:center">
+          <div style="font-size:12px;font-weight:800;color:var(--text-muted);align-self:flex-start">予約貢献率（媒体別）　5月・全体予約数183件の内訳</div>
+          <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:170px;height:170px;flex:none"></svg>
+          <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex-direction:column;align-items:flex-start;width:100%"></div>
+        </div>
+        </div>
+
         <div class="panel-body" style="padding-top:0">
           <div class="callout bad" style="margin-top:6px">
             <h4>🛑 撤退・縮小の判断材料</h4>
             <p>TikTokは予約率0.0002%と最も効率の良いMYSBC公式アプリ（0.162%）の約800分の1、メルマガ（0.074%）の約370分の1の低さです。しかも予約数は3ヶ月連続で減少（8件→3件、▼62.5%）しており、おすすめ規制という構造要因もあるため回復の見込みが低い場合は、リソースをMYSBC公式アプリ・メルマガ・SEOへ再配分しTikTok運用を縮小する判断も選択肢に入ります。既存顧客向けの自社チャネル（アプリ・メルマガ）が軒並み最上位の予約率であることは、「新規獲得はSNS/SEO、確度の高い予約転換は自社チャネルで」という役割分担の裏付けにもなります。YouTubeは予約率がTikTokに次いで低いものの予約数自体は伸びており、まず概要欄タップの実測導入を優先し、継続可否はその結果を見て判断するのが妥当です。</p>
           </div>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約貢献率（媒体別）　<small>5月・全体予約数183件のうち、どの媒体がどれだけ占めるか</small></div>
-        <div class="panel-body chart-wrap" style="display:flex;flex-direction:column;gap:14px;align-items:center">
-          <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:180px;height:180px;flex:none"></svg>
-          <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex-direction:column;align-items:flex-start;width:100%"></div>
-        </div>
-      </div>
       </div>
 
       <div id="kpi-month-view">
