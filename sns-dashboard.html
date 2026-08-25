@@ -487,11 +487,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .overview-stat-label{font-size:12px;color:var(--text-muted);font-weight:700;letter-spacing:.02em;margin-bottom:10px;}
 .overview-stat-value{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;}
 .overview-stat-sub{margin-top:9px;font-size:11.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.overview-compare{display:flex;align-items:flex-end;gap:8px;height:40px;margin-top:14px;}
-.overview-compare .ocb{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end;height:100%;}
-.overview-compare .ocb-fill{width:100%;border-radius:5px 5px 0 0;background:var(--border-strong);}
-.overview-compare .ocb.cur .ocb-fill{background:var(--bar,var(--accent));}
-.overview-compare .ocb-tag{font-size:9.5px;color:var(--text-faint);font-weight:700;}
 
 .channel-section-label{font-size:12.5px;font-weight:800;color:var(--text-muted);margin:4px 0 12px;letter-spacing:.02em;}
 .channel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
@@ -556,6 +551,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      <div class="callout info" style="margin-bottom:18px">
+        <h4>📌 全体サマリー（5月のまとめ・特筆すべきこと）</h4>
+        <p>SNSセッション数（+6.5%）・アクティブユーザー（+12.0%）は回復傾向にある一方、TikTokのおすすめ規制の影響で同経由の予約が3件（前月8件）まで急減し、SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。Instagramプロフィールの予約率（4.25%）は高水準を維持しており、獲得チャネルとしての質は崩れていません。6月はTikTok減少分をアプリ・メルマガへの配信強化で補いつつ、3ヶ月横ばいのカウンセリング予約（5件）への入口強化を最優先で進めます。</p>
+      </div>
+
       <div class="panel overview-panel">
         <div class="panel-title"><span class="bar"></span>全体パフォーマンス概要<small>予約実績と媒体別の主要指標（5月）</small></div>
         <div class="panel-body">
@@ -564,28 +564,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <div class="overview-stat-label">予約数（全媒体合計）</div>
               <div class="overview-stat-value">183件</div>
               <div class="overview-stat-sub">前月 177件 <span class="delta up">▲+3.4%</span></div>
-              <div class="overview-compare">
-                <div class="ocb"><div class="ocb-fill" style="height:97%"></div><span class="ocb-tag">前月</span></div>
-                <div class="ocb cur"><div class="ocb-fill" style="height:100%"></div><span class="ocb-tag">今月</span></div>
-              </div>
             </div>
             <div class="overview-stat-card" style="--bar:var(--bad)">
               <div class="overview-stat-label">予約率</div>
               <div class="overview-stat-value">1.45%</div>
               <div class="overview-stat-sub">前月 2.15% <span class="delta down">▼-32.7%</span></div>
-              <div class="overview-compare">
-                <div class="ocb"><div class="ocb-fill" style="height:100%"></div><span class="ocb-tag">前月</span></div>
-                <div class="ocb cur"><div class="ocb-fill" style="height:67%"></div><span class="ocb-tag">今月</span></div>
-              </div>
             </div>
             <div class="overview-stat-card" style="--bar:var(--accent)">
               <div class="overview-stat-label">セッション数（SNS）</div>
               <div class="overview-stat-value">4,217</div>
               <div class="overview-stat-sub">前月 3,961 <span class="delta up">▲+6.5%</span></div>
-              <div class="overview-compare">
-                <div class="ocb"><div class="ocb-fill" style="height:94%"></div><span class="ocb-tag">前月</span></div>
-                <div class="ocb cur"><div class="ocb-fill" style="height:100%"></div><span class="ocb-tag">今月</span></div>
-              </div>
             </div>
           </div>
 
@@ -638,7 +626,27 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel funnel-panel">
+      <div class="panel" id="kpi-monthly-trend-panel">
+        <div class="panel-title"><span class="bar"></span>月次推移・今月/前月比較<small>棒グラフ：各月の実績（選択中の月は今月・前月の2本で比較）</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="seg" id="kpi-chart-metric-seg">
+            <button class="active" data-metric="sessions">SNSセッション数</button>
+            <button data-metric="activeUsers">アクティブユーザー</button>
+            <button data-metric="bookings">SNS予約貢献数</button>
+            <button data-metric="mysbc">新規MYSBC登録</button>
+          </div>
+          <div class="chart-legend" style="margin-top:10px">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
+          <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前月」の2本棒で実績を比較できます。</p>
+        </div>
+      </div>
+
+      <div class="panel funnel-panel" style="max-width:720px">
         <div class="panel-title"><span class="bar"></span>予約ファネル（全体・SNS）<small>セッション数→クリック数→予約数</small></div>
         <div class="panel-body">
           <div class="funnel-scroll"><div class="funnel-flow">
@@ -661,15 +669,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      <div class="grid-2" style="grid-template-columns:1.7fr 1fr;align-items:start">
       <div class="panel">
         <div class="panel-title"><span class="bar"></span>媒体別サマリー<small>予約率（効率）で比較し、縮小・撤退の判断材料に</small></div>
         <div class="table-scroll">
         <table>
-          <thead><tr><th style="text-align:left">媒体</th><th>セッション数</th><th>クリック数</th><th>予約数</th><th>予約数 前月比</th><th>予約率</th><th>評価</th></tr></thead>
+          <thead><tr><th style="text-align:left">媒体</th><th>セッション数</th><th>予約数</th><th>予約数 前月比</th><th>予約率</th><th>評価</th></tr></thead>
           <tbody>
             <tr>
               <td><span class="dot" style="background:var(--app);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>MYSBC公式アプリ</td>
-              <td>28,400</td><td>1,150</td>
+              <td>28,400</td>
               <td>46件</td>
               <td><span class="delta up">▲+8.8%</span></td>
               <td class="cur">0.162%</td>
@@ -677,7 +686,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--mail);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>メルマガ</td>
-              <td>42,000</td><td>1,320</td>
+              <td>42,000</td>
               <td>31件</td>
               <td><span class="delta up">▲+1.9%</span></td>
               <td class="cur">0.074%</td>
@@ -685,7 +694,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--seo);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>特集記事(SEO)</td>
-              <td>38,500</td><td>480</td>
+              <td>38,500</td>
               <td>14件</td>
               <td><span class="delta up">▲+27.3%</span></td>
               <td class="cur">0.036%</td>
@@ -693,7 +702,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagramフィード</td>
-              <td>18.4万</td><td>890</td>
+              <td>18.4万</td>
               <td>58件</td>
               <td><span class="delta down">▼-6.5%</span></td>
               <td class="cur">0.032%</td>
@@ -701,7 +710,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagramストーリー</td>
-              <td>92,000</td><td>520</td>
+              <td>92,000</td>
               <td>22件</td>
               <td><span class="delta up">▲+29.4%</span></td>
               <td class="cur">0.024%</td>
@@ -709,7 +718,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--yt);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>YouTube</td>
-              <td>20.8万</td><td>640</td>
+              <td>20.8万</td>
               <td>9件</td>
               <td><span class="delta up">▲+28.6%</span></td>
               <td class="cur">0.004%</td>
@@ -717,7 +726,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             </tr>
             <tr>
               <td><span class="dot" style="background:var(--tt);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>TikTok</td>
-              <td>1.6M</td><td>210</td>
+              <td>1.6M</td>
               <td>3件</td>
               <td><span class="delta down">▼-62.5%</span></td>
               <td class="cur">0.0002%</td>
@@ -732,6 +741,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <p>TikTokは予約率0.0002%と最も効率の良いMYSBC公式アプリ（0.162%）の約800分の1、メルマガ（0.074%）の約370分の1の低さです。しかも予約数は3ヶ月連続で減少（8件→3件、▼62.5%）しており、おすすめ規制という構造要因もあるため回復の見込みが低い場合は、リソースをMYSBC公式アプリ・メルマガ・SEOへ再配分しTikTok運用を縮小する判断も選択肢に入ります。既存顧客向けの自社チャネル（アプリ・メルマガ）が軒並み最上位の予約率であることは、「新規獲得はSNS/SEO、確度の高い予約転換は自社チャネルで」という役割分担の裏付けにもなります。YouTubeは予約率がTikTokに次いで低いものの予約数自体は伸びており、まず概要欄タップの実測導入を優先し、継続可否はその結果を見て判断するのが妥当です。</p>
           </div>
         </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約貢献率（媒体別）　<small>5月・全体予約数183件のうち、どの媒体がどれだけ占めるか</small></div>
+        <div class="panel-body chart-wrap" style="display:flex;flex-direction:column;gap:14px;align-items:center">
+          <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:180px;height:180px;flex:none"></svg>
+          <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex-direction:column;align-items:flex-start;width:100%"></div>
+        </div>
+      </div>
       </div>
 
       <div id="kpi-month-view">
@@ -755,14 +773,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>予約貢献率（媒体別）　<small>5月・全体予約数183件のうち、どの媒体がどれだけ占めるか</small></div>
-          <div class="panel-body chart-wrap" style="display:flex;gap:28px;flex-wrap:wrap;align-items:center">
-            <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:220px;height:220px;flex:none"></svg>
-            <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex:1;min-width:220px"></div>
-          </div>
-        </div>
-
         <div class="panel" style="display:none">
           <div class="table-scroll">
           <table id="tbl-kpi-media">
@@ -773,26 +783,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <tr><td>TikTok予約数</td><td>13</td><td>7</td><td>8</td><td class="cur">3</td><td><span class="delta down">▼-62.5%</span></td><td><span class="delta down">▼-54%</span></td><td><span class="pill bad">大幅減</span></td></tr>
             </tbody>
           </table>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>月次推移・今月/前月比較<small>棒グラフ：各月の実績（選択中の月は今月・前月の2本で比較）</small></div>
-          <div class="panel-body chart-wrap">
-            <div class="seg" id="kpi-chart-metric-seg">
-              <button class="active" data-metric="sessions">SNSセッション数</button>
-              <button data-metric="activeUsers">アクティブユーザー</button>
-              <button data-metric="bookings">SNS予約貢献数</button>
-              <button data-metric="mysbc">新規MYSBC登録</button>
-            </div>
-            <div class="chart-legend" style="margin-top:10px">
-              <span><i style="background:var(--accent)"></i>各月の実績</span>
-              <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-              <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-              <span><i style="background:#f87171"></i>前月（選択中）</span>
-            </div>
-            <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
-            <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前月」の2本棒で実績を比較できます。</p>
           </div>
         </div>
 
@@ -818,19 +808,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="callout info">
           <h4>🤖 AI分析</h4>
           <p>セッション数・アクティブユーザーは前月比でそれぞれ+6.5%・+12.0%と回復傾向にありますが、SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。Instagramプロフィールの予約率は4.25%と引き続き高水準を維持しており、予約獲得チャネルとしての質は崩れていません。一方でTikTok経由の予約が3件（前月8件）と急減しており、おすすめ規制の影響による露出機会の減少が全体予約数を押し下げた主因と考えられます。カウンセリング予約は5件のまま3ヶ月横ばいが続いており、高単価施術への入口強化が引き続き最重要課題です。</p>
-        </div>
-
-        <div class="panel" style="margin-top:14px">
-          <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
-          <div class="panel-body">
-            <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
-            <ul class="todo">
-              <li><span class="pdot high"></span>TikTok経由の予約急減分を補うため、アプリ・メルマガでの配信量を6月中に増やし、SNS予約貢献数の下げ止まりを図る</li>
-              <li><span class="pdot mid"></span>カウンセリング予約が3ヶ月横ばいのため、高単価施術（豊胸カウンセリング）への入口となる投稿・導線を各チャネルで強化する</li>
-              <li><span class="pdot mid"></span>YouTube・TikTok・SEOで未整備のタップ計測の導入を進め、来月以降はファネルの精度を上げる</li>
-              <li><span class="pdot low"></span>媒体別サマリーの「評価」欄をもとに、TikTokへの投稿量配分を見直すかどうかを役職者・ドクターと6月中に協議する</li>
-            </ul>
-          </div>
         </div>
       </div>
 
@@ -2034,6 +2011,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var v = btn.getAttribute('data-view');
       document.getElementById('kpi-month-view').style.display = (v==='month') ? '' : 'none';
       document.getElementById('kpi-year-view').style.display = (v==='year') ? '' : 'none';
+      document.getElementById('kpi-monthly-trend-panel').style.display = (v==='month') ? '' : 'none';
       document.getElementById('kpi-month-seg').style.display = (v==='month') ? '' : 'none';
       if(v==='year' && !window.__yearChartDrawn){ drawYearChart(); window.__yearChartDrawn = true; }
     });
