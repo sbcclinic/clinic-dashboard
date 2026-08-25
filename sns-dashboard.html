@@ -119,6 +119,11 @@ body{
   flex-direction:column;
   padding:22px 16px;
   gap:26px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  z-index:5;
 }
 .brand{
   display:flex;
@@ -148,6 +153,20 @@ body{
 .nav a.active{background:var(--accent-soft);color:var(--accent-strong);border-color:transparent;}
 :root[data-theme="dark"] .nav a.active, .nav a.active{color:var(--accent);}
 .nav .dot{width:6px;height:6px;border-radius:50%;margin-left:auto;flex:none;}
+
+.nav-utility{display:flex;flex-direction:column;gap:8px;padding-top:14px;margin-top:6px;border-top:1px solid var(--border);}
+.nav-utility-btn{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+  background:var(--accent-soft);border:1px solid transparent;cursor:pointer;
+  text-decoration:none;color:var(--text);
+}
+.nav-utility-btn:hover{background:var(--surface-muted);}
+.nav-utility-btn.active{background:var(--accent);color:var(--accent-contrast);}
+.nub-icon{font-size:18px;flex:none;width:24px;text-align:center;}
+.nub-text{display:flex;flex-direction:column;gap:1px;}
+.nub-text b{font-size:13px;font-weight:800;}
+.nub-text span{font-size:10.5px;color:var(--text-faint);font-weight:600;}
+.nav-utility-btn.active .nub-text span{color:inherit;opacity:.85;}
 
 .foot-note{
   margin-top:auto;padding:12px 10px;border-top:1px solid var(--border);
@@ -371,36 +390,6 @@ a.rank-row:hover .rt{color:var(--accent-strong);text-decoration:underline;}
 .self-row td{background:var(--accent-soft);}
 .self-row td:first-child{color:var(--accent-strong);}
 
-/* hero (総括) */
-.hero{
-  border-radius:var(--radius-lg);
-  background:radial-gradient(120% 140% at 15% 0%,var(--hero-b),var(--hero-a) 70%);
-  color:#EAF1FF;padding:44px 40px;position:relative;overflow:hidden;margin-bottom:20px;
-}
-.hero::after{
-  content:"";position:absolute;right:-60px;bottom:-90px;width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.10),transparent 70%);
-}
-.hero-eyebrow{
-  font-size:11.5px;font-weight:800;letter-spacing:.22em;color:#AFC9F2;margin-bottom:14px;text-transform:uppercase;
-}
-.hero h2{
-  font-size:clamp(22px,3.4vw,34px);line-height:1.35;margin:0 0 16px;font-weight:800;text-wrap:balance;max-width:780px;
-}
-.hero h2 .warm{color:var(--hi-warm);}
-.hero h2 .cool{color:var(--hi-cool);}
-.hero p{max-width:700px;color:#C7D9F5;font-size:13.5px;line-height:1.85;margin:0;position:relative;z-index:1;}
-
-.dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;position:relative;z-index:1;}
-@media (max-width:900px){.dir-grid{grid-template-columns:1fr;}}
-.dir-card{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:var(--radius-md);
-  padding:16px;backdrop-filter:blur(2px);
-}
-.dir-card h5{margin:0 0 8px;font-size:13px;font-weight:800;color:#EAF1FF;}
-.dir-card p{margin:0;font-size:12px;line-height:1.7;color:#BBD0F1;}
-
-.summary-block{margin-top:4px;}
 
 /* annual view */
 .chart-wrap{padding:6px 4px 2px;}
@@ -561,6 +550,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .proposal-tag{display:inline-flex;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent-strong);margin-bottom:8px;}
 .proposal-card h5{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--text);}
 .proposal-card p{margin:0;font-size:12px;line-height:1.7;color:var(--text-muted);}
+.term-card p+p{margin-top:8px;}
+.term-card .term-en{font-weight:600;color:var(--text-faint);font-size:11.5px;margin-left:2px;}
+.term-card .term-flag{color:var(--accent-strong);font-weight:700;}
+
+/* 初めての方へ：仮説・数値目標の書き込みシート */
+.tut-worksheet{display:flex;flex-direction:column;gap:6px;}
+.tut-worksheet label{font-size:12px;font-weight:700;color:var(--text-muted);margin-top:10px;}
+.tut-worksheet label:first-child{margin-top:0;}
+.tut-worksheet textarea{
+  font:inherit;font-size:13px;padding:10px 12px;border-radius:10px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);resize:vertical;
+}
+.tut-worksheet textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+.guide-preview-note{font-size:11px;color:var(--text-faint);margin:12px 0 0;}
 
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
@@ -596,8 +599,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <a data-page="app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>MYSBC公式アプリ分析<span class="dot" style="background:var(--app)"></span></a>
       <a data-page="mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>メルマガ分析<span class="dot" style="background:var(--mail)"></span></a>
       <a data-page="compare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>クリニック比較</a>
-      <a data-page="dir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4v16"/><path d="M5 5h11l-2 3 2 3H5"/></svg>6月の方針・総括</a>
     </nav>
+    <div class="nav-utility" id="nav-utility">
+      <a data-page="guide" class="nav-utility-btn"><span class="nub-icon">🔰</span><span class="nub-text"><b>初めての方へ</b><span>使い方を4STEPで確認</span></span></a>
+      <a data-page="glossary" class="nav-utility-btn"><span class="nub-icon">📖</span><span class="nub-text"><b>用語集</b><span>指標の意味をすぐ確認</span></span></a>
+    </div>
     <div class="foot-note">要件定義（CPP_AIXPJ作業用シート）をもとに作成した画面デモです。実データ接続前のサンプルを含みます。</div>
   </aside>
 
@@ -2641,46 +2647,182 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
     </section>
 
-    <!-- ============ 9. 6月の方針・総括 ============ -->
-    <section class="page" id="page-dir">
-      <div class="hero">
-        <div class="hero-eyebrow">June Direction</div>
-        <h2><span class="cool">視聴の熱量</span>を、<span class="warm">予約の行動</span>へと変換する月へ。</h2>
-        <p>YouTubeは投稿数増加により視聴回数が過去最高水準を記録。TikTokは視聴数・フォロワー増加と認知拡大が継続している。<br>6月はこの「見てもらえている状態」を予約へ転換する導線設計を最優先に取り組む。</p>
-        <div class="dir-grid">
-          <div class="dir-card"><h5>TikTok規制への対応強化</h5><p>おすすめ規制を潜り抜けるコンテンツの量産で予約転換率の回復を目指す</p></div>
-          <div class="dir-card"><h5>TikTok予約転換の改善</h5><p>視聴は増えている。CTAの徹底とプロフィール導線の最適化で予約率回復へ</p></div>
-          <div class="dir-card"><h5>YouTube投稿数の維持</h5><p>31本の投稿頻度を継続。Shorts→長尺への誘導で登録者+100人以上を目指す</p></div>
+    <!-- ============ 10. 初めての方へ（使い方ガイド） ============ -->
+    <section class="page" id="page-guide">
+      <div class="page-head">
+        <div>
+          <h1>初めての方へ <span class="platform-chip chip-all">使い方ガイド</span></h1>
+          <p>このダッシュボードの見方を4つのSTEPで解説します（Instagram分析ページを例にしていますが、考え方は他のSNS・チャネルのページでも同じです）</p>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>今月の注目媒体：YouTube・TikTok<small>上の総括本文で言及している実績を数値・グラフで確認</small></div>
+      <div class="callout info" style="margin-bottom:22px">
+        <h4>🔰 まずはここから</h4>
+        <p>毎月このダッシュボードを開いたら、下のSTEP1〜STEP4の順番でチェックしていくのがおすすめです。慣れてきたら、自分なりの見る順番にアレンジしてOKです。わからない指標が出てきたら、サイドバー下の「📖 用語集」もあわせて確認してください。</p>
+      </div>
+
+      <div class="section-divider first" style="--sd-color:var(--accent);--sd-bg:var(--accent-soft)">
+        <span class="sd-num">1</span>
+        <div class="sd-text"><span class="sd-title">STEP1：まずは全体の数字をチェックしよう！</span><span class="sd-sub">「全体KPI」「Instagram分析」ページ上部のKPIカードを見る</span></div>
+      </div>
+      <div class="panel guide-preview">
+        <div class="panel-title"><span class="bar"></span>👀 ここを見ます：KPIカード<small>「全体KPI」「Instagram分析」ページ上部</small></div>
         <div class="panel-body">
-          <div style="font-size:12.5px;font-weight:800;color:var(--yt);margin-bottom:10px">📺 YouTube（視聴回数が過去最高水準）</div>
-          <div class="kpi-grid" style="margin-bottom:24px">
-            <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">総視聴回数</div><div class="kpi-value">20.8万</div><div class="kpi-sub">前月 15.9万 <span class="delta up">▲+30.8%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--yt)"><div class="kpi-label">Shorts視聴回数</div><div class="kpi-value">16.9万</div><div class="kpi-sub">前月 11.8万 <span class="delta up">▲+43.2%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">チャンネル登録増</div><div class="kpi-value">+94人</div><div class="kpi-sub">前月 +98人 <span class="delta flat">▼微減</span></div></div>
-            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">予約数</div><div class="kpi-value">9件</div><div class="kpi-sub">公開Shorts本数：31本（前月9本）</div></div>
-          </div>
-          <div style="font-size:12.5px;font-weight:800;color:var(--tt);margin-bottom:10px">🎵 TikTok（認知拡大は継続、予約転換に課題）</div>
           <div class="kpi-grid">
-            <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">投稿視聴数</div><div class="kpi-value">1.6M</div><div class="kpi-sub">前月 1.3M <span class="delta up">▲+23.6%</span></div></div>
-            <div class="kpi-card" style="--bar:var(--tt)"><div class="kpi-label">フォロワー総数</div><div class="kpi-value">40,342</div><div class="kpi-sub">純増 +583人 <span class="delta up">▲（前月+427）</span></div></div>
-            <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約率</div><div class="kpi-value">0.16%</div><div class="kpi-sub">前月 0.52% <span class="delta down">▼大幅低下</span></div></div>
-            <div class="kpi-card" style="--bar:var(--bad)"><div class="kpi-label">予約数</div><div class="kpi-value">3件</div><div class="kpi-sub">前月 8件 <span class="delta down">▼-62.5%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--accent)"><div class="kpi-label">予約数</div><div class="kpi-value">58件</div><div class="kpi-sub">前月 62件 <span class="delta down">▼-6.5%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リーチ数</div><div class="kpi-value">18.4万</div><div class="kpi-sub">前月比 <span class="delta up">▲+15.7%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--good)"><div class="kpi-label">保存数</div><div class="kpi-value">3,050</div><div class="kpi-sub">前月比 <span class="delta up">▲+8.2%</span></div></div>
+            <div class="kpi-card" style="--bar:var(--warn)"><div class="kpi-label">エンゲージメント率</div><div class="kpi-value">3.7%</div><div class="kpi-sub">前月比 <span class="delta down">▼-0.4pt</span></div></div>
           </div>
-          <p style="font-size:11px;color:var(--text-faint);margin-top:14px;line-height:1.6">より詳しい推移・ランキングは左メニューの各チャネルページをご覧ください。</p>
+          <p class="guide-preview-note">※表示はイメージです（実際の数値はページごとに異なります）</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <div class="callout info">
+            <ul>
+              <li>今月の「予約数」は目標数に届いている？</li>
+              <li>「リーチ数」は前月比で伸ばせている？</li>
+              <li>アカウント全体の「保存数」は前月比を超えている？</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div class="panel summary-block">
-        <div class="panel-title"><span class="bar"></span>🤖 AI分析（5月度 総括）</div>
+      <div class="section-divider" style="--sd-color:var(--ig);--sd-bg:rgba(193,57,107,.08)">
+        <span class="sd-num">2</span>
+        <div class="sd-text"><span class="sd-title">STEP2：トップ投稿を見てみよう！</span><span class="sd-sub">Instagram分析ページの「フィード分析」「リール分析」「ストーリー分析」で、フォーマットごとの上位投稿を見る</span></div>
+      </div>
+      <div class="panel guide-preview">
+        <div class="panel-title"><span class="bar"></span>👀 ここを見ます：投稿ランキング<small>投稿ギャラリー・リーチ数上位</small></div>
         <div class="panel-body">
-          <p style="font-size:13px;line-height:1.9;color:var(--text)">
-            プラットフォーム別に見ると、YouTubeはShorts投稿数の大幅増加が視聴回数・視聴者数の伸びに直結し、過去最高水準の認知を獲得できた月だった。TikTokも視聴数・フォロワー・コメントが伸び、感情訴求系コンテンツによるエンゲージメント向上が確認できている。一方でTikTokの予約転換は「おすすめ規制」の影響を強く受け、予約率0.52%→0.16%、予約数8件→3件と大幅に落ち込み、SNS全体の予約貢献数を押し下げる主因となった。Instagramは予約率4.25%と高水準を維持しており、リーチ拡大にも関わらず崩れていない予約導線の強さが確認できる。総じて「認知は広がっているが、その熱量を予約行動に変換しきれていない」のが5月の課題であり、6月はプロフィール導線とCTA設計の見直しを最優先事項とする。
-          </p>
+          <div class="rank-list">
+            <div class="rank-row r1"><div class="bg-bar" style="width:100%"></div><div class="rn">1</div><div class="rt">豊胸のダウンタイム、正直に話します</div><div class="rv">2.4万</div></div>
+            <div class="rank-row"><div class="bg-bar" style="width:78%"></div><div class="rn">2</div><div class="rt">術後の様子と喜びのコメントまとめ</div><div class="rv">1.9万</div></div>
+            <div class="rank-row"><div class="bg-bar" style="width:55%"></div><div class="rn">3</div><div class="rt">【Q&amp;A】豊胸のサイズ選び、失敗しないコツ</div><div class="rv">1.3万</div></div>
+          </div>
+          <p class="guide-preview-note">※表示はイメージです（実際の投稿・数値はページごとに異なります）</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <div class="callout info">
+            <ul>
+              <li><b>フィードの確認：</b>「保存数」が高い投稿はあるか？（どんな悩み解決テーマが保存されているか確認）</li>
+              <li><b>リールの確認：</b>「再生数」と「視聴維持率（冒頭で離脱されていないか）」は十分か？（新規流入のフックになっているか確認）</li>
+              <li><b>ストーリーズの確認：</b>「プロフィールの遷移数」や「予約リンクのタップ数」が出ているか？（既存ファンを予約へ誘導できているか確認）</li>
+            </ul>
+          </div>
+          <p style="margin:12px 0 0;font-size:12px;color:var(--text-muted)">🎥 リールは「再生数」だけでなく「視聴維持率」が命です。</p>
+        </div>
+      </div>
+
+      <div class="section-divider" style="--sd-color:var(--warn);--sd-bg:var(--warn-soft)">
+        <span class="sd-num">3</span>
+        <div class="sd-text"><span class="sd-title">STEP3：トップ投稿から「勝ちパターン」を見つけてみよう！</span><span class="sd-sub">投稿ギャラリー・リーチ数ランキングを見る</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <div class="callout info">
+            <ul>
+              <li><b>上位（バズ）投稿の分析：</b>1位〜3位の投稿は、なぜ伸びたのか？（表紙の文字の大きさ、テーマ、投稿時間帯などの共通点を探す）</li>
+              <li><b>下位（不調）投稿の分析：</b>逆に伸びなかった投稿は、どこに問題があったか？（画像が見づらい、ターゲット層の悩みとズレているなど）</li>
+              <li><b>再現性の確認：</b>上位投稿の要素を、そのまま次の投稿に横展開（真似）できるか？</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider" style="--sd-color:var(--good);--sd-bg:var(--good-soft)">
+        <span class="sd-num">4</span>
+        <div class="sd-text"><span class="sd-title">STEP4：来月の具体的なアクション方針を決めよう！</span><span class="sd-sub">STEP1〜3で見つけた気づきを、来月の打ち手に落とし込む</span></div>
+      </div>
+      <div class="panel guide-preview">
+        <div class="panel-title"><span class="bar"></span>👀 ここに落とし込みます：来月にやるべきこと<small>「全体KPI」ページ下部のイメージ</small></div>
+        <div class="panel-body">
+          <ul class="todo">
+            <li><span class="pdot high"></span>フィードの保存率が低い投稿を減らし、悩み解決テーマの投稿を増やす</li>
+            <li><span class="pdot mid"></span>キャプション末尾に「保存して後で見返してね」の一文を追加する</li>
+            <li><span class="pdot mid"></span>来月は保存率を1.5%→2.5%に引き上げる（数値目標）</li>
+          </ul>
+          <p class="guide-preview-note">※表示はイメージです（実際の内容はあなたの仮説に合わせて考えます）</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <div class="callout info">
+            <ul>
+              <li><b>改善対象の絞り込み：</b>今月一番足を引っ張った「ボトルネック（例：フィードの保存率が低い）」を1つ特定する。</li>
+              <li><b>仮説と対策の言語化：</b>「〇〇が原因だから、来月は××を試す」という具体的な打ち手を決める。</li>
+              <li><b>数値目標の設定：</b>「単に頑張る」ではなく、「来月は保存率を1.5%→2.5%に引き上げる」といった具体的な数値目標まで落とし込む。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>あなたの仮説と数値目標を書き込もう<small>この端末のブラウザにのみ保存されます</small></div>
+        <div class="panel-body">
+          <div class="tut-worksheet">
+            <label for="tut-ng">NG（今月、良くなかった点・原因）</label>
+            <textarea id="tut-ng" rows="2" placeholder="例：フィードの保存率が前月より下がった"></textarea>
+            <label for="tut-ok">OK（来月、目指したい具体的な状態）</label>
+            <textarea id="tut-ok" rows="2" placeholder="例：保存率を1.5%→2.5%に引き上げる"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11. 用語集 ============ -->
+    <section class="page" id="page-glossary">
+      <div class="page-head">
+        <div>
+          <h1>用語集 <span class="platform-chip chip-all">SNS分析指標</span></h1>
+          <p>ダッシュボードに出てくる主な指標の意味と、混同しやすいポイントをまとめています</p>
+        </div>
+      </div>
+
+      <div class="proposal-grid">
+        <div class="proposal-card term-card">
+          <h5>リーチ数<span class="term-en">(Reach)</span></h5>
+          <p>意味：投稿を見た「人（アカウント）の数」。1人が5回見ても「1」とカウント。「どれだけ新しい人に届いたか（認知の広がり）」を測る。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>インプレッション数<span class="term-en">(Impressions)</span></h5>
+          <p>意味：投稿が「表示された回数」。1人が5回見たら「5」とカウント。</p>
+          <p class="term-flag">ごっちゃ回避：「リーチ＝人数」「インプレッション＝回数」と覚える！</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>セッション数<span class="term-en">(Sessions)</span></h5>
+          <p>意味：投稿内のリンク等から「WEBサイトに訪問した回数」。</p>
+          <p class="term-flag">ごっちゃ回避：インスタ内での表示（インプレッション）ではなく、「外部サイトへ移動してきた回数」のこと。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>エンゲージメント数<span class="term-en">(Engagement)</span></h5>
+          <p>意味：投稿に対するリアクションの総数（いいね＋コメント＋保存＋シェアなどの合計）。ユーザーがどれくらい反応してくれたか（反応の熱量）を測る。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>エンゲージメント率<span class="term-en">(ER)</span></h5>
+          <p>意味：投稿を見た人のうち、リアクションしてくれた人の割合（計算式：エンゲージメント数÷リーチ数 または フォロワー数）。</p>
+          <p class="term-flag">ごっちゃ回避：「数」は単純な合計値、「率」はリーチ規模に対する反応の濃さ。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>保存数 / 保存率<span class="term-en">(Saves / Save Rate)</span></h5>
+          <p>意味：「あとで見返したい」と保存された数、およびその割合（保存数÷リーチ数）。</p>
+          <p class="term-flag">ポイント：インスタのアルゴリズムで最も重視される指標。保存率2%以上がバズの目安。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>プロフィールアクセス数<span class="term-en">(Profile Visits)</span></h5>
+          <p>意味：投稿を見て、アカウントのトップページ（プロフィール）を開いた回数。「投稿を見て、どんなアカウントか興味を持ってくれたか」を測る。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>プロフィールのタップ数<span class="term-en">(Link Clicks)</span></h5>
+          <p>意味：プロフィール欄に貼ってある「予約サイトや自社URL」が押された回数。</p>
+          <p class="term-flag">ごっちゃ回避：「アクセス数＝プロフィールに来た数」「タップ数＝そこから予約サイトへ出た数」。</p>
+        </div>
+        <div class="proposal-card term-card">
+          <h5>視聴維持率<span class="term-en">(Retention Rate)</span></h5>
+          <p>意味：動画の最後まで離脱せずに見続けてくれた人の割合。</p>
+          <p class="term-flag">ごっちゃ回避：再生数が多くても、「冒頭3秒で離脱（維持率が低い）」されている場合は動画の改善が必要。</p>
         </div>
       </div>
     </section>
@@ -2690,7 +2832,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
 <script>
 (function(){
-  var navLinks = document.querySelectorAll('#nav a');
+  var navLinks = document.querySelectorAll('#nav a, #nav-utility a');
   var pages = document.querySelectorAll('.page');
   navLinks.forEach(function(link){
     link.addEventListener('click', function(){
@@ -2698,8 +2840,21 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       link.classList.add('active');
       var target = link.getAttribute('data-page');
       pages.forEach(function(p){ p.classList.toggle('active', p.id === 'page-'+target); });
+      window.scrollTo(0,0);
     });
   });
+
+  /* 初めての方へ：仮説・数値目標の書き込みシート（この端末のブラウザにのみ保存） */
+  var tutNg = document.getElementById('tut-ng');
+  var tutOk = document.getElementById('tut-ok');
+  if(tutNg && tutOk){
+    try{
+      tutNg.value = localStorage.getItem('sbc_dash_tut_ng') || '';
+      tutOk.value = localStorage.getItem('sbc_dash_tut_ok') || '';
+    }catch(e){}
+    tutNg.addEventListener('input', function(){ try{ localStorage.setItem('sbc_dash_tut_ng', tutNg.value); }catch(e){} });
+    tutOk.addEventListener('input', function(){ try{ localStorage.setItem('sbc_dash_tut_ok', tutOk.value); }catch(e){} });
+  }
 
   var segBtns = document.querySelectorAll('#kpi-seg button');
   segBtns.forEach(function(btn){
