@@ -527,6 +527,23 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .role-help .rh-popover td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);}
 .role-help .rh-popover tr:last-child td{border-bottom:none;}
 
+.section-divider{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 20px;margin:30px 0 16px;
+  border-radius:var(--radius-lg);
+  background:var(--sd-bg);border:1px solid var(--sd-color);
+}
+.section-divider.first{margin-top:0;}
+.section-divider .sd-num{
+  width:36px;height:36px;border-radius:50%;flex:none;
+  background:var(--sd-color);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:15px;
+}
+.section-divider .sd-text{display:flex;flex-direction:column;gap:2px;}
+.section-divider .sd-title{font-size:15px;font-weight:800;color:var(--text);}
+.section-divider .sd-sub{font-size:11.5px;color:var(--text-muted);}
+
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
 .overview-stat-goal .og-label{font-size:9.5px;color:var(--text-faint);font-weight:700;letter-spacing:.02em;}
@@ -914,6 +931,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。ストーリーの指標はページ下部の「ストーリー分析（参考）」でご覧いただけます。</div></div>
 
       <div id="ig-feed-view">
+      <div class="section-divider first" style="--sd-color:var(--accent);--sd-bg:var(--accent-soft)">
+        <span class="sd-num">①</span>
+        <div class="sd-text"><span class="sd-title">全体</span><span class="sd-sub">KPI・予約数の推移・日別推移・予約の導線・予約ファネル</span></div>
+      </div>
       <div class="seg" id="ig-feed-month-seg" style="margin-bottom:14px">
         <button data-month="0">2月</button>
         <button data-month="1">3月</button>
@@ -1033,6 +1054,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      <div class="section-divider" style="--sd-color:var(--ig);--sd-bg:rgba(193,57,107,.08)">
+        <span class="sd-num">②</span>
+        <div class="sd-text"><span class="sd-title">フィード分析</span><span class="sd-sub">投稿ギャラリー・リーチ数ランキング・よかった点/課題・AI分析</span></div>
+      </div>
+
       <div class="panel">
         <div class="panel-title"><span class="bar"></span>投稿ギャラリー（フィード・リーチ数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small>
           <div class="role-help">
@@ -1100,14 +1126,36 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p>フィード投稿はリーチ数が前月比+15.7%と伸びており、症例＋解説（Q&A形式）を中心としたコンテンツが認知拡大に寄与しています。一方で予約数は58件（▼6.5%）とやや減少しており、リーチした人をプロフィール訪問・予約タップへ導く導線（「リーチ→プロフィール訪問」転換率3.3%）が全体のボトルネックです。投稿本数・頻度を維持しつつ、キャプションや投稿末尾でのプロフィール誘導を強化することが、リーチの伸びを予約数に変換するための次の一手です。</p>
       </div>
 
-      <div class="panel" style="margin-top:14px">
+      <div class="section-divider" style="--sd-color:var(--app);--sd-bg:rgba(91,87,209,.08)">
+        <span class="sd-num">③</span>
+        <div class="sd-text"><span class="sd-title">リール分析</span><span class="sd-sub">再生数・投稿本数・投稿ギャラリー・再生数ランキング・よかった点/課題・AI分析</span></div>
+      </div>
+
+      <div class="panel">
         <div class="panel-title"><span class="bar"></span>リール分析（参考）<small>フィード投稿とは別に集計。全項目サンプル値</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">再生数</div><div class="kpi-value">12.8万</div><div class="kpi-sub">前月 9.6万 <span class="delta up">▲+33.3%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">10本</div><div class="kpi-sub">前月 6本 <span class="delta up">▲+66.7%</span></div></div>
           </div>
-          <div class="panel-title" style="padding:0 0 8px;border:none">リール再生数ランキング（5月）</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>投稿ギャラリー（リール・再生数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small></div>
+        <div class="panel-body" style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">再生数 31.0K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">再生数 26.5K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">再生数 21.8K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">再生数 18.2K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">再生数 15.9K<br>投稿本数 1本</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:0 17px 14px;line-height:1.6">※リール再生数ランキング（5月）上位5投稿分のプレースホルダーです。投稿画像を頂き次第、差し替えます。</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>リール再生数ランキング（5月）</div>
+        <div class="panel-body">
           <p class="rank-hint">クリックすると投稿ページに遷移します（デモ版のためInstagramトップへ遷移）</p>
           <div class="rank-list" id="ig-reel-rank"></div>
         </div>
@@ -1135,14 +1183,36 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p>リールは投稿本数の増加（+66.7%）が再生数の増加（+33.3%）に直結しており、量を投下すること自体が効果につながっています。ただし予約タップ数・予約数は現状サンプル値のみで実測されていないため、再生数の伸びが実際の予約にどれだけ貢献しているかは検証できていません。まずは計測タグを導入し、フィード同様に「再生→プロフィール→予約」の転換率を可視化することが次の課題です。</p>
       </div>
 
-      <div class="panel" style="margin-top:14px">
-        <div class="panel-title"><span class="bar"></span>ストーリー分析（参考）<small>フィード投稿とは別に集計。詳細は上部「ストーリー」タブもご覧ください</small></div>
+      <div class="section-divider" style="--sd-color:var(--mail);--sd-bg:rgba(184,92,31,.08)">
+        <span class="sd-num">④</span>
+        <div class="sd-text"><span class="sd-title">ストーリー</span><span class="sd-sub">リンクスタンプタップ数・投稿本数・投稿ギャラリー・表示回数ランキング・よかった点/課題・AI分析</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>ストーリー分析（参考）<small>フィード投稿とは別に集計</small></div>
         <div class="panel-body">
           <div class="kpi-grid" style="margin-bottom:16px">
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">リンクスタンプタップ数</div><div class="kpi-value">3,850</div><div class="kpi-sub">前月 3,120 <span class="delta up">▲+23.4%</span></div></div>
             <div class="kpi-card" style="--bar:var(--ig)"><div class="kpi-label">投稿本数</div><div class="kpi-value">45本</div><div class="kpi-sub">前月 38本 <span class="delta up">▲+18.4%</span></div></div>
           </div>
-          <div class="panel-title" style="padding:0 0 8px;border:none">ストーリー企画別 表示回数ランキング（5月）</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>投稿ギャラリー（ストーリー・表示回数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small></div>
+        <div class="panel-body" style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">表示回数 18.5K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">表示回数 15.2K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">表示回数 13.8K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">表示回数 11.9K<br>投稿本数 1本</div></div>
+          <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">表示回数 9.6K<br>投稿本数 1本</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:0 17px 14px;line-height:1.6">※ストーリー企画別 表示回数ランキング（5月）上位5企画分のプレースホルダーです。投稿画像を頂き次第、差し替えます。</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>ストーリー企画別 表示回数ランキング（5月）</div>
+        <div class="panel-body">
           <div class="rank-list" id="ig-story-rank-ref"></div>
         </div>
       </div>
@@ -1249,6 +1319,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
       </div>
 
+      <div class="section-divider" style="--sd-color:var(--text-muted);--sd-bg:var(--surface-muted)">
+        <span class="sd-num">⑤</span>
+        <div class="sd-text"><span class="sd-title">他院・競合比較</span><span class="sd-sub">競合アカウントとの比較・AI分析</span></div>
+      </div>
+
       <div class="panel">
         <div class="panel-title"><span class="bar"></span>他院・競合比較　<small>豊胸領域を発信する先生の投稿分析（サンプル・フィード基準・上位8件）</small></div>
         <div class="table-scroll">
@@ -1268,31 +1343,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="callout good">
-          <h4>✅ よかった点</h4>
-          <ul>
-            <li>フィードはリーチ数が前月比+15.7%と伸長。プロフィール流入・保存数も改善傾向</li>
-            <li>ストーリーはリンクスタンプタップ数が+23.4%、表示回数も+17.2%と両方伸びている</li>
-            <li>フィードのIGプロフィール予約率4.25%は全チャネル中でも高い水準を維持</li>
-          </ul>
-        </div>
-        <div class="callout bad">
-          <h4>🔴 課題・改善点</h4>
-          <ul>
-            <li>フィードの予約数は58件（▼6.5%）とやや減少。リーチの伸びを予約数の伸びに変換しきれていない</li>
-            <li>ストーリーの完了率が71.2%→68.4%に低下。冒頭で離脱されている可能性がある</li>
-            <li>フィード・ストーリーとも予約タップ数はサンプル値のみで実測未導入。効果検証にはタグ実装が必要</li>
-          </ul>
-        </div>
-      </div>
-
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>フィードはリーチ数が前月比+15.7%と伸長し、プロフィール流入・保存数も改善傾向にあります。予約率4.25%は依然として高水準ですが、予約数は58件（▼6.5%）とやや減少しており、リーチの伸びを予約数の伸びに変換しきれていません。ストーリーはリンクスタンプという直接的な導線を持つため「表示→タップ」以降の転換率がフィードより高く、表示回数自体を伸ばせば予約数の上積みが期待できます。フィードで信頼を作り、ストーリーで即時の行動を促すという役割分担を意識した運用が次月の伸びしろです。</p>
       </div>
 
-      <div class="panel" style="margin-top:14px">
+      <div class="section-divider" style="--sd-color:var(--good);--sd-bg:var(--good-soft)">
+        <span class="sd-num">⑥</span>
+        <div class="sd-text"><span class="sd-title">6月にやるべきこと</span><span class="sd-sub">優先度別アクションリスト</span></div>
+      </div>
+
+      <div class="panel">
         <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
         <div class="panel-body">
           <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
