@@ -555,6 +555,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .ig-section .section-divider{margin:14px 0 16px;}
 .ig-section .section-divider.first{margin-top:14px;}
 
+.proposal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media (max-width:900px){.proposal-grid{grid-template-columns:1fr;}}
+.proposal-card{background:var(--surface-muted);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;}
+.proposal-tag{display:inline-flex;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent-strong);margin-bottom:8px;}
+.proposal-card h5{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--text);}
+.proposal-card p{margin:0;font-size:12px;line-height:1.7;color:var(--text-muted);}
+
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
 .overview-stat-goal .og-label{font-size:9.5px;color:var(--text-faint);font-weight:700;letter-spacing:.02em;}
@@ -1376,7 +1383,35 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="ig-section" style="--sec-color:var(--good);--sec-bg-soft:rgba(30,158,98,.05)">
       <div class="section-divider" style="--sd-color:var(--good);--sd-bg:var(--good-soft)">
         <span class="sd-num">⑥</span>
-        <div class="sd-text"><span class="sd-title">6月にやるべきこと</span><span class="sd-sub">優先度別アクションリスト</span></div>
+        <div class="sd-text"><span class="sd-title">6月にやるべきこと</span><span class="sd-sub">優先度別アクションリスト・次月の投稿提案</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>次月の投稿提案<small>分析結果を踏まえた6月の投稿企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">フィード</div>
+              <h5>症例＋解説（Q&amp;A形式）を継続</h5>
+              <p>5月の投稿の44%を占め、リーチ数ランキング上位を独占したフォーマット。キャプション末尾や投稿末尾に「プロフィールのリンクから予約はこちら」の一文を明示的に追加し、伸び悩む「リーチ→プロフィール訪問」の転換率（3.3%）の改善を狙う。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">リール</div>
+              <h5>「1分でわかる」系の要点整理リールを量産</h5>
+              <p>リール再生数ランキング1位の型。投稿本数の増加（+66.7%）がそのまま再生数増（+33.3%）に直結しているため、同じ型で新規ネタ（施術の種類・料金比較・ダウンタイムの目安など）を複数本用意し、投稿頻度を維持する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">ストーリー</div>
+              <h5>質問箱・アンケート企画は継続、冒頭2枚で結論を先出し</h5>
+              <p>双方向企画は表示回数ランキング上位で反応が良い一方、完了率が71.2%→68.4%に低下。冒頭2枚以内で要点が伝わる構成に見直し、最後まで見てもらえる形に整えて継続する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">全体</div>
+              <h5>「術後の様子」「症例解説」系ネタをフィード・リール・ストーリーへ横展開</h5>
+              <p>フィード・リールともに術後の様子や症例解説系が上位に入っている。同じテーマをフィードで信頼構築、リールで新規層への認知拡大、ストーリーで即時の行動喚起、という役割分担を意識して3形式に展開する。</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="panel">
