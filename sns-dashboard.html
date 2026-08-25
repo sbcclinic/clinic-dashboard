@@ -513,6 +513,19 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
 .overview-stat-goal .og-label{font-size:9.5px;color:var(--text-faint);font-weight:700;letter-spacing:.02em;}
 .overview-stat-goal .og-value{font-size:13.5px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums;}
+
+.goal-progress-bar{height:9px;background:var(--surface-muted);border-radius:99px;overflow:hidden;margin-top:10px;}
+.goal-progress-bar i{display:block;height:100%;border-radius:99px;}
+.cm-goal-bar{height:6px;background:var(--surface-muted);border-radius:99px;overflow:hidden;margin-top:5px;}
+.cm-goal-bar i{display:block;height:100%;border-radius:99px;}
+
+.summary-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;}
+@media (max-width:900px){.summary-3col{grid-template-columns:1fr;}}
+.summary-col-head{font-size:15px;font-weight:800;margin-bottom:8px;}
+.summary-col-head.good{color:var(--good);}
+.summary-col-head.bad{color:var(--bad);}
+.summary-col-head.accent{color:var(--accent-strong);}
+.summary-col p{margin:0;font-size:13.5px;line-height:1.8;color:var(--text);}
 </style>
 
 <div class="app">
@@ -564,7 +577,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div class="callout info" style="margin-bottom:18px">
         <h4>📌 全体サマリー（5月のまとめ・特筆すべきこと）</h4>
-        <p>SNSセッション数（+6.5%）・アクティブユーザー（+12.0%）は回復傾向にある一方、TikTokのおすすめ規制の影響で同経由の予約が3件（前月8件）まで急減し、SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。Instagramプロフィールの予約率（4.25%）は高水準を維持しており、獲得チャネルとしての質は崩れていません。6月はTikTok減少分をアプリ・メルマガへの配信強化で補いつつ、3ヶ月横ばいのカウンセリング予約（5件）への入口強化を最優先で進めます。</p>
+        <div class="summary-3col">
+          <div class="summary-col">
+            <div class="summary-col-head good">✅ 今月良かった点</div>
+            <p>SNSセッション数（+6.5%）・アクティブユーザー（+12.0%）が回復傾向。Instagramプロフィールの予約率（4.25%）も高水準を維持しており、獲得チャネルとしての質は崩れていません。</p>
+          </div>
+          <div class="summary-col">
+            <div class="summary-col-head bad">🔴 今月悪かった点</div>
+            <p>TikTokのおすすめ規制の影響で同経由の予約が3件（前月8件）まで急減。SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。</p>
+          </div>
+          <div class="summary-col">
+            <div class="summary-col-head accent">🎯 来月の方針</div>
+            <p>TikTok減少分をアプリ・メルマガへの配信強化で補いつつ、3ヶ月横ばいのカウンセリング予約（5件）への入口強化を最優先で進めます。</p>
+          </div>
+        </div>
       </div>
 
       <div class="panel overview-panel">
@@ -580,6 +606,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
                 <div class="og-item"><div class="og-label">結果</div><div class="og-value">183件</div></div>
                 <div class="og-item"><div class="og-label">達成率</div><div class="og-value" style="color:var(--warn)">91.5%</div></div>
               </div>
+              <div class="goal-progress-bar"><i style="width:91.5%;background:var(--warn)"></i></div>
             </div>
             <div class="overview-stat-card" style="--bar:var(--bad)">
               <div class="overview-stat-label">予約率</div>
@@ -618,42 +645,42 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--ig-fill)">IG</span>Instagram</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">フォロワー数</div><div class="cm-value">68,352人</div><div class="cm-sub">純増 +412人</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">80件</div><div class="cm-sub">前月 79件 <span class="delta up">▲+1.3%</span></div><div class="cm-goal">目標 <b>85件</b>・達成率 <b>94.1%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">80件</div><div class="cm-sub">前月 79件 <span class="delta up">▲+1.3%</span></div><div class="cm-goal">目標 <b>85件</b>・達成率 <b>94.1%</b></div><div class="cm-goal-bar"><i style="width:94.1%;background:var(--warn)"></i></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--yt-fill)">YT</span>YouTube</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">チャンネル登録者数</div><div class="cm-value">9,845人</div><div class="cm-sub">純増 +94人</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">9件</div><div class="cm-sub">前月 7件 <span class="delta up">▲+28.6%</span></div><div class="cm-goal">目標 <b>12件</b>・達成率 <b>75.0%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">9件</div><div class="cm-sub">前月 7件 <span class="delta up">▲+28.6%</span></div><div class="cm-goal">目標 <b>12件</b>・達成率 <b>75.0%</b></div><div class="cm-goal-bar"><i style="width:75.0%;background:var(--bad)"></i></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--tt-fill)">TT</span>TikTok</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">フォロワー数</div><div class="cm-value">40,342人</div><div class="cm-sub">純増 +583人</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">3件</div><div class="cm-sub">前月 8件 <span class="delta down">▼-62.5%</span></div><div class="cm-goal">目標 <b>8件</b>・達成率 <b>37.5%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">3件</div><div class="cm-sub">前月 8件 <span class="delta down">▼-62.5%</span></div><div class="cm-goal">目標 <b>8件</b>・達成率 <b>37.5%</b></div><div class="cm-goal-bar"><i style="width:37.5%;background:var(--bad)"></i></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--seo-fill)">SEO</span>特集記事(SEO)</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">流入数</div><div class="cm-value">38,500</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">14件</div><div class="cm-sub">前月比 <span class="delta up">▲+27.3%</span></div><div class="cm-goal">目標 <b>15件</b>・達成率 <b>93.3%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">14件</div><div class="cm-sub">前月比 <span class="delta up">▲+27.3%</span></div><div class="cm-goal">目標 <b>15件</b>・達成率 <b>93.3%</b></div><div class="cm-goal-bar"><i style="width:93.3%;background:var(--warn)"></i></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--app-fill)">📱</span>MYSBC公式アプリ</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">セッション数</div><div class="cm-value">28,400</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">46件</div><div class="cm-sub">前月比 <span class="delta up">▲+8.8%</span></div><div class="cm-goal">目標 <b>45件</b>・達成率 <b>102.2%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">46件</div><div class="cm-sub">前月比 <span class="delta up">▲+8.8%</span></div><div class="cm-goal">目標 <b>45件</b>・達成率 <b>102.2%</b></div><div class="cm-goal-bar"><i style="width:100%;background:var(--good)"></i></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--mail-fill)">✉</span>メルマガ</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">セッション数</div><div class="cm-value">42,000</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">31件</div><div class="cm-sub">前月比 <span class="delta up">▲+1.9%</span></div><div class="cm-goal">目標 <b>30件</b>・達成率 <b>103.3%</b></div></div>
+                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">31件</div><div class="cm-sub">前月比 <span class="delta up">▲+1.9%</span></div><div class="cm-goal">目標 <b>30件</b>・達成率 <b>103.3%</b></div><div class="cm-goal-bar"><i style="width:100%;background:var(--good)"></i></div></div>
               </div>
             </div>
           </div>
@@ -686,12 +713,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div class="panel">
         <div class="panel-title"><span class="bar"></span>媒体別サマリー・予約貢献率<small>予約率（効率）と予約貢献率（構成比）をあわせて確認し、縮小・撤退の判断材料に</small></div>
-        <div class="panel-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+        <div class="panel-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:stretch">
         <div style="flex:1.7;min-width:340px">
         <div class="table-scroll">
         <table>
           <thead><tr><th style="text-align:left">媒体</th><th>セッション数</th><th>予約数</th><th>予約数 前月比</th><th>予約率</th><th>評価</th></tr></thead>
           <tbody>
+            <tr>
+              <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagram</td>
+              <td>27.6万</td>
+              <td>80件</td>
+              <td><span class="delta up">▲+1.3%</span></td>
+              <td class="cur">0.029%</td>
+              <td><span class="pill good">効果大・継続</span></td>
+            </tr>
             <tr>
               <td><span class="dot" style="background:var(--app);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>MYSBC公式アプリ</td>
               <td>28,400</td>
@@ -717,14 +752,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               <td><span class="pill good">効果大・継続</span></td>
             </tr>
             <tr>
-              <td><span class="dot" style="background:var(--ig);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>Instagram</td>
-              <td>27.6万</td>
-              <td>80件</td>
-              <td><span class="delta up">▲+1.3%</span></td>
-              <td class="cur">0.029%</td>
-              <td><span class="pill good">効果大・継続</span></td>
-            </tr>
-            <tr>
               <td><span class="dot" style="background:var(--yt);display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px"></span>YouTube</td>
               <td>20.8万</td>
               <td>9件</td>
@@ -745,10 +772,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
         </div>
 
-        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:12px;align-items:center">
-          <div style="font-size:12px;font-weight:800;color:var(--text-muted);align-self:flex-start">予約貢献率（媒体別）　5月・全体予約数183件の内訳</div>
-          <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:170px;height:170px;flex:none"></svg>
-          <div class="compare-trend-legend" id="contrib-donut-legend" style="border-top:none;margin-top:0;padding-top:0;flex-direction:column;align-items:flex-start;width:100%"></div>
+        <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center">
+          <div style="font-size:12px;font-weight:800;color:var(--text-muted);text-align:center">予約貢献率（媒体別）　5月・全体予約数183件の内訳</div>
+          <svg id="contrib-donut-chart" viewBox="0 0 220 220" style="width:230px;height:230px;flex:none"></svg>
         </div>
         </div>
 
@@ -818,6 +844,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <div class="callout info">
           <h4>🤖 AI分析</h4>
           <p>セッション数・アクティブユーザーは前月比でそれぞれ+6.5%・+12.0%と回復傾向にありますが、SNS予約貢献数は61件（▼28.2%）と大幅に減少しました。Instagramプロフィールの予約率は4.25%と引き続き高水準を維持しており、予約獲得チャネルとしての質は崩れていません。一方でTikTok経由の予約が3件（前月8件）と急減しており、おすすめ規制の影響による露出機会の減少が全体予約数を押し下げた主因と考えられます。カウンセリング予約は5件のまま3ヶ月横ばいが続いており、高単価施術への入口強化が引き続き最重要課題です。</p>
+        </div>
+
+        <div class="panel" style="margin-top:14px">
+          <div class="panel-title"><span class="bar"></span>やることリスト（新人向け）<small>まずはこれだけ！というシンプルな3つ</small></div>
+          <div class="panel-body">
+            <ul class="todo">
+              <li><span class="pdot high"></span>TikTokの投稿を今月より2回増やす！おすすめ規制で埋もれやすいので、まずは投稿数で勝負しよう</li>
+              <li><span class="pdot mid"></span>アプリのプッシュ通知を週1回、いつもより多めに送ってみる。TikTokで減った分の予約をアプリで取り返そう</li>
+              <li><span class="pdot mid"></span>次の投稿のキャプション最後に「カウンセリング予約はこちらから」を一文追加してみる。3ヶ月ずっと5件のままなので、まずは声かけから</li>
+            </ul>
+          </div>
         </div>
       </div>
 
