@@ -544,6 +544,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .section-divider .sd-title{font-size:15px;font-weight:800;color:var(--text);}
 .section-divider .sd-sub{font-size:11.5px;color:var(--text-muted);}
 
+.ig-section{
+  border:1px solid var(--sec-color);border-left-width:6px;
+  border-radius:var(--radius-lg);
+  background:var(--sec-bg-soft);
+  padding:6px 18px 22px;
+  margin:0 0 30px;
+}
+.ig-section:last-child{margin-bottom:0;}
+.ig-section .section-divider{margin:14px 0 16px;}
+.ig-section .section-divider.first{margin-top:14px;}
+
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
 .overview-stat-goal .og-label{font-size:9.5px;color:var(--text-faint);font-weight:700;letter-spacing:.02em;}
@@ -931,6 +942,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。ストーリーの指標はページ下部の「ストーリー分析（参考）」でご覧いただけます。</div></div>
 
       <div id="ig-feed-view">
+      <div class="ig-section" style="--sec-color:var(--accent);--sec-bg-soft:var(--accent-soft)">
       <div class="section-divider first" style="--sd-color:var(--accent);--sd-bg:var(--accent-soft)">
         <span class="sd-num">①</span>
         <div class="sd-text"><span class="sd-title">全体</span><span class="sd-sub">KPI・予約数の推移・日別推移・予約の導線・予約ファネル</span></div>
@@ -1054,6 +1066,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      </div>
+
+      <div class="ig-section" style="--sec-color:var(--ig);--sec-bg-soft:rgba(193,57,107,.05)">
       <div class="section-divider" style="--sd-color:var(--ig);--sd-bg:rgba(193,57,107,.08)">
         <span class="sd-num">②</span>
         <div class="sd-text"><span class="sd-title">フィード分析</span><span class="sd-sub">投稿ギャラリー・リーチ数ランキング・よかった点/課題・AI分析</span></div>
@@ -1126,6 +1141,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p>フィード投稿はリーチ数が前月比+15.7%と伸びており、症例＋解説（Q&A形式）を中心としたコンテンツが認知拡大に寄与しています。一方で予約数は58件（▼6.5%）とやや減少しており、リーチした人をプロフィール訪問・予約タップへ導く導線（「リーチ→プロフィール訪問」転換率3.3%）が全体のボトルネックです。投稿本数・頻度を維持しつつ、キャプションや投稿末尾でのプロフィール誘導を強化することが、リーチの伸びを予約数に変換するための次の一手です。</p>
       </div>
 
+      </div>
+
+      <div class="ig-section" style="--sec-color:var(--app);--sec-bg-soft:rgba(91,87,209,.05)">
       <div class="section-divider" style="--sd-color:var(--app);--sd-bg:rgba(91,87,209,.08)">
         <span class="sd-num">③</span>
         <div class="sd-text"><span class="sd-title">リール分析</span><span class="sd-sub">再生数・投稿本数・投稿ギャラリー・再生数ランキング・よかった点/課題・AI分析</span></div>
@@ -1183,6 +1201,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p>リールは投稿本数の増加（+66.7%）が再生数の増加（+33.3%）に直結しており、量を投下すること自体が効果につながっています。ただし予約タップ数・予約数は現状サンプル値のみで実測されていないため、再生数の伸びが実際の予約にどれだけ貢献しているかは検証できていません。まずは計測タグを導入し、フィード同様に「再生→プロフィール→予約」の転換率を可視化することが次の課題です。</p>
       </div>
 
+      </div>
+
+      <div class="ig-section" style="--sec-color:var(--mail);--sec-bg-soft:rgba(184,92,31,.05)">
       <div class="section-divider" style="--sd-color:var(--mail);--sd-bg:rgba(184,92,31,.08)">
         <span class="sd-num">④</span>
         <div class="sd-text"><span class="sd-title">ストーリー</span><span class="sd-sub">リンクスタンプタップ数・投稿本数・投稿ギャラリー・表示回数ランキング・よかった点/課題・AI分析</span></div>
@@ -1319,6 +1340,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
       </div>
 
+      </div>
+
+      <div class="ig-section" style="--sec-color:var(--border-strong);--sec-bg-soft:var(--surface-muted)">
       <div class="section-divider" style="--sd-color:var(--text-muted);--sd-bg:var(--surface-muted)">
         <span class="sd-num">⑤</span>
         <div class="sd-text"><span class="sd-title">他院・競合比較</span><span class="sd-sub">競合アカウントとの比較・AI分析</span></div>
@@ -1347,7 +1371,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <h4>🤖 AI分析</h4>
         <p>フィードはリーチ数が前月比+15.7%と伸長し、プロフィール流入・保存数も改善傾向にあります。予約率4.25%は依然として高水準ですが、予約数は58件（▼6.5%）とやや減少しており、リーチの伸びを予約数の伸びに変換しきれていません。ストーリーはリンクスタンプという直接的な導線を持つため「表示→タップ」以降の転換率がフィードより高く、表示回数自体を伸ばせば予約数の上積みが期待できます。フィードで信頼を作り、ストーリーで即時の行動を促すという役割分担を意識した運用が次月の伸びしろです。</p>
       </div>
+      </div>
 
+      <div class="ig-section" style="--sec-color:var(--good);--sec-bg-soft:rgba(30,158,98,.05)">
       <div class="section-divider" style="--sd-color:var(--good);--sd-bg:var(--good-soft)">
         <span class="sd-num">⑥</span>
         <div class="sd-text"><span class="sd-title">6月にやるべきこと</span><span class="sd-sub">優先度別アクションリスト</span></div>
@@ -1364,6 +1390,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <li><span class="pdot low"></span>反応の良かった投稿（Q&amp;A形式、症例のダウンタイム紹介）の企画を6月も継続する</li>
           </ul>
         </div>
+      </div>
       </div>
     </section>
 
