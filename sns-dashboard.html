@@ -942,12 +942,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <option>ドクター2</option>
             <option>ドクター3</option>
           </select>
+          <div class="seg" id="ig-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
           <button class="help-btn" type="button" title="このページの見方">？</button>
         </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。ストーリーの指標はページ下部の「ストーリー分析（参考）」でご覧いただけます。</div></div>
 
+      <div id="ig-month-view">
       <div id="ig-feed-view">
       <div class="ig-section" style="--sec-color:var(--accent);--sec-bg-soft:var(--accent-soft)">
       <div class="section-divider first" style="--sd-color:var(--accent);--sd-bg:var(--accent-soft)">
@@ -1427,6 +1432,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
       </div>
+      </div>
+
+      <div id="ig-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--ig)"></i>予約数（当年）</span>
+            </div>
+            <svg id="ig-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 3. YouTube ============ -->
@@ -1437,16 +1456,27 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p>Shorts投稿数が大幅増加し総視聴回数が過去最高水準に（5月）</p>
         </div>
         <div class="head-controls">
-          <div class="select-fake">キム先生（豊胸領域）</div>
+          <select class="account-select" title="表示するアカウントを選択">
+            <option>全体</option>
+            <option>院アカウント</option>
+            <option selected>ドクター1（キム先生・豊胸領域）</option>
+            <option>ドクター2</option>
+            <option>ドクター3</option>
+          </select>
           <div class="seg" id="yt-month-seg">
             <button data-month="0">2月</button>
             <button data-month="1">3月</button>
             <button data-month="2">4月</button>
             <button class="active" data-month="3">5月</button>
           </div>
+          <div class="seg" id="yt-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
         </div>
       </div>
 
+      <div id="yt-month-view">
       <div class="kpi-grid" id="yt-kpi-grid"></div>
 
       <div class="panel">
@@ -1636,6 +1666,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </ul>
         </div>
       </div>
+      </div>
+
+      <div id="yt-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--yt)"></i>予約数（当年）</span>
+            </div>
+            <svg id="yt-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 4. TikTok ============ -->
@@ -1646,16 +1690,27 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p>視聴数・フォロワーは増加。おすすめ規制の影響で予約への転換が低下（5月）</p>
         </div>
         <div class="head-controls">
-          <div class="select-fake">キム先生（豊胸領域）</div>
+          <select class="account-select" title="表示するアカウントを選択">
+            <option>全体</option>
+            <option>院アカウント</option>
+            <option selected>ドクター1（キム先生・豊胸領域）</option>
+            <option>ドクター2</option>
+            <option>ドクター3</option>
+          </select>
           <div class="seg" id="tt-month-seg">
             <button data-month="0">2月</button>
             <button data-month="1">3月</button>
             <button data-month="2">4月</button>
             <button class="active" data-month="3">5月</button>
           </div>
+          <div class="seg" id="tt-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
         </div>
       </div>
 
+      <div id="tt-month-view">
       <div class="kpi-grid" id="tt-kpi-grid"></div>
 
       <div class="panel">
@@ -1829,6 +1884,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </ul>
         </div>
       </div>
+      </div>
+
+      <div id="tt-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--tt)"></i>予約数（当年）</span>
+            </div>
+            <svg id="tt-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 5. 特集記事(SEO) ============ -->
@@ -1846,11 +1915,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <button data-month="2">4月</button>
             <button class="active" data-month="3">5月</button>
           </div>
+          <div class="seg" id="seo-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
         </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>特集記事(SEO)は今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
+      <div id="seo-month-view">
       <div class="kpi-grid" id="seo-kpi-grid"></div>
 
       <div class="panel">
@@ -2022,6 +2096,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </ul>
         </div>
       </div>
+      </div>
+
+      <div id="seo-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--seo)"></i>予約数（当年）</span>
+            </div>
+            <svg id="seo-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 6. MYSBC公式アプリ ============ -->
@@ -2039,11 +2127,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <button data-month="2">4月</button>
             <button class="active" data-month="3">5月</button>
           </div>
+          <div class="seg" id="app-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
         </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>MYSBC公式アプリは今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
+      <div id="app-month-view">
       <div class="kpi-grid" id="page-app-kpi-grid"></div>
 
       <div class="panel">
@@ -2201,6 +2294,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </ul>
         </div>
       </div>
+      </div>
+
+      <div id="app-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--app)"></i>予約数（当年）</span>
+            </div>
+            <svg id="app-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 7. メルマガ ============ -->
@@ -2218,11 +2325,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <button data-month="2">4月</button>
             <button class="active" data-month="3">5月</button>
           </div>
+          <div class="seg" id="mail-view-seg">
+            <button class="active" data-view="month">月次</button>
+            <button data-view="year">年間</button>
+          </div>
         </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>メルマガは今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
+      <div id="mail-month-view">
       <div class="kpi-grid" id="mail-kpi-grid"></div>
 
       <div class="panel">
@@ -2391,6 +2503,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <li><span class="pdot mid"></span>キャンペーン・お得情報系（45%）に偏っている配信内容に、症例紹介・Q&amp;A系など新しい切り口を1〜2本追加する</li>
             <li><span class="pdot low"></span>開封率・クリック率が改善した件名パターンを蓄積し、6月配信のテンプレートに反映する</li>
           </ul>
+        </div>
+      </div>
+      </div>
+
+      <div id="mail-year-view" style="display:none">
+        <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>年間ビューは要件定義にある「年単位でも見たい」を満たすためのレイアウト案です。表示している数値も含め、この画面全体が仮の値です。</div></div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>予約数の年間推移（サンプル）<small>1月〜12月</small></div>
+          <div class="panel-body chart-wrap">
+            <div class="chart-legend">
+              <span><i style="background:var(--mail)"></i>予約数（当年）</span>
+            </div>
+            <svg id="mail-year-chart" viewBox="0 0 760 220" style="width:100%;height:auto;overflow:visible"></svg>
+          </div>
         </div>
       </div>
     </section>
@@ -2599,6 +2725,54 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       document.getElementById('ig-story-view').style.display = (v==='story') ? '' : 'none';
     });
   });
+
+  /* ================= 各分析ページ共通：月次／年間 切替 ================= */
+  function setupViewToggle(prefix, drawFn){
+    var toggleBtns = document.querySelectorAll('#'+prefix+'-view-seg button');
+    if(!toggleBtns.length) return;
+    var drawn = false;
+    toggleBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        toggleBtns.forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+        var v = btn.getAttribute('data-view');
+        var monthView = document.getElementById(prefix+'-month-view');
+        var yearView = document.getElementById(prefix+'-year-view');
+        if(monthView) monthView.style.display = (v==='month') ? '' : 'none';
+        if(yearView) yearView.style.display = (v==='year') ? '' : 'none';
+        if(v==='year' && !drawn && drawFn){ drawFn(); drawn = true; }
+      });
+    });
+  }
+
+  function drawSimpleYearChart(svgId, values, color){
+    var svg = document.getElementById(svgId);
+    if(!svg) return;
+    var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    var W=760, H=220, padL=34, padR=10, padT=14, padB=26;
+    var maxV = Math.max.apply(null, values) * 1.2 || 1;
+    function xFor(i){ return padL + (W-padL-padR) * (i/(values.length-1)); }
+    function yFor(v){ return padT + (H-padT-padB) * (1 - v/maxV); }
+    var gridLines = '';
+    for(var g=0; g<=3; g++){
+      var gy = padT + (H-padT-padB)*g/3;
+      gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
+    }
+    var pts = values.map(function(v,i){ return xFor(i)+','+yFor(v); }).join(' ');
+    var labels = months.map(function(m,i){ return '<text x="'+xFor(i)+'" y="'+(H-6)+'" font-size="10" fill="var(--text-faint)" text-anchor="middle">'+m+'</text>'; }).join('');
+    var last = values.length-1;
+    svg.innerHTML = gridLines +
+      '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="'+xFor(last)+'" cy="'+yFor(values[last])+'" r="4.5" fill="'+color+'"/>' +
+      labels;
+  }
+
+  setupViewToggle('ig', function(){ drawSimpleYearChart('ig-year-chart', [40,47,58,62,58,63,67,64,70,72,75,78], 'var(--ig)'); });
+  setupViewToggle('yt', function(){ drawSimpleYearChart('yt-year-chart', [4,5,6,7,9,10,11,10,12,13,14,15], 'var(--yt)'); });
+  setupViewToggle('tt', function(){ drawSimpleYearChart('tt-year-chart', [15,13,7,8,3,4,5,6,6,7,8,9], 'var(--tt)'); });
+  setupViewToggle('seo', function(){ drawSimpleYearChart('seo-year-chart', [7,8,9,11,14,15,16,15,17,18,19,20], 'var(--seo)'); });
+  setupViewToggle('app', function(){ drawSimpleYearChart('app-year-chart', [36,38,40,42,46,47,48,47,49,50,51,53], 'var(--app)'); });
+  setupViewToggle('mail', function(){ drawSimpleYearChart('mail-year-chart', [26,27,28,30,31,31,32,32,33,33,34,35], 'var(--mail)'); });
 
   /* ================= 汎用：各ページ共通の年月選択・予約数推移グラフ ================= */
   var MONTHS4 = ['2月','3月','4月','5月'];
