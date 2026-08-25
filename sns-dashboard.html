@@ -1450,6 +1450,25 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="yt-kpi-grid"></div>
 
       <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="callout info">
+            <h4>🤖 AI分析</h4>
+            <p>予約数は5件→6件→7件→9件と2月から4ヶ月連続で増加しており、Shorts投稿数の増加（18本→31本）がそのまま予約数の伸びにつながっている状態です。この増加基調を維持するには、投稿頻度を落とさずに、概要欄タップの実測導入で「どのShortsが予約に効いているか」を可視化することが次のステップです。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
         <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
         <div class="panel-body chart-wrap">
           <svg id="yt-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
@@ -1535,25 +1554,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="callout info">
             <h4>🤖 AI分析</h4>
             <p>「総視聴回数→チャンネルページ表示数」の転換率6.0%に対し、「チャンネルページ表示数→概要欄予約タップ数」5.2%、「予約タップ数→予約数」1.4%と、後半の転換率が全体的に低めです。特に予約タップ数から予約数への転換1.4%は改善余地が大きく、概要欄リンクのタップ計測導入と合わせて、タップ後の予約ページの見やすさ・導線を見直すことが次の一手です。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
-        <div class="panel-body chart-wrap">
-          <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
-          </div>
-          <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-        </div>
-        <div class="panel-body" style="padding-top:0">
-          <div class="callout info">
-            <h4>🤖 AI分析</h4>
-            <p>予約数は5件→6件→7件→9件と2月から4ヶ月連続で増加しており、Shorts投稿数の増加（18本→31本）がそのまま予約数の伸びにつながっている状態です。この増加基調を維持するには、投稿頻度を落とさずに、概要欄タップの実測導入で「どのShortsが予約に効いているか」を可視化することが次のステップです。</p>
           </div>
         </div>
       </div>
