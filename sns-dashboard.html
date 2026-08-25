@@ -197,6 +197,14 @@ main{padding:26px 34px 60px;max-width:1180px;}
   border:1px solid var(--border);background:var(--surface);
   padding:7px 12px;border-radius:10px;
 }
+.account-select{
+  font:inherit;font-size:12.5px;font-weight:600;color:var(--text-muted);
+  border:1px solid var(--border);background:var(--surface);
+  padding:7px 30px 7px 12px;border-radius:10px;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235C6B87' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 9px center;
+}
 
 .sample-banner{
   display:flex;gap:9px;align-items:flex-start;
@@ -508,6 +516,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
 .help-btn{width:34px;height:34px;border-radius:50%;border:none;background:var(--bad);color:#fff;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:var(--shadow);}
 .help-btn:hover{filter:brightness(1.08);}
+
+.role-help{position:relative;display:inline-flex;margin-left:auto;flex:none;}
+.role-help .rh-btn{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent-strong);border:none;font-weight:800;font-size:12.5px;cursor:help;display:flex;align-items:center;justify-content:center;}
+.role-help .rh-popover{display:none;position:absolute;right:0;top:30px;z-index:50;width:440px;max-width:80vw;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:14px 16px;}
+.role-help:hover .rh-popover{display:block;}
+.role-help .rh-popover h6{margin:0 0 10px;font-size:12.5px;font-weight:800;color:var(--text);}
+.role-help .rh-popover table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.role-help .rh-popover th{text-align:left;padding:6px 8px;color:var(--text-faint);font-weight:700;border-bottom:1px solid var(--border);}
+.role-help .rh-popover td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);}
+.role-help .rh-popover tr:last-child td{border-bottom:none;}
 
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
 .overview-stat-goal .og-item{flex:1;text-align:center;}
@@ -882,15 +900,18 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p>リーチ数を軸にした認知拡大と、予約への転換状況（5月）</p>
         </div>
         <div class="head-controls">
-          <div class="select-fake">キム先生（豊胸領域）</div>
-          <div class="seg" id="ig-seg">
-            <button class="active" data-view="feed">フィード</button>
-            <button data-view="story">ストーリー</button>
-          </div>
+          <select class="account-select" title="表示するアカウントを選択">
+            <option>全体</option>
+            <option>院アカウント</option>
+            <option>ドクター1（キム先生・豊胸領域）</option>
+            <option>ドクター2</option>
+            <option>ドクター3</option>
+          </select>
+          <button class="help-btn" type="button" title="このページの見方">？</button>
         </div>
       </div>
 
-      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。フィードとストーリーで指標が異なるため、上部の切替でご覧いただけます。</div></div>
+      <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>提出いただいた要件シートにInstagram単体の画面モックはなかったため、他画面と同じレイアウト思想でのたたき台です。表示している数値はすべて仮の値です。ストーリーの指標はページ下部の「ストーリー分析（参考）」でご覧いただけます。</div></div>
 
       <div id="ig-feed-view">
       <div class="seg" id="ig-feed-month-seg" style="margin-bottom:14px">
@@ -1013,7 +1034,22 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>投稿ギャラリー（フィード・リーチ数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small></div>
+        <div class="panel-title"><span class="bar"></span>投稿ギャラリー（フィード・リーチ数上位）<small>実際の投稿画像は準備中のためプレースホルダー表示です</small>
+          <div class="role-help">
+            <button type="button" class="rh-btn">？</button>
+            <div class="rh-popover">
+              <h6>📊 一目でわかる役割比較表</h6>
+              <table>
+                <thead><tr><th>形式</th><th>届く相手（ターゲット）</th><th>一番の役割・目的</th></tr></thead>
+                <tbody>
+                  <tr><td><b>リール(Reels)</b></td><td>非フォロワー（新規）</td><td>新規ファン・認知の獲得</td></tr>
+                  <tr><td><b>フィード(Feed)</b></td><td>フォロワー＋検索ユーザー</td><td>アカウントの信頼獲得・保存</td></tr>
+                  <tr><td><b>ストーリーズ(Stories)</b></td><td>既存のフォロワー</td><td>教育・親近感の醸成・コンバージョン</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
         <div class="panel-body" style="display:flex;gap:14px;flex-wrap:wrap">
           <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 52.0K<br>投稿本数 1本</div></div>
           <div style="width:150px"><div style="width:150px;height:150px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>投稿画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted)">リーチ 44.5K<br>投稿本数 1本</div></div>
@@ -2473,8 +2509,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       {t:'8時〜10時', v:6, vLabel:'6件'},
       {t:'その他の時間帯', v:6, vLabel:'6件'}
     ];
+    var BOOKING_GOAL = 65;
     function render(monthIdx){
       renderGenericKpiGrid('ig-feed-kpi-grid', metrics, monthIdx);
+      var bookings = bookingsV[monthIdx];
+      var rate = bookings/BOOKING_GOAL*100;
+      var barColor = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var firstCard = document.querySelector('#ig-feed-kpi-grid .kpi-card');
+      if(firstCard){
+        firstCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      }
       drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
       drawDailyChart('ig-feed-daily-chart', dailyBookings);
       renderRank('ig-feed-dow-rank', DOW_RANK);
