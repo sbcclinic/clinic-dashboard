@@ -1597,6 +1597,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>次月の投稿提案<small>分析結果を踏まえた6月の投稿企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">Shorts</div>
+              <h5>「術後面会」「眼瞼下垂セルフチェック」系の高再生パターンを継続量産</h5>
+              <p>Shorts投稿数の増加（18本→31本）がそのまま視聴回数増（+30.8%）に直結している。同じ型で新規ネタ（症例別のセルフチェック、術後の過ごし方など）を複数本用意し、投稿頻度31本／月を維持する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">導線改善</div>
+              <h5>Shorts末尾・概要欄に予約導線のCTAを明示的に追加</h5>
+              <p>「チャンネルページ表示数→概要欄予約タップ数」の転換率5.2%、「タップ数→予約数」1.4%と後半の転換率が低い。動画末尾のテロップと概要欄1行目に「プロフィールから予約はこちら」を統一フォーマットで挿入する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">長尺動画</div>
+              <h5>Shorts視聴者を長尺動画へ誘導する橋渡しコンテンツ</h5>
+              <p>Shorts視聴者の56%がShortsのみ視聴で、通常動画視聴（3.8万・横ばい）へ繋がっていない。Shorts末尾に「続きは通常動画で解説」のテロップを入れ、登録・長尺視聴への誘導を狙う。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">投稿時間</div>
+              <h5>水・金・土の20時〜22時に投稿を集中させる</h5>
+              <p>予約は水曜・金曜・土曜、平日夜20時〜22時が最大のピーク。この時間帯に合わせて投稿することで、同じ投稿本数でも予約への転換効率を高める。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
         <div class="panel-title"><span class="bar"></span>6月にやるべきこと</div>
         <div class="panel-body">
           <div class="legend"><span><i class="h" style="width:8px;height:8px;border-radius:50%;background:var(--bad);display:inline-block"></i>高優先</span><span><i class="m" style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></i>中優先</span><span><i class="l" style="width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block"></i>低優先</span></div>
@@ -1629,6 +1657,53 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="kpi-grid" id="tt-kpi-grid"></div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="tt-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="tt-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="tt-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>10代</td><td>女性</td><td>15歳主人公と面会😳🌸 #キム先生 #金先生</td><td>カウンセリングのみ</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>優しすぎる…。キム先生…。</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+            <tr><td>30代</td><td>女性</td><td>家族3人でキム先生をご指名くださった理由は？</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。おすすめ規制の影響で母数自体が少ないため件数は僅少です。</p>
+      </div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（TikTok）<small>投稿量→エンゲージメント→視聴→プロフィール→タップ→予約</small></div>
@@ -1671,19 +1746,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
-        <div class="panel-body chart-wrap">
-          <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
-          </div>
-          <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-        </div>
-      </div>
-
       <div class="two-col panel">
         <div class="panel-body">
           <div class="panel-title" style="padding:0 0 12px;border:none">トラフィックソース（5月）</div>
@@ -1700,21 +1762,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <div class="rank-list" id="tt-rank"></div>
           <p style="font-size:12px;color:var(--text-muted);margin:14px 0 0;line-height:1.7">「優しすぎるキム先生…。」が292K回と新たな感情訴求型バズ動画に。患者との関係性を描いたコンテンツが引き続き高い拡散力を持つことが確認された。</p>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元動画</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>10代</td><td>女性</td><td>15歳主人公と面会😳🌸 #キム先生 #金先生</td><td>カウンセリングのみ</td><td>カウンセリング</td></tr>
-            <tr><td>20代</td><td>女性</td><td>優しすぎる…。キム先生…。</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
-            <tr><td>30代</td><td>女性</td><td>家族3人でキム先生をご指名くださった理由は？</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。おすすめ規制の影響で母数自体が少ないため件数は僅少です。</p>
       </div>
 
       <div class="grid-2">
@@ -1740,6 +1787,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>視聴数・フォロワー・コメントはすべて増加しており、コンテンツそのものの人気・共感度は高い状態です。一方で予約率が0.52%→0.16%へ急落しており、「見られている量」と「予約に繋がる質」が分離してきています。要因はおすすめ規制による予約意欲層への露出減で、当院側の努力（CTA設置・導線改善）だけでは限界がある構造要因です。プロフィール流入自体は伸びているため、プロフィール〜予約リンクの導線最適化を優先すべきです。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>次月の投稿提案<small>分析結果を踏まえた6月の投稿企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">動画企画</div>
+              <h5>人柄・日常・感情訴求系コンテンツを継続強化</h5>
+              <p>「優しすぎるキム先生…。」が292K回と新たなバズ動画に。症例・整形系は規制対象になりやすいため、患者との関係性を描いた人柄・日常系ネタを軸に企画を量産し、規制を回避しながら拡散力を維持する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">CTA導線</div>
+              <h5>動画末尾に毎回「プロフィールのリンクから予約できます」を統一挿入</h5>
+              <p>プロフィール流入は13.0%→16.1%に伸びているが、「プロフィール表示→予約タップ」の転換率は0.4%と3媒体中最も低い。動画末尾のテロップとキャプションでCTAを統一し、伸びた流入を予約タップに繋げる。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">プロフィール改善</div>
+              <h5>プロフィール〜予約リンクまでの導線を見直す</h5>
+              <p>プロフィール表示は58Kまで増えているが予約タップ数は210件のみ。プロフィール文言・固定投稿・リンクの見せ方を見直し、訪問後すぐに予約できる状態を作る。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">全体</div>
+              <h5>「術後面会」「患者との関係性」系ネタをシリーズ化</h5>
+              <p>感情訴求型コンテンツが高再生・高シェアの傾向。同テーマをシリーズ化して継続投稿することで、規制の影響を受けにくい形でファン化・予約意欲層への接触機会を増やす。</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="panel" style="margin-top:14px">
@@ -1777,6 +1852,54 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>特集記事(SEO)は今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
       <div class="kpi-grid" id="seo-kpi-grid"></div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="seo-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="seo-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="seo-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元記事</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>30代</td><td>女性</td><td>豊胸手術の失敗しない選び方 完全ガイド</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>20代</td><td>女性</td><td>シリコンバッグ vs 脂肪注入 徹底比較</td><td>豊胸（シリコン）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>豊胸手術の値段相場と保険適用について</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>ダウンタイムはどれくらい？豊胸手術後の過ごし方</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（特集記事・SEO）<small>記事量→記事エンゲージメント→検索流入→記事内CTA→タップ→予約</small></div>
@@ -1819,19 +1942,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
-        <div class="panel-body chart-wrap">
-          <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
-          </div>
-          <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-        </div>
-      </div>
-
       <div class="two-col panel">
         <div class="panel-body">
           <div class="panel-title" style="padding:0 0 8px;border:none">検索流入ランキング（5月・記事別）</div>
@@ -1846,22 +1956,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>費用・比較系キーワード</span><span class="pct">21%</span></div><div class="tsbar"><i style="width:21%"></i></div></div>
           </div>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元記事</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>30代</td><td>女性</td><td>豊胸手術の失敗しない選び方 完全ガイド</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>20代</td><td>女性</td><td>シリコンバッグ vs 脂肪注入 徹底比較</td><td>豊胸（シリコン）</td><td>カウンセリング</td></tr>
-            <tr><td>40代</td><td>女性</td><td>豊胸手術の値段相場と保険適用について</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>30代</td><td>女性</td><td>ダウンタイムはどれくらい？豊胸手術後の過ごし方</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -1886,6 +1980,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>検索流入は前月比+12.6%、平均掲載順位も改善しており、SEO施策自体は順調に成果を出しています。一方で「記事を読む→予約する」までの導線は他チャネルに比べて弱く、特に記事内CTAクリック以降が実測データを欠くため改善余地の特定が難しい状態です。まずはCTAクリックのタグ計測を導入し、どの記事のどの位置でクリックが発生しているかを可視化することが次の一手になります。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>次月の投稿提案<small>分析結果を踏まえた6月の記事企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">記事企画</div>
+              <h5>予約転換が高い「費用・比較系」記事を1〜2本追加</h5>
+              <p>「費用・比較系」キーワードは21%と比率は低いが予約転換が高い傾向。「値段相場」系記事が新規流入を牽引しているため、同テーマの新規記事を6月の公開記事に組み込む。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">CTA改善</div>
+              <h5>記事内CTAの文言・配置を「タップ→予約」に効く形へ見直す</h5>
+              <p>「記事内CTAクリック→予約タップ」は22.3%と高いが「タップ→予約」は2.9%とInstagram（6.5%）より低い。予約ページ側の見やすさ・CTA文言をInstagramの成功パターンに合わせて見直す。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">タイトル・見出し</div>
+              <h5>平均掲載順位が改善した記事のパターンを横展開</h5>
+              <p>検索CTRが5.9%→6.3%に改善し、平均掲載順位も5.1位→4.2位に向上。改善したタイトル・メタディスクリプションのパターンを他の既存記事にも適用し、検索流入全体を引き上げる。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">全体</div>
+              <h5>記事内CTAクリックの計測タグ導入を6月中に着手</h5>
+              <p>記事内CTAクリック数・予約タップ数が現在サンプル値のため、改善余地の特定が難しい状態。タグ実装を優先し、どの記事・どの位置のCTAが効いているかを実測データで可視化する。</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="panel" style="margin-top:14px">
@@ -1924,6 +2046,54 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
       <div class="kpi-grid" id="page-app-kpi-grid"></div>
 
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="app-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="app-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="app-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元クーポン/メニュー</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>20代</td><td>女性</td><td>豊胸カウンセリング初回限定クーポン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>30代</td><td>女性</td><td>二重埋没法（メニュー詳細）</td><td>二重埋没法</td><td>マイメニュー</td></tr>
+            <tr><td>40代</td><td>女性</td><td>夏の美肌キャンペーン</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>20代</td><td>女性</td><td>モニター募集（豊胸）</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（MYSBC公式アプリ）<small>新規インストール数→合計配信者数→予約タップ→予約</small></div>
         <div class="panel-body">
@@ -1952,19 +2122,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
-        <div class="panel-body chart-wrap">
-          <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
-          </div>
-          <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-        </div>
-      </div>
-
       <div class="two-col panel">
         <div class="panel-body">
           <div class="panel-title" style="padding:0 0 12px;border:none">人気クーポン・メニュー タップランキング（5月）</div>
@@ -1978,22 +2135,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>他チャネルのリンクから</span><span class="pct">17%</span></div><div class="tsbar"><i style="width:17%"></i></div></div>
           </div>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元クーポン/メニュー</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>20代</td><td>女性</td><td>豊胸カウンセリング初回限定クーポン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>30代</td><td>女性</td><td>二重埋没法（メニュー詳細）</td><td>二重埋没法</td><td>マイメニュー</td></tr>
-            <tr><td>40代</td><td>女性</td><td>夏の美肌キャンペーン</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>20代</td><td>女性</td><td>モニター募集（豊胸）</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -2018,6 +2159,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>MYSBC公式アプリは既存顧客・来院検討済み層が中心のため、他チャネルと比べて予約への転換効率が際立って高いことが見込まれます。一方で新規インストール数の伸びが小さく、母数（アプリ利用者数）自体を増やす打ち手が手薄です。SNS・SEO・メルマガの各ページにアプリダウンロードへの誘導を明示的に配置し、「認知チャネルで集めた興味をアプリに集約し、アプリ内で予約に変換する」導線を強化することが次の成長ドライバーになります。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>次月の施策提案<small>分析結果を踏まえた6月の配信・クーポン企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">クーポン企画</div>
+              <h5>タップランキング上位のクーポン形式を軸に新規クーポンを企画</h5>
+              <p>人気クーポン・メニュー タップランキング上位のフォーマット（初回限定・季節キャンペーン系）を継続。反応の良い型を6月も横展開し、クーポン/施術ページ表示数の伸長（+14.3%）を維持する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">プッシュ通知</div>
+              <h5>プッシュ通知の開封率改善（29.0%→31.4%）を踏まえた配信強化</h5>
+              <p>プッシュ通知からの起動が46%を占め最大の起動きっかけになっている。開封率が改善したタイミング・文言パターンを分析し、6月の配信スケジュールに反映する。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">新規インストール</div>
+              <h5>SNS・SEO・メルマガへのアプリダウンロード誘導を明示的に設置</h5>
+              <p>新規インストール数は640件と伸びが小さい。他チャネル経由の起動きっかけは17%のみのため、各チャネルの投稿・記事・配信にアプリダウンロードリンクを明示的に配置し、母数拡大を狙う。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">全体</div>
+              <h5>予約タップ数・予約数の計測タグをアプリ内に実装</h5>
+              <p>予約タップ数・予約数が現在サンプル値のみで実測未導入。既存顧客チャネルで最も転換効率が高いと見込まれるため、タグ実装により実測値化し、他チャネルとの効果比較を可能にする。</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="panel" style="margin-top:14px">
@@ -2055,6 +2224,54 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="sample-banner"><span>⚠</span><div><b>サンプル表示：</b>メルマガは今回新たに追加した分析ビューです。表示している数値はすべて仮の値でのたたき台となります。</div></div>
 
       <div class="kpi-grid" id="mail-kpi-grid"></div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-body chart-wrap">
+          <div class="chart-legend">
+            <span><i style="background:var(--accent)"></i>各月の実績</span>
+            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
+            <span><i style="background:#f87171"></i>前月（選択中）</span>
+          </div>
+          <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約数の日別推移（5月）<small>日別の予約数と、曜日別・時間帯別の予約傾向</small></div>
+        <div class="panel-body chart-wrap">
+          <svg id="mail-daily-chart" viewBox="0 0 1060 200" style="width:100%;height:auto;overflow:visible"></svg>
+        </div>
+        <div class="panel-body" style="padding-top:0">
+          <div class="grid-2">
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">曜日別ランキング</div>
+              <div class="rank-list" id="mail-dow-rank"></div>
+            </div>
+            <div>
+              <div class="panel-title" style="padding:0 0 8px;border:none">時間帯別ランキング</div>
+              <div class="rank-list" id="mail-hour-rank"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>年代</th><th>性別</th><th>流入元配信</th><th>予約施術</th><th>予約種別</th></tr></thead>
+          <tbody>
+            <tr><td>30代</td><td>女性</td><td>【期間限定】豊胸手術20%OFFキャンペーン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
+            <tr><td>40代</td><td>女性</td><td>今月の症例ピックアップ：豊胸編</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>30代</td><td>女性</td><td>ポイント消化はお早めに！有効期限のご案内</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
+            <tr><td>20代</td><td>女性</td><td>夏に向けたダウンタイム別施術ガイド</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
 
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（メルマガ）<small>配信量→リスト健全性→到達→開封→クリック→予約</small></div>
@@ -2097,19 +2314,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
-        <div class="panel-body chart-wrap">
-          <div class="chart-legend">
-            <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
-            <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
-          </div>
-          <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
-        </div>
-      </div>
-
       <div class="two-col panel">
         <div class="panel-body">
           <div class="panel-title" style="padding:0 0 12px;border:none">配信別 クリック数ランキング（5月）</div>
@@ -2123,22 +2327,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="tsrow"><div class="tsl"><span>お知らせ・季節ネタ</span><span class="pct">22%</span></div><div class="tsbar"><i style="width:22%"></i></div></div>
           </div>
         </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約の導線（誰が何を予約したか）　<small>サンプルデータ・個人が特定される情報は含みません</small></div>
-        <div class="table-scroll">
-        <table>
-          <thead><tr><th>年代</th><th>性別</th><th>流入元配信</th><th>予約施術</th><th>予約種別</th></tr></thead>
-          <tbody>
-            <tr><td>30代</td><td>女性</td><td>【期間限定】豊胸手術20%OFFキャンペーン</td><td>豊胸（脂肪注入）</td><td>カウンセリング</td></tr>
-            <tr><td>40代</td><td>女性</td><td>今月の症例ピックアップ：豊胸編</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>30代</td><td>女性</td><td>ポイント消化はお早めに！有効期限のご案内</td><td>豊胸（シリコン）</td><td>マイメニュー</td></tr>
-            <tr><td>20代</td><td>女性</td><td>夏に向けたダウンタイム別施術ガイド</td><td>豊胸（脂肪注入）</td><td>モニター</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
       <div class="grid-2">
@@ -2163,6 +2351,34 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="callout info">
         <h4>🤖 AI分析</h4>
         <p>メルマガは既存リストへの配信という性質上、開封・クリックの転換率が高く、少ない到達数でも安定して予約を獲得できているチャネルです。開封率・クリック率が両方改善傾向にあり、件名や配信内容の見直しが着実に効果を出しています。一方でリスト自体の増加ペースが緩やかなため、他チャネル（SNS・SEO・アプリ）からのメルマガ登録誘導を強化し、母数を増やすことが今後の成長余地です。</p>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="bar"></span>次月の配信提案<small>分析結果を踏まえた6月の配信企画アイデア</small></div>
+        <div class="panel-body">
+          <div class="proposal-grid">
+            <div class="proposal-card">
+              <div class="proposal-tag">配信企画</div>
+              <h5>症例紹介・Q&amp;A系の切り口を1〜2本追加</h5>
+              <p>配信テーマがキャンペーン・お得情報系（45%）に偏っている。症例・施術紹介系（33%）と合わせて新しい切り口（Q&amp;A形式など）を追加し、テーマの多様化を図る。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">件名・配信時間</div>
+              <h5>開封率・クリック率が改善した件名パターンを6月配信に反映</h5>
+              <p>開封率26.5%→28.1%、クリック率10.5%→11.2%と両方改善。効果のあった件名の型・配信時間帯を蓄積し、6月配信のテンプレート化を進める。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">リスト増加</div>
+              <h5>SNS・SEO・アプリからのメルマガ登録導線を強化</h5>
+              <p>新規登録数は285人→320人（+12.3%）と増加しているが、配信到達数の伸びは+1.9%と小さい。他チャネルの投稿・記事・アプリ内にメルマガ登録への誘導を追加し、リスト増加ペースを上げる。</p>
+            </div>
+            <div class="proposal-card">
+              <div class="proposal-tag">全体</div>
+              <h5>予約数の計測タグを予約ページ側に実装</h5>
+              <p>予約数（31件）は現在サンプル値のみで実測未導入。既存リスト向けチャネルとして安定した転換効率が見込まれるため、タグ実装により実測値化し、他チャネルとの比較検証を可能にする。</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="panel" style="margin-top:14px">
@@ -2605,21 +2821,33 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var tapsV = series4(1050,1150);
     var bookingsV = series4(42,46);
     var deliveryCountV = series4(15,18);
-    var announcementsV = series4(15,18);
-    var pushTapsV = series4(4200,4900);
     var rateV = bookingsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var clickRateV = tapsV.map(function(v,i){ return v/subscribersV[i]*100; });
-    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'taps', label:'クリック数', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
       {key:'clickRate', label:'クリック率', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'announcements', label:'お知らせ配信本数', bar:'var(--app)', values:announcementsV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'pushTaps', label:'プッシュ通知タップ数', bar:'var(--app)', values:pushTapsV, fmt:fmtInt, deltaType:'pct'},
-      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'}
+    ];
+    var dailyBookings = genDailyBookings(31, 46/31);
+    var DOW_RANK = [
+      {t:'土曜日', v:9, vLabel:'9件'},
+      {t:'日曜日', v:8, vLabel:'8件'},
+      {t:'水曜日', v:7, vLabel:'7件'},
+      {t:'木曜日', v:6, vLabel:'6件'},
+      {t:'金曜日', v:6, vLabel:'6件'},
+      {t:'火曜日', v:5, vLabel:'5件'},
+      {t:'月曜日', v:5, vLabel:'5件'}
+    ];
+    var HOUR_RANK = [
+      {t:'20時〜22時', v:12, vLabel:'12件'},
+      {t:'12時〜14時', v:9, vLabel:'9件'},
+      {t:'18時〜20時', v:8, vLabel:'8件'},
+      {t:'22時〜24時', v:7, vLabel:'7件'},
+      {t:'8時〜10時', v:6, vLabel:'6件'},
+      {t:'その他の時間帯', v:4, vLabel:'4件'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('page-app-kpi-grid', metrics, monthIdx);
@@ -2634,6 +2862,9 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       document.getElementById('app-conv-2').textContent = '転換 '+conv2.toFixed(1)+'%';
       document.getElementById('app-drop-2').textContent = '離脱 '+(100-conv2).toFixed(1)+'%';
       drawBookingsChart('app-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('app-daily-chart', dailyBookings);
+      renderRank('app-dow-rank', DOW_RANK);
+      renderRank('app-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('app-month-seg', render);
   })();
@@ -2765,7 +2996,6 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   /* ---------- TikTok ---------- */
   (function(){
     var bookingsV = [13,7,8,3];
-    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--bad)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
       {key:'bookingRate', label:'予約率', bar:'var(--bad)', values:series4(0.52,0.16), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
@@ -2773,12 +3003,33 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       {key:'views', label:'投稿視聴数', bar:'var(--tt)', values:series4(1300000,1600000), fmt:function(v){return fmtM(v);}, deltaType:'pct'},
       {key:'likes', label:'いいね', bar:'var(--tt)', values:series4(23000,26000), fmt:fmtK, deltaType:'pct'},
       {key:'comments', label:'コメント', bar:'var(--tt)', values:series4(46,103), fmt:fmtInt, deltaType:'pct'},
-      {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'}
+    ];
+    var dailyBookings = new Array(31).fill(0);
+    [9,19,27].forEach(function(d){ dailyBookings[d-1] = 1; });
+    var DOW_RANK = [
+      {t:'木曜日', v:1, vLabel:'1件'},
+      {t:'土曜日', v:1, vLabel:'1件'},
+      {t:'日曜日', v:1, vLabel:'1件'},
+      {t:'月曜日', v:0, vLabel:'0件'},
+      {t:'火曜日', v:0, vLabel:'0件'},
+      {t:'水曜日', v:0, vLabel:'0件'},
+      {t:'金曜日', v:0, vLabel:'0件'}
+    ];
+    var HOUR_RANK = [
+      {t:'20時〜22時', v:1, vLabel:'1件'},
+      {t:'12時〜14時', v:1, vLabel:'1件'},
+      {t:'22時〜24時', v:1, vLabel:'1件'},
+      {t:'18時〜20時', v:0, vLabel:'0件'},
+      {t:'8時〜10時', v:0, vLabel:'0件'},
+      {t:'その他の時間帯', v:0, vLabel:'0件'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('tt-kpi-grid', metrics, monthIdx);
       drawBookingsChart('tt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('tt-daily-chart', dailyBookings);
+      renderRank('tt-dow-rank', DOW_RANK);
+      renderRank('tt-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('tt-month-seg', render);
   })();
@@ -2788,20 +3039,37 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var sessionsV = series4(34200,38500);
     var bookingsV = series4(11,14);
     var rateV = bookingsV.map(function(v,i){ return v/sessionsV[i]*100; });
-    var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
       {key:'sessions', label:'セッション数', bar:'var(--seo)', values:sessionsV, fmt:fmtInt, deltaType:'pct'},
       {key:'taps', label:'クリック数', bar:'var(--warn)', values:series4(390,480), fmt:fmtInt, deltaType:'none', staticSub:'記事内CTA経由'},
-      {key:'impressions', label:'検索表示回数', bar:'var(--seo)', values:series4(580000,612000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
-      {key:'articles', label:'公開記事本数', bar:'var(--seo)', values:series4(4,6), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'freq', label:'更新頻度', bar:'var(--seo)', values:series4(0.9,1.4), fmt:function(v){return '週'+v.toFixed(1)+'本';}, deltaType:'pct'},
-      {key:'contribRate', label:'予約貢献率', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'impressions', label:'検索表示回数', bar:'var(--seo)', values:series4(580000,612000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
+    ];
+    var dailyBookings = genDailyBookings(31, 14/31);
+    var DOW_RANK = [
+      {t:'火曜日', v:4, vLabel:'4件'},
+      {t:'水曜日', v:3, vLabel:'3件'},
+      {t:'木曜日', v:3, vLabel:'3件'},
+      {t:'月曜日', v:2, vLabel:'2件'},
+      {t:'金曜日', v:1, vLabel:'1件'},
+      {t:'土曜日', v:1, vLabel:'1件'},
+      {t:'日曜日', v:0, vLabel:'0件'}
+    ];
+    var HOUR_RANK = [
+      {t:'12時〜14時', v:4, vLabel:'4件'},
+      {t:'20時〜22時', v:3, vLabel:'3件'},
+      {t:'8時〜10時', v:3, vLabel:'3件'},
+      {t:'22時〜24時', v:2, vLabel:'2件'},
+      {t:'18時〜20時', v:1, vLabel:'1件'},
+      {t:'その他の時間帯', v:1, vLabel:'1件'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('seo-kpi-grid', metrics, monthIdx);
       drawBookingsChart('seo-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('seo-daily-chart', dailyBookings);
+      renderRank('seo-dow-rank', DOW_RANK);
+      renderRank('seo-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('seo-month-seg', render);
   })();
@@ -2809,6 +3077,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   /* ---------- メルマガ ---------- */
   (function(){
     var reachV = series4(41200,42000);
+    var deliveryRateV = series4(98.2,98.5);
+    var sentV = reachV.map(function(v,i){ return v/(deliveryRateV[i]/100); });
     var openRateV = series4(26.5,28.1);
     var ctrV = series4(10.5,11.2);
     var bookingsV = series4(30,31);
@@ -2818,16 +3088,37 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'メルマガ経由の予約'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'volume', label:'配信本数', bar:'var(--mail)', values:series4(7,8), fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'reach', label:'配信到達率', bar:'var(--mail)', values:reachV, fmt:fmtInt, deltaType:'pct'},
-      {key:'clicks', label:'クリック数', bar:'var(--mail)', values:clicksV, fmt:fmtInt, deltaType:'pct'},
-      {key:'ctr', label:'クリック率（CTR）', bar:'var(--mail)', values:ctrV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'volume', label:'配信済みメール件数', bar:'var(--mail)', values:sentV, fmt:fmtInt, deltaType:'pct'},
+      {key:'reach', label:'配信到達率', bar:'var(--mail)', values:deliveryRateV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'opens', label:'開封数', bar:'var(--mail)', values:opensV, fmt:fmtInt, deltaType:'pct'},
-      {key:'openRate', label:'開封率', bar:'var(--mail)', values:openRateV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+      {key:'openRate', label:'開封率', bar:'var(--mail)', values:openRateV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
+      {key:'clicks', label:'クリック数', bar:'var(--mail)', values:clicksV, fmt:fmtInt, deltaType:'pct'},
+      {key:'ctr', label:'クリック率（CTR）', bar:'var(--mail)', values:ctrV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'}
+    ];
+    var dailyBookings = genDailyBookings(31, 31/31);
+    var DOW_RANK = [
+      {t:'火曜日', v:6, vLabel:'6件'},
+      {t:'木曜日', v:6, vLabel:'6件'},
+      {t:'水曜日', v:5, vLabel:'5件'},
+      {t:'金曜日', v:5, vLabel:'5件'},
+      {t:'月曜日', v:4, vLabel:'4件'},
+      {t:'土曜日', v:3, vLabel:'3件'},
+      {t:'日曜日', v:2, vLabel:'2件'}
+    ];
+    var HOUR_RANK = [
+      {t:'20時〜22時', v:8, vLabel:'8件'},
+      {t:'12時〜14時', v:6, vLabel:'6件'},
+      {t:'8時〜10時', v:6, vLabel:'6件'},
+      {t:'18時〜20時', v:5, vLabel:'5件'},
+      {t:'22時〜24時', v:4, vLabel:'4件'},
+      {t:'その他の時間帯', v:2, vLabel:'2件'}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('mail-kpi-grid', metrics, monthIdx);
       drawBookingsChart('mail-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawDailyChart('mail-daily-chart', dailyBookings);
+      renderRank('mail-dow-rank', DOW_RANK);
+      renderRank('mail-hour-rank', HOUR_RANK);
     }
     setupPageMonthSelector('mail-month-seg', render);
   })();
