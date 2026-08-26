@@ -248,6 +248,10 @@ main{padding:26px 34px 60px;max-width:1180px;}
 .kpi-label{font-size:11.5px;color:var(--text-muted);font-weight:700;letter-spacing:.02em;margin-bottom:8px;}
 .kpi-value{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;}
 .kpi-sub{margin-top:9px;font-size:11.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.kpi-breakdown{display:flex;gap:16px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);}
+.kpi-breakdown span{font-size:11.5px;color:var(--text-muted);display:flex;flex-direction:column;gap:2px;}
+.kpi-breakdown span i{font-style:normal;color:var(--text-faint);}
+.kpi-breakdown span b{font-size:14px;color:var(--text);font-weight:800;}
 .kpi-avg{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .kpi-tip{margin-top:6px;font-size:10.5px;color:var(--text-faint);line-height:1.5;}
 
@@ -2293,6 +2297,18 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      <div class="panel">
+        <div class="panel-title"><span class="bar"></span>配信画像ギャラリー（配信数上位）<small>実際の配信画像は準備中のためプレースホルダー表示です</small></div>
+        <div class="panel-body" style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="width:170px"><div style="width:170px;height:170px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>配信画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted);line-height:1.6"><b style="color:var(--text);font-size:12px">豊胸カウンセリング初回限定クーポン</b><br>配信数 12,400<br>開封数 3,850・開封率 31.0%<br>予約数 12件<br>リンク先：クーポン詳細ページ</div></div>
+          <div style="width:170px"><div style="width:170px;height:170px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>配信画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted);line-height:1.6"><b style="color:var(--text);font-size:12px">二重埋没法（メニュー詳細）</b><br>配信数 9,800<br>開封数 2,950・開封率 30.1%<br>予約数 9件<br>リンク先：メニュー詳細ページ</div></div>
+          <div style="width:170px"><div style="width:170px;height:170px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>配信画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted);line-height:1.6"><b style="color:var(--text);font-size:12px">夏の美肌キャンペーン</b><br>配信数 11,200<br>開封数 3,270・開封率 29.2%<br>予約数 8件<br>リンク先：キャンペーンLP</div></div>
+          <div style="width:170px"><div style="width:170px;height:170px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>配信画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted);line-height:1.6"><b style="color:var(--text);font-size:12px">モニター募集（豊胸）</b><br>配信数 8,600<br>開封数 2,410・開封率 28.0%<br>予約数 6件<br>リンク先：モニター応募フォーム</div></div>
+          <div style="width:170px"><div style="width:170px;height:170px;border-radius:10px;background:var(--surface-muted);border:1px dashed var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-size:11px;text-align:center;line-height:1.5">📷<br>配信画像<br>準備中</div><div style="margin-top:7px;font-size:11.5px;color:var(--text-muted);line-height:1.6"><b style="color:var(--text);font-size:12px">ポイント2倍デー告知</b><br>配信数 7,300<br>開封数 1,890・開封率 25.9%<br>予約数 4件<br>リンク先：ポイント案内ページ</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-faint);margin:0 17px 14px;line-height:1.6">※配信数（5月）上位5配信分のプレースホルダーです。配信画像を頂き次第、差し替えます。</p>
+      </div>
+
       <div class="grid-2">
         <div class="callout good">
           <h4>✅ よかった点</h4>
@@ -3128,7 +3144,14 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       }
       var hint = HINTS[m.label] || m.hint;
       var labelHtml = hint ? '<div class="kpi-label info-hint" title="'+escAttr(hint)+'">'+m.label+'</div>' : '<div class="kpi-label">'+m.label+'</div>';
-      return '<div class="kpi-card" style="--bar:'+m.bar+'">'+labelHtml+'<div class="kpi-value">'+m.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div></div>';
+      var breakdownHtml = '';
+      if(m.breakdown){
+        breakdownHtml = '<div class="kpi-breakdown">'+m.breakdown.map(function(b){
+          return '<span><i>'+b.label+'</i><b>'+(b.fmt?b.fmt(b.values[monthIdx]):fmtCount(b.values[monthIdx]))+'</b></span>';
+        }).join('')+'</div>';
+      }
+      var wideStyle = m.wide ? ';grid-column:span 2' : '';
+      return '<div class="kpi-card" data-key="'+m.key+'" style="--bar:'+m.bar+wideStyle+'">'+labelHtml+'<div class="kpi-value">'+m.fmt(cur)+'</div><div class="kpi-sub">'+sub+'</div>'+breakdownHtml+'</div>';
     }).join('');
   }
 
@@ -3237,16 +3260,23 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var tapsV = series4(1050,1150);
     var bookingsV = series4(42,46);
     var deliveryCountV = series4(15,18);
+    var favorite1V = series4(2150,2280);
+    var favorite2V = series4(980,1050);
+    var favorite3V = series4(520,560);
     var rateV = bookingsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var clickRateV = tapsV.map(function(v,i){ return v/subscribersV[i]*100; });
     var metrics = [
+      {key:'favorite1', label:'お気に入り1登録者数', bar:'var(--app)', values:favorite1V, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'アプリ経由の予約'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
+      {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
       {key:'taps', label:'クリック数', bar:'var(--warn)', values:tapsV, fmt:fmtInt, deltaType:'none', staticSub:'クーポン/施術ページ経由'},
       {key:'clickRate', label:'クリック率', bar:'var(--good)', values:clickRateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'deliveryCount', label:'配信本数', bar:'var(--app)', values:deliveryCountV, fmt:function(v){return fmtHon(v);}, deltaType:'pct'},
-      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'}
+      {key:'newinstall', label:'新規インストール数', bar:'var(--app)', values:newinstallV, fmt:fmtInt, deltaType:'pct'},
+      {key:'favorite2', label:'お気に入り2登録者数', bar:'var(--app)', values:favorite2V, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
+      {key:'favorite3', label:'お気に入り3登録者数', bar:'var(--app)', values:favorite3V, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'}
     ];
+    var FAVORITE1_GOAL = 2500;
     var dailyBookings = genDailyBookings(31, 46/31);
     var DOW_RANK = [
       {t:'土曜日', v:9, vLabel:'9件'},
@@ -3267,6 +3297,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('page-app-kpi-grid', metrics, monthIdx);
+      var favorite1 = favorite1V[monthIdx];
+      var f1Rate = favorite1/FAVORITE1_GOAL*100;
+      var f1Color = f1Rate>=100 ? 'var(--good)' : (f1Rate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var favorite1Card = document.querySelector('#page-app-kpi-grid .kpi-card[data-key="favorite1"]');
+      if(favorite1Card){
+        favorite1Card.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(FAVORITE1_GOAL)+'人</b>・達成率 <b>'+f1Rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,f1Rate)+'%;background:'+f1Color+'"></i></div>');
+      }
       var newi = newinstallV[monthIdx], sub = subscribersV[monthIdx], taps = tapsV[monthIdx], book = bookingsV[monthIdx];
       document.getElementById('app-fs-newinstall').textContent = fmtInt(newi);
       document.getElementById('app-fs-subscribers').textContent = fmtInt(sub);
@@ -3289,15 +3326,20 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   (function(){
     var reachV = series4(159000,184000);
     var bookingsV = [47,58,62,58];
+    var bookingsProfileV = [32,40,43,40];
+    var bookingsStoryV = [15,18,19,18];
     var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
+    var followersV = series4(67940,68352);
     var metrics = [
-      {key:'igBookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
+      {key:'followers', label:'フォロワー数', bar:'var(--ig)', values:followersV, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
+      {key:'igBookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct', wide:true,
+        breakdown:[{label:'プロフィールURL', values:bookingsProfileV, fmt:function(v){return fmtCount(v);}}, {label:'ストーリー', values:bookingsStoryV, fmt:function(v){return fmtCount(v);}}]},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'followers', label:'フォロワー数', bar:'var(--ig)', values:series4(67940,68352), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
       {key:'reach', label:'リーチ数', bar:'var(--ig)', values:reachV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'saves', label:'保存数', bar:'var(--ig)', values:series4(2610,3050), fmt:fmtInt, deltaType:'pct'},
       {key:'shares', label:'シェア数', bar:'var(--ig)', values:series4(910,870), fmt:fmtInt, deltaType:'pct'}
     ];
+    var FOLLOWERS_GOAL = 70000;
     var dailyBookings = genDailyBookings(31, 58/31);
     var DOW_RANK = [
       {t:'水曜日', v:12, vLabel:'12件'},
@@ -3322,9 +3364,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var bookings = bookingsV[monthIdx];
       var rate = bookings/BOOKING_GOAL*100;
       var barColor = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
-      var firstCard = document.querySelector('#ig-feed-kpi-grid .kpi-card');
-      if(firstCard){
-        firstCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      var bookingsCard = document.querySelector('#ig-feed-kpi-grid .kpi-card[data-key="igBookings"]');
+      if(bookingsCard){
+        bookingsCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      }
+      var followers = followersV[monthIdx];
+      var fRate = followers/FOLLOWERS_GOAL*100;
+      var fColor = fRate>=100 ? 'var(--good)' : (fRate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var followersCard = document.querySelector('#ig-feed-kpi-grid .kpi-card[data-key="followers"]');
+      if(followersCard){
+        followersCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(FOLLOWERS_GOAL)+'人</b>・達成率 <b>'+fRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,fRate)+'%;background:'+fColor+'"></i></div>');
       }
       drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
       drawDailyChart('ig-feed-daily-chart', dailyBookings);
@@ -3364,14 +3413,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var rateV = bookingsV.map(function(v,i){ return v/viewsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
+      {key:'views', label:'チャンネル登録者数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'公開Shorts本数：31本（前月9本）'},
       {key:'bookingRate', label:'予約率', bar:'var(--good)', values:rateV, fmt:function(v){return fmtPct(v,3);}, deltaType:'pt', ptDigits:3},
-      {key:'views', label:'チャンネル登録者数', bar:'var(--yt)', values:viewsV, fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'viewers', label:'インプレッション数', bar:'var(--yt)', values:series4(37000,40000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'},
       {key:'subs', label:'月間視聴回数', bar:'var(--warn)', values:series4(98,94), fmt:function(v){return '+'+Math.round(v)+'人';}, deltaType:'pct'},
       {key:'contribRate', label:'横動画視聴回数', bar:'var(--good)', values:contribV, fmt:function(v){return fmtPct(v,1);}, deltaType:'pt'},
       {key:'shorts', label:'shorts視聴回数', bar:'var(--yt)', values:series4(118000,169000), fmt:function(v){return fmtMan(v);}, deltaType:'pct'}
     ];
+    var CHANNEL_GOAL = 220000;
     var dailyBookings = new Array(31).fill(0);
     [3,6,10,14,17,21,24,28,30].forEach(function(d){ dailyBookings[d-1] = 1; });
     var DOW_RANK = [
@@ -3397,9 +3447,16 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var bookings = bookingsV[monthIdx];
       var rate = bookings/BOOKING_GOAL*100;
       var barColor = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
-      var firstCard = document.querySelector('#yt-kpi-grid .kpi-card');
-      if(firstCard){
-        firstCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      var bookingsCard = document.querySelector('#yt-kpi-grid .kpi-card[data-key="bookings"]');
+      if(bookingsCard){
+        bookingsCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+BOOKING_GOAL+'件</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+barColor+'"></i></div>');
+      }
+      var channelSubs = viewsV[monthIdx];
+      var cRate = channelSubs/CHANNEL_GOAL*100;
+      var cColor = cRate>=100 ? 'var(--good)' : (cRate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var channelCard = document.querySelector('#yt-kpi-grid .kpi-card[data-key="views"]');
+      if(channelCard){
+        channelCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(CHANNEL_GOAL)+'人</b>・達成率 <b>'+cRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,cRate)+'%;background:'+cColor+'"></i></div>');
       }
       drawBookingsChart('yt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
       drawDailyChart('yt-daily-chart', dailyBookings);
@@ -3412,15 +3469,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   /* ---------- TikTok ---------- */
   (function(){
     var bookingsV = [13,7,8,3];
+    var followersV = series4(39759,40342);
     var metrics = [
+      {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:followersV, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
       {key:'bookings', label:'予約数', bar:'var(--bad)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'pct'},
       {key:'bookingRate', label:'予約率', bar:'var(--bad)', values:series4(0.52,0.16), fmt:function(v){return fmtPct(v,2);}, deltaType:'pt', ptDigits:2},
-      {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:series4(39759,40342), fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
       {key:'views', label:'投稿視聴数', bar:'var(--tt)', values:series4(1300000,1600000), fmt:function(v){return fmtM(v);}, deltaType:'pct'},
       {key:'likes', label:'いいね', bar:'var(--tt)', values:series4(23000,26000), fmt:fmtK, deltaType:'pct'},
       {key:'comments', label:'コメント', bar:'var(--tt)', values:series4(46,103), fmt:fmtInt, deltaType:'pct'},
       {key:'shares', label:'シェア', bar:'var(--bad)', values:series4(347,205), fmt:fmtInt, deltaType:'pct'}
     ];
+    var FOLLOWERS_GOAL = 42000;
     var dailyBookings = new Array(31).fill(0);
     [9,19,27].forEach(function(d){ dailyBookings[d-1] = 1; });
     var DOW_RANK = [
@@ -3442,6 +3501,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('tt-kpi-grid', metrics, monthIdx);
+      var followers = followersV[monthIdx];
+      var fRate = followers/FOLLOWERS_GOAL*100;
+      var fColor = fRate>=100 ? 'var(--good)' : (fRate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var followersCard = document.querySelector('#tt-kpi-grid .kpi-card[data-key="followers"]');
+      if(followersCard){
+        followersCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(FOLLOWERS_GOAL)+'人</b>・達成率 <b>'+fRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,fRate)+'%;background:'+fColor+'"></i></div>');
+      }
       drawBookingsChart('tt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
       drawDailyChart('tt-daily-chart', dailyBookings);
       renderRank('tt-dow-rank', DOW_RANK);
