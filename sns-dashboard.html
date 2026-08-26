@@ -553,6 +553,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .term-card p+p{margin-top:8px;}
 .term-card .term-en{font-weight:600;color:var(--text-faint);font-size:11.5px;margin-left:2px;}
 .term-card .term-flag{color:var(--accent-strong);font-weight:700;}
+.term-card.gs-hidden{display:none;}
+
+.glossary-search{position:relative;margin-bottom:16px;}
+.glossary-search input{width:100%;font:inherit;font-size:14px;padding:12px 16px 12px 40px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);box-sizing:border-box;}
+.glossary-search input:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+.glossary-search .gs-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;}
+.glossary-no-result{display:none;color:var(--text-faint);font-size:13px;padding:24px 4px;text-align:center;}
 
 /* 初めての方へ：仮説・数値目標の書き込みシート */
 .tut-worksheet{display:flex;flex-direction:column;gap:6px;}
@@ -619,7 +626,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           <p>流入・予約数の推移と評価　／　対象期間：2月〜5月（当月：5月）</p>
         </div>
         <div class="head-controls">
-          <div class="select-fake">キム先生（豊胸領域）</div>
+          <select class="account-select" title="表示するアカウントを選択">
+            <option>全体</option>
+            <option>院アカウント</option>
+            <option selected>ドクター1（キム先生・豊胸領域）</option>
+            <option>ドクター2</option>
+            <option>ドクター3</option>
+          </select>
           <div class="seg" id="kpi-month-seg">
             <button data-month="0">2月</button>
             <button data-month="1">3月</button>
@@ -747,6 +760,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>6媒体中、MYSBC公式アプリ（達成率102.2%）とメルマガ（103.3%）は目標を上回り安定した予約獲得チャネルになっています。一方でTikTok（37.5%）とYouTube（75.0%）は目標を大きく下回っており、特にTikTokはおすすめ規制の影響で前月比▼62.5%と急落しています。Instagram・特集記事(SEO)は90%台と目標に近い水準を維持しているため、当面はTikTok・YouTubeのテコ入れと、App・メルマガへの予算・工数の重点配分を検討するのが妥当です。</p>
+      </div>
+
       <div class="panel funnel-panel" style="max-width:720px">
         <div class="panel-title"><span class="bar"></span>予約ファネル（全体・SNS）<small>セッション数→クリック数→予約数</small></div>
         <div class="panel-body">
@@ -768,6 +786,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div></div>
           <p class="funnel-note">シンプルに「セッション数→クリック数→予約数」の3段階に絞った表示です。クリック数はセッションのうち何らかのリンクをクリックした割合から算出しています。</p>
         </div>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>セッション数4,217（前月比+6.5%）に対し、「セッション数→クリック数」の転換率12.0%、「クリック数→予約数」の転換率12.1%と、両段階でほぼ同水準の転換率になっています。SNS予約貢献数は61件（▼28.2%）と減少していますが、要因はセッション数側ではなく転換率側（特にTikTokの急落）にあるため、セッション数の増加施策よりも、クリック後の予約導線（LP・予約ページの見やすさ）の見直しを優先するのが効果的です。</p>
       </div>
 
       <div class="panel">
@@ -1035,6 +1058,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </table>
         </div>
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>予約に繋がった投稿は20〜30代女性向けの症例解説・Q&amp;A系が中心で、そこから「カウンセリング」への流入が多く見られます。一方でリール経由は「モニター」「マイメニュー」への流入がやや目立ち、フィードで信頼を獲得してカウンセリングへ、リールで新規層にモニター応募を促す、という役割分担が実際の予約データにも表れています。</p>
       </div>
 
       <div class="panel funnel-panel">
@@ -1547,6 +1575,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>豊胸系・二重埋没法・眼瞼下垂の3施術に予約が分散しており、Shorts単体で複数の施術領域への入口になっていることが分かります。年代は20〜50代女性が中心で、症例解説・比較系の動画からは「カウンセリング」、施術結果の紹介系動画からは「マイメニュー」への流入が多く、動画の切り口によって呼び込みやすい予約種別が異なる傾向があります。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（YouTube）<small>投稿量→エンゲージメント→視聴→チャンネル→タップ→予約</small></div>
         <div class="panel-body">
@@ -1766,6 +1799,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。おすすめ規制の影響で母数自体が少ないため件数は僅少です。</p>
       </div>
 
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>件数自体は少ないものの、人柄・関係性を描いたコンテンツ経由の予約が中心で、10〜30代の幅広い年代から流入しています。おすすめ規制で母数が絞られている状況下でも、「カウンセリングのみ」「モニター」など比較的ハードルの低い予約種別に繋がっており、規制の影響を受けにくい人柄系コンテンツを軸にすることが、少ない露出機会を無駄にしないポイントと考えられます。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（TikTok）<small>投稿量→エンゲージメント→視聴→プロフィール→タップ→予約</small></div>
         <div class="panel-body">
@@ -1981,6 +2019,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>「選び方ガイド」「比較記事」「値段相場」「ダウンタイム」など、施術を検討する過程で読まれる比較・実用系の記事から予約に繋がっています。特に比較・費用系の記事は「カウンセリング」への流入が多く、じっくり検討したい層の入口として機能していることがわかります。この傾向を踏まえ、比較・費用系記事を増やすことが予約数の上積みに繋がりやすいと考えられます。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（特集記事・SEO）<small>記事量→記事エンゲージメント→検索流入→記事内CTA→タップ→予約</small></div>
         <div class="panel-body">
@@ -2193,6 +2236,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
       </div>
 
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>初回限定クーポンやキャンペーン系のプッシュ通知・お知らせから「カウンセリング」「モニター」への予約が生まれており、既存アプリ利用者に対する期間限定の訴求が予約の起点になりやすい傾向があります。一方でメニュー詳細ページ経由は「マイメニュー」（再来院・追加施術）への流入が多く、新規獲得はクーポン、既存顧客の追加施術喚起はメニューページ、という役割分担が見えます。</p>
+      </div>
+
       <div class="panel funnel-panel">
         <div class="panel-title"><span class="bar"></span>予約ファネル分析（MYSBC公式アプリ）<small>新規インストール数→合計配信者数→予約タップ→予約</small></div>
         <div class="panel-body">
@@ -2389,6 +2437,11 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </table>
         </div>
         <p style="font-size:11px;color:var(--text-faint);margin:10px 17px 0;line-height:1.6">※全て仮のサンプルデータです。実際の患者属性・予約内容とは関係ありません。</p>
+      </div>
+
+      <div class="callout info">
+        <h4>🤖 AI分析</h4>
+        <p>期間限定キャンペーン・ポイント有効期限のご案内など、行動を促す「締切」を明示した配信からカウンセリング・マイメニューへの予約が生まれています。症例紹介系の配信は「マイメニュー」（既存顧客の追加施術検討）への流入が中心で、既存リストに対しては「今すぐ動く理由」を提示する配信が予約に繋がりやすい傾向がうかがえます。</p>
       </div>
 
       <div class="panel funnel-panel">
@@ -2781,7 +2834,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
         </div>
       </div>
 
-      <div class="proposal-grid">
+      <div class="glossary-search">
+        <span class="gs-icon">🔍</span>
+        <input type="text" id="glossary-search-input" placeholder="わからない用語を入力して検索（例：リーチ、保存率、エンゲージメント）">
+      </div>
+      <div class="glossary-no-result" id="glossary-no-result">該当する用語が見つかりませんでした。別のキーワードでお試しください。</div>
+
+      <div class="proposal-grid" id="glossary-grid">
         <div class="proposal-card term-card">
           <h5>リーチ数<span class="term-en">(Reach)</span></h5>
           <p>意味：投稿を見た「人（アカウント）の数」。1人が5回見ても「1」とカウント。「どれだけ新しい人に届いたか（認知の広がり）」を測る。</p>
@@ -2843,6 +2902,24 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       window.scrollTo(0,0);
     });
   });
+
+  /* 用語集：キーワード検索 */
+  var glossaryInput = document.getElementById('glossary-search-input');
+  if(glossaryInput){
+    var termCards = document.querySelectorAll('#glossary-grid .term-card');
+    var glossaryNoResult = document.getElementById('glossary-no-result');
+    glossaryInput.addEventListener('input', function(){
+      var q = glossaryInput.value.trim().toLowerCase();
+      var anyVisible = false;
+      termCards.forEach(function(card){
+        var text = card.textContent.toLowerCase();
+        var match = !q || text.indexOf(q) !== -1;
+        card.classList.toggle('gs-hidden', !match);
+        if(match) anyVisible = true;
+      });
+      if(glossaryNoResult) glossaryNoResult.style.display = (!anyVisible && q) ? 'block' : 'none';
+    });
+  }
 
   /* 初めての方へ：仮説・数値目標の書き込みシート（この端末のブラウザにのみ保存） */
   var tutNg = document.getElementById('tut-ng');
