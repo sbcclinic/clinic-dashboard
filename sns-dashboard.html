@@ -340,6 +340,16 @@ td.cur{font-weight:800;}
 .callout ul{margin:0;padding-left:18px;}
 .callout li{margin-bottom:5px;}
 .callout li:last-child{margin-bottom:0;}
+
+.editable-block{position:relative;}
+.editable-block.callout{padding-right:38px;}
+.callout-edit-btn{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s;padding:0;}
+.callout-edit-btn:hover{opacity:1;}
+.callout-editarea{width:100%;box-sizing:border-box;font:inherit;font-size:12.8px;line-height:1.7;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);resize:vertical;min-height:80px;margin-bottom:8px;}
+.callout-edit-actions{display:flex;gap:8px;}
+.callout-edit-actions button{font:inherit;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;border:none;cursor:pointer;}
+.callout-edit-save{background:var(--accent);color:#fff;}
+.callout-edit-cancel{background:var(--surface-muted);color:var(--text-muted);border:1px solid var(--border);}
 .callout p{margin:0;}
 
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -572,6 +582,17 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   border:1px solid var(--border);background:var(--surface);color:var(--text);resize:vertical;
 }
 .tut-worksheet textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+
+/* 目標入力ページ */
+.goals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media (max-width:640px){.goals-grid{grid-template-columns:1fr;}}
+.goals-field{display:flex;flex-direction:column;gap:6px;}
+.goals-field span{font-size:12px;font-weight:700;color:var(--text-muted);}
+.goals-field input{font:inherit;font-size:14px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);}
+.goals-field input:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+.goals-save-btn{font:inherit;font-size:13px;font-weight:800;padding:10px 22px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;}
+.goals-reset-btn{font:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--surface-muted);color:var(--text-muted);cursor:pointer;}
+.goals-saved-note{font-size:12.5px;font-weight:700;color:var(--good);display:none;}
 .guide-preview-note{font-size:11px;color:var(--text-faint);margin:12px 0 0;}
 
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
@@ -612,6 +633,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     <div class="nav-utility" id="nav-utility">
       <a data-page="guide" class="nav-utility-btn"><span class="nub-icon">🔰</span><span class="nub-text"><b>初めての方へ</b><span>使い方を4STEPで確認</span></span></a>
       <a data-page="glossary" class="nav-utility-btn"><span class="nub-icon">📖</span><span class="nub-text"><b>用語集</b><span>指標の意味をすぐ確認</span></span></a>
+      <a data-page="goals" class="nav-utility-btn"><span class="nub-icon">🎯</span><span class="nub-text"><b>目標入力</b><span>媒体別の月次目標を編集</span></span></a>
     </div>
     <div class="foot-note">要件定義（CPP_AIXPJ作業用シート）をもとに作成した画面デモです。実データ接続前のサンプルを含みます。</div>
   </aside>
@@ -717,43 +739,43 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--ig-fill)">IG</span>Instagram</div>
               <div class="channel-card-metrics">
-                <div class="channel-metric"><div class="cm-label">フォロワー数</div><div class="cm-value">68,352人</div><div class="cm-sub">純増 +412人</div><div class="cm-goal">目標 <b>70,000人</b>・達成率 <b>97.6%</b></div><div class="cm-goal-bar"><i style="width:97.6%;background:var(--warn)"></i></div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">80件</div><div class="cm-sub">前月 79件 <span class="delta up">▲+1.3%</span></div><div class="cm-goal">目標 <b>85件</b>・達成率 <b>94.1%</b></div><div class="cm-goal-bar"><i style="width:94.1%;background:var(--warn)"></i></div></div>
+                <div class="channel-metric" data-goal-key="ig_followers" data-goal-default="70000" data-actual="68352" data-goal-suffix="人"><div class="cm-label">フォロワー数</div><div class="cm-value">68,352人</div><div class="cm-sub">純増 +412人</div><div class="cm-goal-mount"></div></div>
+                <div class="channel-metric" data-goal-key="ig_bookings" data-goal-default="85" data-actual="80" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">80件</div><div class="cm-sub">前月 79件 <span class="delta up">▲+1.3%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--yt-fill)">YT</span>YouTube</div>
               <div class="channel-card-metrics">
-                <div class="channel-metric"><div class="cm-label">チャンネル登録者数</div><div class="cm-value">9,845人</div><div class="cm-sub">純増 +94人</div><div class="cm-goal">目標 <b>10,500人</b>・達成率 <b>93.8%</b></div><div class="cm-goal-bar"><i style="width:93.8%;background:var(--warn)"></i></div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">9件</div><div class="cm-sub">前月 7件 <span class="delta up">▲+28.6%</span></div><div class="cm-goal">目標 <b>12件</b>・達成率 <b>75.0%</b></div><div class="cm-goal-bar"><i style="width:75.0%;background:var(--bad)"></i></div></div>
+                <div class="channel-metric" data-goal-key="yt_subscribers" data-goal-default="10500" data-actual="9845" data-goal-suffix="人"><div class="cm-label">チャンネル登録者数</div><div class="cm-value">9,845人</div><div class="cm-sub">純増 +94人</div><div class="cm-goal-mount"></div></div>
+                <div class="channel-metric" data-goal-key="yt_bookings" data-goal-default="12" data-actual="9" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">9件</div><div class="cm-sub">前月 7件 <span class="delta up">▲+28.6%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--tt-fill)">TT</span>TikTok</div>
               <div class="channel-card-metrics">
-                <div class="channel-metric"><div class="cm-label">フォロワー数</div><div class="cm-value">40,342人</div><div class="cm-sub">純増 +583人</div><div class="cm-goal">目標 <b>42,000人</b>・達成率 <b>96.1%</b></div><div class="cm-goal-bar"><i style="width:96.1%;background:var(--warn)"></i></div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">3件</div><div class="cm-sub">前月 8件 <span class="delta down">▼-62.5%</span></div><div class="cm-goal">目標 <b>8件</b>・達成率 <b>37.5%</b></div><div class="cm-goal-bar"><i style="width:37.5%;background:var(--bad)"></i></div></div>
+                <div class="channel-metric" data-goal-key="tt_followers" data-goal-default="42000" data-actual="40342" data-goal-suffix="人"><div class="cm-label">フォロワー数</div><div class="cm-value">40,342人</div><div class="cm-sub">純増 +583人</div><div class="cm-goal-mount"></div></div>
+                <div class="channel-metric" data-goal-key="tt_bookings" data-goal-default="8" data-actual="3" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">3件</div><div class="cm-sub">前月 8件 <span class="delta down">▼-62.5%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--seo-fill)">SEO</span>特集記事(SEO)</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">流入数</div><div class="cm-value">38,500</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">14件</div><div class="cm-sub">前月比 <span class="delta up">▲+27.3%</span></div><div class="cm-goal">目標 <b>15件</b>・達成率 <b>93.3%</b></div><div class="cm-goal-bar"><i style="width:93.3%;background:var(--warn)"></i></div></div>
+                <div class="channel-metric" data-goal-key="seo_bookings" data-goal-default="15" data-actual="14" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">14件</div><div class="cm-sub">前月比 <span class="delta up">▲+27.3%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--app-fill)">📱</span>MYSBC公式アプリ</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">セッション数</div><div class="cm-value">28,400</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">46件</div><div class="cm-sub">前月比 <span class="delta up">▲+8.8%</span></div><div class="cm-goal">目標 <b>45件</b>・達成率 <b>102.2%</b></div><div class="cm-goal-bar"><i style="width:100%;background:var(--good)"></i></div></div>
+                <div class="channel-metric" data-goal-key="app_bookings" data-goal-default="45" data-actual="46" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">46件</div><div class="cm-sub">前月比 <span class="delta up">▲+8.8%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
             <div class="channel-card">
               <div class="channel-card-head"><span class="ch-ico" style="background:var(--mail-fill)">✉</span>メルマガ</div>
               <div class="channel-card-metrics">
                 <div class="channel-metric"><div class="cm-label">セッション数</div><div class="cm-value">42,000</div></div>
-                <div class="channel-metric"><div class="cm-label">予約数</div><div class="cm-value">31件</div><div class="cm-sub">前月比 <span class="delta up">▲+1.9%</span></div><div class="cm-goal">目標 <b>30件</b>・達成率 <b>103.3%</b></div><div class="cm-goal-bar"><i style="width:100%;background:var(--good)"></i></div></div>
+                <div class="channel-metric" data-goal-key="mail_bookings" data-goal-default="30" data-actual="31" data-goal-suffix="件"><div class="cm-label">予約数</div><div class="cm-value">31件</div><div class="cm-sub">前月比 <span class="delta up">▲+1.9%</span></div><div class="cm-goal-mount"></div></div>
               </div>
             </div>
           </div>
@@ -1001,13 +1023,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="ig-feed-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="ig-feed-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -1363,13 +1385,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="ig-story-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -1519,13 +1541,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="yt-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="yt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -1759,13 +1781,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="tt-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="tt-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -1979,13 +2001,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="seo-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="seo-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -2197,13 +2219,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="page-app-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="app-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -2413,13 +2435,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       <div class="kpi-grid" id="mail-kpi-grid"></div>
 
       <div class="panel">
-        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前月の実績を比較</small></div>
+        <div class="panel-title"><span class="bar"></span>予約数の推移<small>今月・前年同月の実績を比較</small></div>
         <div class="panel-body chart-wrap">
           <div class="chart-legend">
             <span><i style="background:var(--accent)"></i>各月の実績</span>
-            <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+            <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
             <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-            <span><i style="background:#f87171"></i>前月（選択中）</span>
+            <span><i style="background:#f87171"></i>前年同月（選択中）</span>
           </div>
           <svg id="mail-booking-chart" viewBox="0 0 760 236" style="width:100%;height:auto;overflow:visible"></svg>
         </div>
@@ -2908,6 +2930,68 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       </div>
     </section>
 
+    <!-- ============ 12. 目標入力 ============ -->
+    <section class="page" id="page-goals">
+      <div class="page-head">
+        <div>
+          <h1>目標入力 <span class="platform-chip chip-all">月次目標の編集</span></h1>
+          <p>「全体KPI」ページの媒体別パフォーマンスに表示される目標値を編集できます</p>
+        </div>
+      </div>
+
+      <div class="sample-banner"><span>⚠</span><div><b>デモ機能：</b>ここで保存した目標値は、この端末・このブラウザにのみ保存されます（他の担当者やほかのPCには反映されません）。将来的にチーム全員で共有するには、Googleスプレッドシート等の外部データベースと連携する仕組みが別途必要です。ここでは「入力→保存→反映」という見え方・仕組みのデモとしてご確認ください。</div></div>
+
+      <form id="goals-form">
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>Instagram</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>フォロワー数の目標（人）</span><input type="number" data-goal-key="ig_followers" min="0" step="1"></label>
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="ig_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>YouTube</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>チャンネル登録者数の目標（人）</span><input type="number" data-goal-key="yt_subscribers" min="0" step="1"></label>
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="yt_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>TikTok</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>フォロワー数の目標（人）</span><input type="number" data-goal-key="tt_followers" min="0" step="1"></label>
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="tt_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>特集記事(SEO)</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="seo_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>MYSBC公式アプリ</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="app_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="bar"></span>メルマガ</div>
+          <div class="panel-body goals-grid">
+            <label class="goals-field"><span>予約数の目標（件）</span><input type="number" data-goal-key="mail_bookings" min="0" step="1"></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <button type="submit" class="goals-save-btn">保存する</button>
+            <button type="button" id="goals-reset-btn" class="goals-reset-btn">デフォルトに戻す</button>
+            <span id="goals-saved-note" class="goals-saved-note">✅ 保存しました（全体KPIページに反映されます）</span>
+          </div>
+        </div>
+      </form>
+    </section>
+
   </main>
 </div>
 
@@ -2924,6 +3008,183 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       window.scrollTo(0,0);
     });
   });
+
+  /* 媒体別パフォーマンスの目標値：目標入力ページで保存した値（この端末のブラウザ内）を反映。未保存ならデフォルト値を使用 */
+  window.renderChannelGoals = function(){
+    document.querySelectorAll('.channel-metric[data-goal-key]').forEach(function(el){
+      var key = el.getAttribute('data-goal-key');
+      var def = parseFloat(el.getAttribute('data-goal-default'));
+      var actual = parseFloat(el.getAttribute('data-actual'));
+      var suffix = el.getAttribute('data-goal-suffix') || '';
+      var goal = def;
+      try{
+        var saved = localStorage.getItem('sbc_dash_goal_' + key);
+        if(saved != null && saved !== '' && !isNaN(parseFloat(saved))) goal = parseFloat(saved);
+      }catch(e){}
+      var rate = goal ? (actual/goal*100) : 0;
+      var color = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
+      var mount = el.querySelector('.cm-goal-mount');
+      if(mount){
+        mount.innerHTML = '<div class="cm-goal">目標 <b>'+Math.round(goal).toLocaleString()+suffix+'</b>・達成率 <b>'+rate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,rate)+'%;background:'+color+'"></i></div>';
+      }
+    });
+  };
+  window.renderChannelGoals();
+
+  /* 目標入力ページ：フォームの読み込み・保存・リセット */
+  (function(){
+    var form = document.getElementById('goals-form');
+    if(!form) return;
+    var inputs = form.querySelectorAll('input[data-goal-key]');
+    var defaults = {};
+    document.querySelectorAll('.channel-metric[data-goal-key]').forEach(function(el){
+      defaults[el.getAttribute('data-goal-key')] = el.getAttribute('data-goal-default');
+    });
+
+    function loadInputs(){
+      inputs.forEach(function(input){
+        var key = input.getAttribute('data-goal-key');
+        var val = null;
+        try{ val = localStorage.getItem('sbc_dash_goal_' + key); }catch(e){}
+        input.value = (val != null && val !== '') ? val : (defaults[key] || '');
+      });
+    }
+    loadInputs();
+
+    var savedNote = document.getElementById('goals-saved-note');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      inputs.forEach(function(input){
+        var key = input.getAttribute('data-goal-key');
+        var val = input.value;
+        try{
+          if(val === ''){ localStorage.removeItem('sbc_dash_goal_' + key); }
+          else{ localStorage.setItem('sbc_dash_goal_' + key, val); }
+        }catch(e){}
+      });
+      if(window.renderChannelGoals) window.renderChannelGoals();
+      if(savedNote){
+        savedNote.style.display = 'inline';
+        clearTimeout(savedNote.__hideTimer);
+        savedNote.__hideTimer = setTimeout(function(){ savedNote.style.display = 'none'; }, 4000);
+      }
+    });
+
+    var resetBtn = document.getElementById('goals-reset-btn');
+    if(resetBtn){
+      resetBtn.addEventListener('click', function(){
+        inputs.forEach(function(input){
+          var key = input.getAttribute('data-goal-key');
+          try{ localStorage.removeItem('sbc_dash_goal_' + key); }catch(e){}
+        });
+        loadInputs();
+        if(window.renderChannelGoals) window.renderChannelGoals();
+      });
+    }
+  })();
+
+  /* コメント手修正（良かった点・課題・AI分析・方針など）：デモ用に、この端末のブラウザにのみ保存 */
+  (function(){
+    var STORAGE_PREFIX = 'sbc_dash_edit_';
+    function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function getText(block){
+      var ul = block.querySelector(':scope > ul');
+      if(ul){
+        return Array.prototype.map.call(ul.querySelectorAll(':scope > li'), function(li){ return li.textContent.trim(); }).join('\n');
+      }
+      var ps = block.querySelectorAll(':scope > p');
+      return Array.prototype.map.call(ps, function(p){ return p.textContent.trim(); }).join('\n\n');
+    }
+    function setText(block, text){
+      var ul = block.querySelector(':scope > ul');
+      if(ul){
+        var lines = text.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        ul.innerHTML = lines.map(function(l){ return '<li>'+escHtml(l)+'</li>'; }).join('');
+        return;
+      }
+      var ps = block.querySelectorAll(':scope > p');
+      if(ps.length <= 1){
+        var p = ps[0];
+        if(!p){ p = document.createElement('p'); block.appendChild(p); }
+        p.textContent = text;
+      } else {
+        var paras = text.split(/\n\n+/).map(function(s){ return s.trim(); });
+        Array.prototype.forEach.call(ps, function(p, i){ p.textContent = paras[i] != null ? paras[i] : ''; });
+      }
+    }
+
+    var blocks = [];
+    document.querySelectorAll('.page').forEach(function(page){
+      var els = page.querySelectorAll('.callout.good, .callout.bad, .callout.info, .summary-col');
+      els.forEach(function(el, i){
+        el.setAttribute('data-cid', page.id + '-edit-' + i);
+        blocks.push(el);
+      });
+    });
+
+    blocks.forEach(function(block){
+      var cid = block.getAttribute('data-cid');
+      try{
+        var saved = localStorage.getItem(STORAGE_PREFIX + cid);
+        if(saved != null){ setText(block, saved); }
+      }catch(e){}
+
+      block.classList.add('editable-block');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'callout-edit-btn';
+      btn.title = 'このコメントを編集する';
+      btn.textContent = '✏️';
+      block.appendChild(btn);
+
+      var editing = false;
+
+      btn.addEventListener('click', function(){
+        if(editing) return;
+        editing = true;
+
+        var textarea = document.createElement('textarea');
+        textarea.className = 'callout-editarea';
+        textarea.value = getText(block);
+
+        var actions = document.createElement('div');
+        actions.className = 'callout-edit-actions';
+        var saveBtn = document.createElement('button');
+        saveBtn.type = 'button'; saveBtn.className = 'callout-edit-save'; saveBtn.textContent = '保存';
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button'; cancelBtn.className = 'callout-edit-cancel'; cancelBtn.textContent = 'キャンセル';
+        actions.appendChild(saveBtn);
+        actions.appendChild(cancelBtn);
+
+        var hidden = [];
+        Array.prototype.forEach.call(block.children, function(child){
+          if(child === btn) return;
+          if(child.tagName === 'UL' || child.tagName === 'P'){
+            child.style.display = 'none';
+            hidden.push(child);
+          }
+        });
+        block.insertBefore(textarea, btn);
+        block.insertBefore(actions, btn);
+        btn.style.display = 'none';
+
+        function exitEdit(shouldSave){
+          if(shouldSave){
+            setText(block, textarea.value);
+            try{ localStorage.setItem(STORAGE_PREFIX + cid, textarea.value); }catch(e){}
+          }
+          textarea.remove();
+          actions.remove();
+          hidden.forEach(function(c){ c.style.display = ''; });
+          btn.style.display = '';
+          editing = false;
+        }
+        saveBtn.addEventListener('click', function(){ exitEdit(true); });
+        cancelBtn.addEventListener('click', function(){ exitEdit(false); });
+        textarea.focus();
+      });
+    });
+  })();
 
   /* 用語集：キーワード検索 */
   var glossaryInput = document.getElementById('glossary-search-input');
@@ -3151,12 +3412,13 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     }).join('');
   }
 
-  function drawBookingsChart(svgId, values, monthIdx, fmt){
+  function drawBookingsChart(svgId, values, monthIdx, fmt, lastYearValues){
     var svg = document.getElementById(svgId);
     if(!svg) return;
     var W=760, H=236, padL=44, padR=14, padT=16, padB=46;
     var groupW = (W-padL-padR)/values.length;
-    var maxV = Math.max.apply(null, values) * 1.2;
+    var allValues = lastYearValues ? values.concat(lastYearValues) : values;
+    var maxV = Math.max.apply(null, allValues) * 1.2;
     function yFor(v){ return padT + (H-padT-padB)*(1-v/maxV); }
     function xForGroup(i){ return padL + groupW*i; }
     var gridLines = '';
@@ -3164,23 +3426,26 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       var gy = padT + (H-padT-padB)*g/3;
       gridLines += '<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="var(--border)" stroke-width="1"/>';
     }
+    var compareLabel = lastYearValues ? '前年同月' : '先月';
     var bars = '';
     values.forEach(function(v, i){
       var isSel = i===monthIdx;
-      if(i>0){
+      var hasCompare = lastYearValues ? true : (i>0);
+      if(hasCompare){
+        var compareV = lastYearValues ? lastYearValues[i] : values[i-1];
         var halfW = groupW*0.32, gap = 5;
         var xThis = xForGroup(i) + groupW/2 - halfW - gap/2;
         var xPrev = xForGroup(i) + groupW/2 + gap/2;
-        var yThis = yFor(v), prevV = values[i-1], yPrev = yFor(prevV);
+        var yThis = yFor(v), yPrev = yFor(compareV);
         var colorThis = isSel ? '#38bdf8' : 'var(--accent)';
         var colorPrev = isSel ? '#f87171' : 'var(--border-strong)';
         bars += '<rect x="'+xThis+'" y="'+yThis+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yThis)+'" rx="4" fill="'+colorThis+'"/>'+
           '<text x="'+(xThis+halfW/2)+'" y="'+(yThis-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(v)+'</text>';
         bars += '<rect x="'+xPrev+'" y="'+yPrev+'" width="'+halfW+'" height="'+Math.max(0,H-padB-yPrev)+'" rx="4" fill="'+colorPrev+'"/>'+
-          '<text x="'+(xPrev+halfW/2)+'" y="'+(yPrev-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(prevV)+'</text>';
+          '<text x="'+(xPrev+halfW/2)+'" y="'+(yPrev-6)+'" font-size="10.5" font-weight="800" fill="var(--text-muted)" text-anchor="middle">'+fmt(compareV)+'</text>';
         if(isSel){
           bars += '<text x="'+(xThis+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#38bdf8" text-anchor="middle">今月</text>'+
-            '<text x="'+(xPrev+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#f87171" text-anchor="middle">先月</text>';
+            '<text x="'+(xPrev+halfW/2)+'" y="'+(H-padB+15)+'" font-size="9.5" font-weight="800" fill="#f87171" text-anchor="middle">'+compareLabel+'</text>';
         }
       } else {
         var barW = groupW*0.4;
@@ -3255,6 +3520,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var subscribersV = series4(49040,49680);
     var tapsV = series4(1050,1150);
     var bookingsV = series4(42,46);
+    var lastYearBookingsV = [30,33,36,39];
     var deliveryCountV = series4(15,18);
     var favorite1V = series4(2150,2280);
     var favorite2V = series4(980,1050);
@@ -3310,7 +3576,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       document.getElementById('app-drop-1').textContent = '離脱 '+(100-conv1).toFixed(1)+'%';
       document.getElementById('app-conv-2').textContent = '転換 '+conv2.toFixed(1)+'%';
       document.getElementById('app-drop-2').textContent = '離脱 '+(100-conv2).toFixed(1)+'%';
-      drawBookingsChart('app-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('app-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('app-daily-chart', dailyBookings);
       renderRank('app-dow-rank', DOW_RANK);
       renderRank('app-hour-rank', HOUR_RANK);
@@ -3322,6 +3588,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   (function(){
     var reachV = series4(159000,184000);
     var bookingsV = [47,58,62,58];
+    var lastYearBookingsV = [38,45,50,48];
     var bookingsProfileV = [32,40,43,40];
     var bookingsStoryV = [15,18,19,18];
     var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
@@ -3371,7 +3638,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       if(followersCard){
         followersCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(FOLLOWERS_GOAL)+'人</b>・達成率 <b>'+fRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,fRate)+'%;background:'+fColor+'"></i></div>');
       }
-      drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('ig-feed-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('ig-feed-daily-chart', dailyBookings);
       renderRank('ig-feed-dow-rank', DOW_RANK);
       renderRank('ig-feed-hour-rank', HOUR_RANK);
@@ -3383,6 +3650,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   (function(){
     var storyViewsV = series4(78500,92000);
     var bookingsV = series4(17,22);
+    var lastYearBookingsV = [12,14,16,18];
     var rateV = bookingsV.map(function(v,i){ return v/storyViewsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
@@ -3397,7 +3665,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('ig-story-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('ig-story-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('ig-story-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
     }
     setupPageMonthSelector('ig-story-month-seg', render);
   })();
@@ -3406,6 +3674,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   (function(){
     var viewsV = series4(159000,208000);
     var bookingsV = series4(7,9);
+    var lastYearBookingsV = [3,4,5,6];
     var rateV = bookingsV.map(function(v,i){ return v/viewsV[i]*100; });
     var contribV = bookingsV.map(function(v){ return v/183*100; });
     var metrics = [
@@ -3454,7 +3723,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       if(channelCard){
         channelCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(CHANNEL_GOAL)+'人</b>・達成率 <b>'+cRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,cRate)+'%;background:'+cColor+'"></i></div>');
       }
-      drawBookingsChart('yt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('yt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('yt-daily-chart', dailyBookings);
       renderRank('yt-dow-rank', DOW_RANK);
       renderRank('yt-hour-rank', HOUR_RANK);
@@ -3465,6 +3734,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   /* ---------- TikTok ---------- */
   (function(){
     var bookingsV = [13,7,8,3];
+    var lastYearBookingsV = [6,7,8,9];
     var followersV = series4(39759,40342);
     var metrics = [
       {key:'followers', label:'フォロワー総数', bar:'var(--tt)', values:followersV, fmt:fmtInt, deltaType:'raw', rawSuffix:'人'},
@@ -3504,7 +3774,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       if(followersCard){
         followersCard.insertAdjacentHTML('beforeend', '<div class="cm-goal">目標 <b>'+fmtInt(FOLLOWERS_GOAL)+'人</b>・達成率 <b>'+fRate.toFixed(1)+'%</b></div><div class="cm-goal-bar"><i style="width:'+Math.min(100,fRate)+'%;background:'+fColor+'"></i></div>');
       }
-      drawBookingsChart('tt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('tt-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('tt-daily-chart', dailyBookings);
       renderRank('tt-dow-rank', DOW_RANK);
       renderRank('tt-hour-rank', HOUR_RANK);
@@ -3516,6 +3786,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   (function(){
     var sessionsV = series4(34200,38500);
     var bookingsV = series4(11,14);
+    var lastYearBookingsV = [6,7,8,9];
     var rateV = bookingsV.map(function(v,i){ return v/sessionsV[i]*100; });
     var metrics = [
       {key:'bookings', label:'予約数', bar:'var(--warn)', values:bookingsV, fmt:function(v){return fmtCount(v);}, deltaType:'none', staticSub:'記事経由の予約'},
@@ -3544,7 +3815,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('seo-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('seo-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('seo-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('seo-daily-chart', dailyBookings);
       renderRank('seo-dow-rank', DOW_RANK);
       renderRank('seo-hour-rank', HOUR_RANK);
@@ -3560,6 +3831,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     var openRateV = series4(26.5,28.1);
     var ctrV = series4(10.5,11.2);
     var bookingsV = series4(30,31);
+    var lastYearBookingsV = [24,25,27,28];
     var opensV = reachV.map(function(v,i){ return v*openRateV[i]/100; });
     var clicksV = opensV.map(function(v,i){ return v*ctrV[i]/100; });
     var rateV = bookingsV.map(function(v,i){ return v/reachV[i]*100; });
@@ -3593,7 +3865,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     ];
     function render(monthIdx){
       renderGenericKpiGrid('mail-kpi-grid', metrics, monthIdx);
-      drawBookingsChart('mail-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);});
+      drawBookingsChart('mail-booking-chart', bookingsV, monthIdx, function(v){return fmtCount(v);}, lastYearBookingsV);
       drawDailyChart('mail-daily-chart', dailyBookings);
       renderRank('mail-dow-rank', DOW_RANK);
       renderRank('mail-hour-rank', HOUR_RANK);
