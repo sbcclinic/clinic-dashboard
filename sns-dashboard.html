@@ -593,6 +593,10 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 .goals-save-btn{font:inherit;font-size:13px;font-weight:800;padding:10px 22px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer;}
 .goals-reset-btn{font:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--surface-muted);color:var(--text-muted);cursor:pointer;}
 .goals-saved-note{font-size:12.5px;font-weight:700;color:var(--good);display:none;}
+.goals-table td{white-space:nowrap;}
+.goals-table td:first-child{white-space:normal;min-width:150px;}
+.goals-table input[type="number"]{width:82px;font:inherit;font-size:12.5px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-align:right;}
+.goals-table input[type="number"]:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
 .guide-preview-note{font-size:11px;color:var(--text-faint);margin:12px 0 0;}
 
 .overview-stat-goal{display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);}
@@ -716,7 +720,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           </div>
 
           <div id="kpi-monthly-trend-panel">
-            <div class="channel-section-label">月次推移・今月/前月比較<small style="font-weight:600;color:var(--text-faint);margin-left:6px">棒グラフ：各月の実績（選択中の月は今月・前月の2本で比較）</small></div>
+            <div class="channel-section-label">月次推移・今月/前年同月比較<small style="font-weight:600;color:var(--text-faint);margin-left:6px">棒グラフ：各月の実績（選択中の月は今月・前年同月の2本で比較）</small></div>
             <div class="chart-wrap">
               <div class="seg" id="kpi-chart-metric-seg">
                 <button class="active" data-metric="sessions">SNSセッション数</button>
@@ -725,12 +729,12 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
               </div>
               <div class="chart-legend" style="margin-top:10px">
                 <span><i style="background:var(--accent)"></i>各月の実績</span>
-                <span><i style="background:var(--border-strong)"></i>前月（比較用）</span>
+                <span><i style="background:var(--border-strong)"></i>前年同月（比較用）</span>
                 <span><i style="background:#38bdf8"></i>今月（選択中）</span>
-                <span><i style="background:#f87171"></i>前月（選択中）</span>
+                <span><i style="background:#f87171"></i>前年同月（選択中）</span>
               </div>
               <svg id="kpi-month-chart" viewBox="0 0 760 240" style="width:100%;height:auto;overflow:visible"></svg>
-              <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前月」の2本棒で実績を比較できます。</p>
+              <p style="font-size:11px;color:var(--text-faint);margin-top:8px;line-height:1.6">●は年月選択で選んだ月を示します。選んだ月は「今月」「前年同月」の2本棒で実績を比較できます。</p>
             </div>
           </div>
 
@@ -2934,140 +2938,15 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     <section class="page" id="page-goals">
       <div class="page-head">
         <div>
-          <h1>目標入力 <span class="platform-chip chip-all">月次目標の編集</span></h1>
-          <p>「全体KPI」ページの媒体別パフォーマンスに表示される目標値を編集できます</p>
+          <h1>目標入力 <span class="platform-chip chip-all">年間・月次目標の編集</span></h1>
+          <p>媒体ごとに1月〜12月の目標値を入力・確認できます。「全体KPI」ページの媒体別パフォーマンスには、選択中の月に対応する目標が反映されます</p>
         </div>
       </div>
 
       <div class="sample-banner"><span>⚠</span><div><b>デモ機能：</b>ここで保存した目標値は、この端末・このブラウザにのみ保存されます（他の担当者やほかのPCには反映されません）。将来的にチーム全員で共有するには、Googleスプレッドシート等の外部データベースと連携する仕組みが別途必要です。ここでは「入力→保存→反映」という見え方・仕組みのデモとしてご確認ください。</div></div>
 
       <form id="goals-form">
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>Instagram</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>フォロワー数の目標（人）</td>
-                  <td><input type="number" data-goal-key="ig_followers" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_followers" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_followers" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_followers" data-month="3" min="0" step="1"></td>
-                </tr>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="ig_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="ig_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>YouTube</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>チャンネル登録者数の目標（人）</td>
-                  <td><input type="number" data-goal-key="yt_subscribers" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_subscribers" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_subscribers" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_subscribers" data-month="3" min="0" step="1"></td>
-                </tr>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="yt_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="yt_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>TikTok</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>フォロワー数の目標（人）</td>
-                  <td><input type="number" data-goal-key="tt_followers" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_followers" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_followers" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_followers" data-month="3" min="0" step="1"></td>
-                </tr>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="tt_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="tt_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>特集記事(SEO)</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="seo_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="seo_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="seo_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="seo_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>MYSBC公式アプリ</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="app_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="app_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="app_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="app_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="bar"></span>メルマガ</div>
-          <div class="panel-body">
-            <div class="table-scroll">
-            <table class="goals-table">
-              <thead><tr><th style="text-align:left">指標</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th></tr></thead>
-              <tbody>
-                <tr><td>予約数の目標（件）</td>
-                  <td><input type="number" data-goal-key="mail_bookings" data-month="0" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="mail_bookings" data-month="1" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="mail_bookings" data-month="2" min="0" step="1"></td>
-                  <td><input type="number" data-goal-key="mail_bookings" data-month="3" min="0" step="1"></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
+        <div id="goals-tables"><p style="color:var(--text-faint);font-size:12.5px">読み込み中…</p></div>
 
         <div class="panel">
           <div class="panel-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -3097,36 +2976,46 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   });
 
   /* 媒体別パフォーマンス：月選択に応じて実績・目標を再計算して表示。
-     目標値は「目標入力」ページで月ごとに保存した値（この端末のブラウザ内）を反映し、未保存ならデフォルト値を使用 */
+     目標値は「目標入力」ページでカレンダー月（1〜12月）ごとに保存した値（この端末のブラウザ内）を反映し、未保存ならデフォルト値を使用。
+     全体KPIの月選択（monthIdx 0〜3）は2月〜5月に対応するため、カレンダー月 = monthIdx + 2 に変換して参照する。 */
   window.CHANNEL_PERF = [
-    {key:'ig', metrics:[
-      {subStyle:'raw', rawSuffix:'人', values:series4(67940,68352), fmt:fmtInt, goalKey:'ig_followers', goalDefault:70000, goalSuffix:'人'},
-      {subStyle:'prevPct', values:[47,58,62,58], fmt:function(v){return fmtCount(v);}, goalKey:'ig_bookings', goalDefault:85, goalSuffix:'件'}
+    {key:'ig', name:'Instagram', metrics:[
+      {label:'フォロワー数', subStyle:'raw', rawSuffix:'人', values:series4(67940,68352), fmt:fmtInt, goalKey:'ig_followers', goalDefault:70000, goalSuffix:'人'},
+      {label:'予約数', subStyle:'prevPct', values:[47,58,62,58].map(function(v,i){ return v + series4(17,22)[i]; }), fmt:function(v){return fmtCount(Math.round(v));}, goalKey:'ig_bookings', goalDefault:85, goalSuffix:'件'}
     ]},
-    {key:'yt', metrics:[
-      {subStyle:'raw', rawSuffix:'人', values:series4(9751,9845), fmt:fmtInt, goalKey:'yt_subscribers', goalDefault:10500, goalSuffix:'人'},
-      {subStyle:'prevPct', values:series4(7,9), fmt:function(v){return fmtCount(v);}, goalKey:'yt_bookings', goalDefault:12, goalSuffix:'件'}
+    {key:'yt', name:'YouTube', metrics:[
+      {label:'チャンネル登録者数', subStyle:'raw', rawSuffix:'人', values:series4(9751,9845), fmt:fmtInt, goalKey:'yt_subscribers', goalDefault:10500, goalSuffix:'人'},
+      {label:'予約数', subStyle:'prevPct', values:series4(7,9), fmt:function(v){return fmtCount(v);}, goalKey:'yt_bookings', goalDefault:12, goalSuffix:'件'}
     ]},
-    {key:'tt', metrics:[
-      {subStyle:'raw', rawSuffix:'人', values:series4(39759,40342), fmt:fmtInt, goalKey:'tt_followers', goalDefault:42000, goalSuffix:'人'},
-      {subStyle:'prevPct', values:[13,7,8,3], fmt:function(v){return fmtCount(v);}, goalKey:'tt_bookings', goalDefault:8, goalSuffix:'件'}
+    {key:'tt', name:'TikTok', metrics:[
+      {label:'フォロワー数', subStyle:'raw', rawSuffix:'人', values:series4(39759,40342), fmt:fmtInt, goalKey:'tt_followers', goalDefault:42000, goalSuffix:'人'},
+      {label:'予約数', subStyle:'prevPct', values:[13,7,8,3], fmt:function(v){return fmtCount(v);}, goalKey:'tt_bookings', goalDefault:8, goalSuffix:'件'}
     ]},
-    {key:'seo', metrics:[
-      {subStyle:'none', values:series4(34200,38500), fmt:fmtInt},
-      {subStyle:'pctOnly', values:series4(11,14), fmt:function(v){return fmtCount(v);}, goalKey:'seo_bookings', goalDefault:15, goalSuffix:'件'}
+    {key:'seo', name:'特集記事(SEO)', metrics:[
+      {label:'流入数', subStyle:'none', values:series4(34200,38500), fmt:fmtInt},
+      {label:'予約数', subStyle:'pctOnly', values:series4(11,14), fmt:function(v){return fmtCount(v);}, goalKey:'seo_bookings', goalDefault:15, goalSuffix:'件'}
     ]},
-    {key:'app', metrics:[
-      {subStyle:'none', values:series4(24850,28400), fmt:fmtInt},
-      {subStyle:'pctOnly', values:series4(42,46), fmt:function(v){return fmtCount(v);}, goalKey:'app_bookings', goalDefault:45, goalSuffix:'件'}
+    {key:'app', name:'MYSBC公式アプリ', metrics:[
+      {label:'セッション数', subStyle:'none', values:series4(24850,28400), fmt:fmtInt},
+      {label:'予約数', subStyle:'pctOnly', values:series4(42,46), fmt:function(v){return fmtCount(v);}, goalKey:'app_bookings', goalDefault:45, goalSuffix:'件'}
     ]},
-    {key:'mail', metrics:[
-      {subStyle:'none', values:series4(41200,42000), fmt:fmtInt},
-      {subStyle:'pctOnly', values:series4(30,31), fmt:function(v){return fmtCount(v);}, goalKey:'mail_bookings', goalDefault:30, goalSuffix:'件'}
+    {key:'mail', name:'メルマガ', metrics:[
+      {label:'セッション数', subStyle:'none', values:series4(41200,42000), fmt:fmtInt},
+      {label:'予約数', subStyle:'pctOnly', values:series4(30,31), fmt:function(v){return fmtCount(v);}, goalKey:'mail_bookings', goalDefault:30, goalSuffix:'件'}
     ]}
   ];
 
+  function loadGoalValue(goalKey, calMonth, fallback){
+    try{
+      var saved = localStorage.getItem('sbc_dash_goal_' + goalKey + '_cm' + calMonth);
+      if(saved != null && saved !== '' && !isNaN(parseFloat(saved))) return parseFloat(saved);
+    }catch(e){}
+    return fallback;
+  }
+
   window.renderChannelPerformance = function(monthIdx){
     var prevIdx = monthIdx > 0 ? monthIdx - 1 : null;
+    var calMonth = monthIdx + 2; // monthIdx 0-3 → 2月〜5月
     window.CHANNEL_PERF.forEach(function(ch){
       ch.metrics.forEach(function(m, mi){
         var card = document.querySelector('.channel-metric[data-perf-key="'+ch.key+'-'+mi+'"]');
@@ -3147,11 +3036,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
           }
         }
         if(m.goalKey){
-          var goal = m.goalDefault;
-          try{
-            var saved = localStorage.getItem('sbc_dash_goal_' + m.goalKey + '_m' + monthIdx);
-            if(saved != null && saved !== '' && !isNaN(parseFloat(saved))) goal = parseFloat(saved);
-          }catch(e){}
+          var goal = loadGoalValue(m.goalKey, calMonth, m.goalDefault);
           var rate = goal ? (cur/goal*100) : 0;
           var color = rate>=100 ? 'var(--good)' : (rate>=80 ? 'var(--warn)' : 'var(--bad)');
           var mount = card.querySelector('.cm-goal-mount');
@@ -3164,22 +3049,51 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
   };
   window.renderChannelPerformance(3);
 
-  /* 目標入力ページ：フォームの読み込み・保存・リセット */
+  /* 目標入力ページ：1月〜12月の年間テーブルを動的生成し、読み込み・保存・リセットを行う */
   (function(){
+    var container = document.getElementById('goals-tables');
     var form = document.getElementById('goals-form');
-    if(!form) return;
+    if(!container || !form) return;
+    var MONTHS_FULL = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+    var html = window.CHANNEL_PERF.map(function(ch){
+      var rows = ch.metrics.filter(function(m){ return !!m.goalKey; }).map(function(m){
+        var cells = MONTHS_FULL.map(function(label, i){
+          var calMonth = i + 1;
+          return '<td><input type="number" data-goal-key="'+m.goalKey+'" data-cal-month="'+calMonth+'" min="0" step="1"></td>';
+        }).join('');
+        return '<tr><td>'+m.label+'の目標（'+(m.goalSuffix||'')+'）</td>'+cells+'</tr>';
+      }).join('');
+      if(!rows) return '';
+      var headCells = MONTHS_FULL.map(function(label){ return '<th>'+label+'</th>'; }).join('');
+      return '<div class="panel"><div class="panel-title"><span class="bar"></span>'+ch.name+'</div>'+
+        '<div class="panel-body"><div class="table-scroll"><table class="goals-table">'+
+        '<thead><tr><th style="text-align:left">指標</th>'+headCells+'</tr></thead><tbody>'+rows+'</tbody></table></div></div></div>';
+    }).join('');
+
+    html += '<div class="panel"><div class="panel-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">'+
+      '<button type="submit" class="goals-save-btn">保存する</button>'+
+      '<button type="button" id="goals-reset-btn" class="goals-reset-btn">デフォルトに戻す</button>'+
+      '<span id="goals-saved-note" class="goals-saved-note">✅ 保存しました（全体KPIページに反映されます）</span>'+
+      '</div></div>';
+
+    container.innerHTML = html;
+
     var inputs = form.querySelectorAll('input[data-goal-key]');
     var defaults = {};
-    document.querySelectorAll('.channel-metric[data-goal-key]').forEach(function(el){
-      defaults[el.getAttribute('data-goal-key')] = el.getAttribute('data-goal-default');
+    window.CHANNEL_PERF.forEach(function(ch){
+      ch.metrics.forEach(function(m){
+        if(m.goalKey) defaults[m.goalKey] = m.goalDefault;
+      });
     });
 
     function loadInputs(){
       inputs.forEach(function(input){
         var key = input.getAttribute('data-goal-key');
+        var calMonth = input.getAttribute('data-cal-month');
         var val = null;
-        try{ val = localStorage.getItem('sbc_dash_goal_' + key); }catch(e){}
-        input.value = (val != null && val !== '') ? val : (defaults[key] || '');
+        try{ val = localStorage.getItem('sbc_dash_goal_' + key + '_cm' + calMonth); }catch(e){}
+        input.value = (val != null && val !== '') ? val : (defaults[key] != null ? defaults[key] : '');
       });
     }
     loadInputs();
@@ -3189,31 +3103,33 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
       e.preventDefault();
       inputs.forEach(function(input){
         var key = input.getAttribute('data-goal-key');
+        var calMonth = input.getAttribute('data-cal-month');
         var val = input.value;
         try{
-          if(val === ''){ localStorage.removeItem('sbc_dash_goal_' + key); }
-          else{ localStorage.setItem('sbc_dash_goal_' + key, val); }
+          if(val === ''){ localStorage.removeItem('sbc_dash_goal_' + key + '_cm' + calMonth); }
+          else{ localStorage.setItem('sbc_dash_goal_' + key + '_cm' + calMonth, val); }
         }catch(e){}
       });
-      if(window.renderChannelGoals) window.renderChannelGoals();
-      if(savedNote){
-        savedNote.style.display = 'inline';
-        clearTimeout(savedNote.__hideTimer);
-        savedNote.__hideTimer = setTimeout(function(){ savedNote.style.display = 'none'; }, 4000);
+      if(window.renderChannelPerformance) window.renderChannelPerformance(typeof kpiSelectedMonth !== 'undefined' ? kpiSelectedMonth : 3);
+      var note = document.getElementById('goals-saved-note');
+      if(note){
+        note.style.display = 'inline';
+        clearTimeout(note.__hideTimer);
+        note.__hideTimer = setTimeout(function(){ note.style.display = 'none'; }, 4000);
       }
     });
 
-    var resetBtn = document.getElementById('goals-reset-btn');
-    if(resetBtn){
-      resetBtn.addEventListener('click', function(){
+    form.addEventListener('click', function(e){
+      if(e.target && e.target.id === 'goals-reset-btn'){
         inputs.forEach(function(input){
           var key = input.getAttribute('data-goal-key');
-          try{ localStorage.removeItem('sbc_dash_goal_' + key); }catch(e){}
+          var calMonth = input.getAttribute('data-cal-month');
+          try{ localStorage.removeItem('sbc_dash_goal_' + key + '_cm' + calMonth); }catch(e2){}
         });
         loadInputs();
-        if(window.renderChannelGoals) window.renderChannelGoals();
-      });
-    }
+        if(window.renderChannelPerformance) window.renderChannelPerformance(typeof kpiSelectedMonth !== 'undefined' ? kpiSelectedMonth : 3);
+      }
+    });
   })();
 
   /* コメント手修正（良かった点・課題・AI分析・方針など）：デモ用に、この端末のブラウザにのみ保存 */
@@ -4556,7 +4472,8 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
 
   function drawKpiMonthChart(metricKey, monthIdx){
     var def = KPI_ALL_METRICS.filter(function(m){return m.key===metricKey;})[0];
-    drawBookingsChart('kpi-month-chart', def.values, monthIdx, def.fmt);
+    var lastYearValues = def.values.map(function(v){ return v/(1+def.yoyPct/100); });
+    drawBookingsChart('kpi-month-chart', def.values, monthIdx, def.fmt, lastYearValues);
   }
 
   function renderMainFunnel(monthIdx){
@@ -4579,6 +4496,7 @@ table.compare-table td.heat{font-weight:800;font-size:12.5px;}
     renderMainFunnel(monthIdx);
     highlightKpiTableColumn('tbl-kpi-media', monthIdx);
     drawKpiMonthChart(kpiChartMetric, monthIdx);
+    if(window.renderChannelPerformance) window.renderChannelPerformance(monthIdx);
   }
 
   var kpiMonthSegBtns = document.querySelectorAll('#kpi-month-seg button');
