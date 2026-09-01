@@ -3,6 +3,7 @@
 実行すると index.html を生成します
 """
 import json
+import os
 import pandas as pd
 import plotly.express as px
 import calendar
@@ -11,7 +12,10 @@ from pathlib import Path
 from itertools import groupby
 
 # ── ファイルパス ──────────────────────────────────────
-BOX_PATH  = Path(r"C:\Users\宮城杏奈\Box\総合企画部_特殊案件\その他\院情報一覧カウント\院情報一覧_カウント自動化.xlsx")
+# クラウド実行環境（Boxがローカルにマウントされない環境）向けに、
+# 環境変数で読み込み先を上書きできるようにしている。
+BOX_PATH = Path(os.environ["CLINIC_XLSX_PATH"]) if os.environ.get("CLINIC_XLSX_PATH") else (
+    Path.home() / "Box" / "総合企画部_特殊案件" / "その他" / "院情報一覧カウント_元データ" / "院情報一覧_カウント自動化.xlsx")
 LOCAL_PATH = Path.home() / "Documents" / "クリニックDB" / "院情報一覧_カウント自動化.xlsx"
 OUTPUT_HTML = Path(__file__).parent / "index.html"
 
@@ -143,8 +147,10 @@ def load_houjin_settings():
 # 法人設定はgenerate()内で動的読み込みするためここでは初期化のみ
 REGION_HOUJIN_ORDER = {"国内": [], "海外": []}
 
-DOCTOR_FILE_PATH = Path(r"C:\Users\宮城杏奈\Box\総合企画部_特殊案件\その他\院情報一覧カウント\ドクター人事通達 自動集計.xlsx")
-PAST_DIRECTOR_FILE_PATH = Path(r"C:\Users\宮城杏奈\Downloads\過去分院長変更履歴.xlsx")
+DOCTOR_FILE_PATH = Path(os.environ["DOCTOR_XLSX_PATH"]) if os.environ.get("DOCTOR_XLSX_PATH") else (
+    Path.home() / "Box" / "総合企画部_特殊案件" / "その他" / "院情報一覧カウント_元データ" / "ドクター人事通達 自動集計.xlsx")
+PAST_DIRECTOR_FILE_PATH = Path(os.environ["PAST_DIRECTOR_XLSX_PATH"]) if os.environ.get("PAST_DIRECTOR_XLSX_PATH") else (
+    Path.home() / "Box" / "総合企画部_特殊案件" / "その他" / "院情報一覧カウント_元データ" / "過去分院長変更履歴.xlsx")
 
 
 def load_doctor_data():
