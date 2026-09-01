@@ -1110,6 +1110,7 @@ def load_conversion_overrides(path):
                         "業態転換日": row.get("業態転換日"),
                         "転換後院名": after_name,
                         "転換後業態": str(row.get("転換後業態", "") or "").strip(),
+                        "種別": str(row.get("種別", "") or "").strip(),
                     }
                 except (ValueError, TypeError):
                     pass
@@ -1158,6 +1159,8 @@ def load_data():
                 df.at[idx, "転換後院名"] = ov["転換後院名"]
             if ov["転換後業態"]:
                 df.at[idx, "転換後業態"] = ov["転換後業態"]
+            if ov["種別"]:
+                df.at[idx, "種別_転換"] = ov["種別"]
     # Excelに新ブランドが追加されていたら自動でリストに追加
     _auto_add_new_brands(df)
     # 「転換後の院自身は新規開院ではなく業態転換扱いにする」判定に使う情報を、
@@ -1345,7 +1348,7 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
         for month in range(1, 13):
             ms = pd.Timestamp(year, month, 1)
             me = pd.Timestamp(year, month, calendar.monthrange(year, month)[1])
-            opened, closed, convert, ma = [], [], [], []
+            opened, closed, convert, ma, rename = [], [], [], [], []
             for _, row in df.iterrows():
                 brand = get_brand(row)
                 if not brand or brand not in target_brands: continue
@@ -1380,7 +1383,7 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
                         new_id = name_to_id.get(after_n) if after_n else None
                         old_id_str = str(old_id) if old_id is not None else "―"
                         new_id_str = str(new_id) if new_id is not None else "―"
-                        convert.append({
+                        conv_entry = {
                             "転換前院ID": old_id_str,
                             "転換前名称": row.get("正式名称",""),
                             "転換前ブランド": brand,
@@ -1390,7 +1393,12 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
                             "転換後名称": after_n if after_n else "―",
                             "法人名": str(row.get("法人名","") or ""),
                             "業態転換日": conv_only.strftime("%Y/%m/%d"),
-                        })
+                        }
+                        kind = str(row.get("種別_転換","") or "").strip()
+                        if kind == "名称変更のみ":
+                            rename.append(conv_entry)
+                        else:
+                            convert.append(conv_entry)
                 close_ref = d_close if d_close is not None else d_conv
                 if close_ref is not None:
                     close_only = pd.Timestamp(close_ref.year, close_ref.month, close_ref.day)
@@ -1403,7 +1411,7 @@ def build_history(df, target_brands, exclude_pr, after_by_idname=None, after_by_
                             "法人名": str(row.get("法人名","") or ""),
                             "国内／海外": get_region(row),
                         })
-            monthly[month] = {"opened": opened, "closed": closed, "convert": convert, "ma": ma}
+            monthly[month] = {"opened": opened, "closed": closed, "convert": convert, "ma": ma, "rename": rename}
         result[year] = monthly
     return result, hist_years
 
@@ -1418,9 +1426,10 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             year_closed_real = [x for m in monthly.values() for x in m["closed"]  if "業態転換" not in x.get("種別","")]
             year_convert     = [x for m in monthly.values() for x in m["convert"]]
             year_ma          = [x for m in monthly.values() for x in m["ma"]]
-            ytotal_o, ytotal_c, ytotal_k, ytotal_ma = len(year_opened_new), len(year_closed_real), len(year_convert), len(year_ma)
-            if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0 and ytotal_ma == 0: continue
-            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🟣 M&A {ytotal_ma} 院　　🔵 業態転換 {ytotal_k} 院"
+            year_rename      = [x for m in monthly.values() for x in m["rename"]]
+            ytotal_o, ytotal_c, ytotal_k, ytotal_ma, ytotal_rn = len(year_opened_new), len(year_closed_real), len(year_convert), len(year_ma), len(year_rename)
+            if ytotal_o == 0 and ytotal_c == 0 and ytotal_k == 0 and ytotal_ma == 0 and ytotal_rn == 0: continue
+            year_label = f"📅 {year}年　｜　🟢 開院 {ytotal_o} 院　　🔴 閉院 {ytotal_c} 院　　🟣 M&A {ytotal_ma} 院　　🔵 業態転換 {ytotal_k} 院　　🟡 名称変更 {ytotal_rn} 院"
             color = C_HEADER
 
             year_inner = ""
@@ -1435,10 +1444,14 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             if ytotal_c > 0:
                 year_inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{ytotal_c}院</div>'
                 year_inner += df_to_html_table(pd.DataFrame(year_closed_real), highlight_last=False)
-                if ytotal_k > 0: year_inner += "<br>"
+                if ytotal_k > 0 or ytotal_rn > 0: year_inner += "<br>"
             if ytotal_k > 0:
                 year_inner += f'<div style="border-left:4px solid {C_BLUE};background:#D6EAF8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔵 業態転換　{ytotal_k}院</div>'
                 year_inner += df_to_html_table(pd.DataFrame(year_convert), highlight_last=False)
+                if ytotal_rn > 0: year_inner += "<br>"
+            if ytotal_rn > 0:
+                year_inner += f'<div style="border-left:4px solid #F1C40F;background:#FCF3CF;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟡 名称変更　{ytotal_rn}院</div>'
+                year_inner += df_to_html_table(pd.DataFrame(year_rename), highlight_last=False)
         else:
             ytotal_k = sum(len(v["convert"]) for v in monthly.values())
             if ytotal_k == 0: continue
@@ -1461,14 +1474,15 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
             closed  = monthly[month]["closed"]
             convert = monthly[month]["convert"]
             ma      = monthly[month]["ma"]
+            rename  = monthly[month]["rename"]
             uid += 1
 
             if mode == "openclose":
                 opened_new  = [x for x in opened if "業態転換" not in x.get("種別","")]
                 closed_real = [x for x in closed  if "業態転換" not in x.get("種別","")]
-                n_o = len(opened_new); n_c = len(closed_real); n_k = len(convert); n_ma = len(ma)
-                if n_o == 0 and n_c == 0 and n_k == 0 and n_ma == 0: continue
-                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院　　🟣 M&A {n_ma}院　　🔵 業態転換 {n_k}院"
+                n_o = len(opened_new); n_c = len(closed_real); n_k = len(convert); n_ma = len(ma); n_rn = len(rename)
+                if n_o == 0 and n_c == 0 and n_k == 0 and n_ma == 0 and n_rn == 0: continue
+                label = f"{year}年{month}月　🟢 開院 {n_o}院　　🔴 閉院 {n_c}院　　🟣 M&A {n_ma}院　　🔵 業態転換 {n_k}院　　🟡 名称変更 {n_rn}院"
                 inner = ""
                 if n_o > 0:
                     inner += f'<div style="border-left:4px solid #27AE60;background:#D5F5E3;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟢 開院　{n_o}院</div>'
@@ -1481,10 +1495,14 @@ def build_history_html(history, hist_years, mode="openclose", prefix=""):
                 if n_c > 0:
                     inner += f'<div style="border-left:4px solid #E74C3C;background:#FADBD8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔴 閉院　{n_c}院</div>'
                     inner += df_to_html_table(pd.DataFrame(closed_real), highlight_last=False)
-                    if n_k > 0: inner += "<br>"
+                    if n_k > 0 or n_rn > 0: inner += "<br>"
                 if n_k > 0:
                     inner += f'<div style="border-left:4px solid {C_BLUE};background:#D6EAF8;padding:5px 10px;font-weight:bold;margin-bottom:6px">🔵 業態転換　{n_k}院</div>'
                     inner += df_to_html_table(pd.DataFrame(convert), highlight_last=False)
+                    if n_rn > 0: inner += "<br>"
+                if n_rn > 0:
+                    inner += f'<div style="border-left:4px solid #F1C40F;background:#FCF3CF;padding:5px 10px;font-weight:bold;margin-bottom:6px">🟡 名称変更　{n_rn}院</div>'
+                    inner += df_to_html_table(pd.DataFrame(rename), highlight_last=False)
             else:
                 n_k = len(convert)
                 if n_k == 0: continue
