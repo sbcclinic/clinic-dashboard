@@ -16,7 +16,6 @@ from itertools import groupby
 # 環境変数で読み込み先を上書きできるようにしている。
 BOX_PATH = Path(os.environ["CLINIC_XLSX_PATH"]) if os.environ.get("CLINIC_XLSX_PATH") else (
     Path.home() / "Box" / "総合企画部_特殊案件" / "その他" / "院情報一覧カウント_元データ" / "院情報一覧_カウント自動化.xlsx")
-LOCAL_PATH = Path.home() / "Documents" / "クリニックDB" / "院情報一覧_カウント自動化.xlsx"
 OUTPUT_HTML = Path(__file__).parent / "index.html"
 
 ORANGE_TWIST_COUNT = 24
@@ -1067,9 +1066,13 @@ def build_director_html(doctor_df, clinic_df, brand_cols, after_by_idname=None, 
 
 
 def get_path():
-    if BOX_PATH.exists(): return BOX_PATH
-    if LOCAL_PATH.exists(): return LOCAL_PATH
-    raise FileNotFoundError("Excelファイルが見つかりません")
+    if BOX_PATH.exists():
+        return BOX_PATH
+    # 意図せず古いコピーを集計してしまうことを防ぐため、代替ファイルへは自動で切り替えない。
+    raise FileNotFoundError(
+        f"元データが見つかりません: {BOX_PATH}\n"
+        "Boxの同期が完了しているか、フォルダ名が変わっていないかを確認してください。"
+    )
 
 def to_ts(v):
     if isinstance(v, pd.Timestamp): return v
@@ -1197,6 +1200,27 @@ def _auto_add_new_brands(df):
             added.append(brand)
     if added:
         print(f"  ※ 新ブランドを自動追加しました: {added}")
+
+def validate_brand_registration(df, official_brand_cols):
+    """開院中クリニックのブランド表記が「ブランド設定」表の正式名と一致しているか検証する。
+    一致しないものは集計から漏れている可能性があるため、呼び出し側で警告として扱う。
+    Returns: [{"brand": 表記, "clinics": [院名, ...]}, ...]
+    """
+    if "ブランド" not in df.columns or "開院フラグ" not in df.columns:
+        return []
+    official = {str(b).strip() for b, _ in official_brand_cols}
+    if not official:
+        return []
+    open_df = df[df["開院フラグ"].astype(str).str.strip() == "開院"]
+    issues = {}
+    for _, row in open_df.iterrows():
+        raw_brand = row.get("ブランド")
+        if pd.isna(raw_brand):
+            continue  # ブランド欄が空欄の拠点（コールセンター等、クリニックではない拠点）は対象外
+        brand = str(raw_brand).strip()
+        if brand and brand not in official:
+            issues.setdefault(brand, []).append(str(row.get("正式名称", "") or "").strip())
+    return [{"brand": b, "clinics": clinics} for b, clinics in issues.items()]
 
 def load_brand_settings():
     try:
@@ -1974,6 +1998,16 @@ def generate():
     REGION_HOUJIN_ORDER = load_houjin_settings()
     ot_settings = load_orangetwist_settings()
     brand_cols, existing_flags, exclude_pr = load_brand_settings()
+    # 「ブランド設定」表の正式名と表記が一致しない開院中クリニックがないか検証する
+    # （TARGET_BRANDSによる自動補完の前に、正式一覧だけと比べる）
+    brand_issues = validate_brand_registration(df, brand_cols)
+    if brand_issues:
+        print("\n" + "=" * 60)
+        print("⚠⚠⚠ 要確認：ブランド設定表にない表記が見つかりました ⚠⚠⚠")
+        for issue in brand_issues:
+            print(f"  表記「{issue['brand']}」 該当院: {', '.join(issue['clinics'])}")
+        print("  → 集計から漏れている可能性があります。クリニック一覧のブランド列をご確認ください。")
+        print("=" * 60 + "\n")
     if not brand_cols:
         brand_cols = [(b,None) for b in TARGET_BRANDS]
         existing_flags = [True]*19 + [False]*(len(brand_cols)-19)
@@ -2330,6 +2364,24 @@ def generate():
     brand_labels_json = json.dumps(brand_labels_js, ensure_ascii=False)
 
     report_date = f"{y}年{m}月末"
+
+    if brand_issues:
+        _items = "".join(
+            f"<li>表記「{issue['brand']}」該当院：{', '.join(issue['clinics'])}</li>"
+            for issue in brand_issues
+        )
+        brand_warning_html = (
+            '<div style="max-width:900px;margin:10px auto 0;padding:12px 16px;'
+            'background:#FFF3CD;border:1px solid #E6A700;border-radius:6px;color:#664d03">'
+            '<b>⚠ 要確認：ブランド設定表にない表記の院があります</b>'
+            f'<ul style="margin:6px 0 0 20px;padding:0">{_items}</ul>'
+            '<div style="margin-top:6px;font-size:12px">'
+            'これらの院は集計から漏れている可能性があります。クリニック一覧のブランド列をご確認ください。'
+            '</div></div>'
+        )
+    else:
+        brand_warning_html = ""
+
     html = f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -2387,6 +2439,7 @@ def generate():
   <p>{report_date} 時点</p>
 </div>
 
+{brand_warning_html}
 <div class="kpi">
   <div class="kpi-card orange">
     <div class="kpi-label">IR・広報用（除：Holdingsへの収益貢献なし、含：OrangeTwist）</div>
